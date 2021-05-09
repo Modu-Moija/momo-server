@@ -1,7 +1,10 @@
 name: momo server deploy
 
 on: [push]
-
+env:
+  AZURE_WEBAPP_NAME: momoapi 
+  AZURE_WEBAPP_PACKAGE_PATH: '.' 
+  
 jobs:
   build:
 
