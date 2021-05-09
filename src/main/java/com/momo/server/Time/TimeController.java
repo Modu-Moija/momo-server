@@ -1,4 +1,4 @@
-package com.example.letsmeet.Time;
+package com.momo.server.Time;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -17,13 +17,13 @@ import java.util.TreeMap;
 
 import javax.annotation.Resource;
 
+import com.momo.server.User.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,8 +34,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.letsmeet.Meet.Meet;
-import com.example.letsmeet.User.User;
+import com.momo.server.Meet.Meet;
+import com.momo.server.User.User;
 
 @RestController
 @RequestMapping("/api/time")
@@ -99,6 +99,7 @@ public class TimeController {
 		}
 
 		Iterator it = map.keySet().iterator();
+
 		
 		while( it.hasNext()) {
 			
@@ -189,6 +190,7 @@ public class TimeController {
 		
 			 } 
 		}
+
 
 	public String BFS(int x, int y, int[][] table, int[][] visited) {
 		

@@ -1,7 +1,8 @@
-package com.example.letsmeet.User;
+package com.momo.server.User;
 
 import javax.annotation.Resource;
 
+import com.momo.server.Meet.Meet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -10,15 +11,10 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.example.letsmeet.Meet.Meet;
-
-import com.example.letsmeet.Time.UserInfo;
 
 @RestController
 @RequestMapping(value="/api/user")

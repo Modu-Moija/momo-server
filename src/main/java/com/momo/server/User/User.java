@@ -1,12 +1,10 @@
-package com.example.letsmeet.User;
+package com.momo.server.User;
 
+import com.momo.server.Meet.Meet;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-
-import com.example.letsmeet.Meet.Meet;
-import com.example.letsmeet.Time.UserInfo;
 
 import lombok.Data;
 

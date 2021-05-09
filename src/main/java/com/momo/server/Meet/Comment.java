@@ -1,8 +1,6 @@
-package com.example.letsmeet.Meet;
+package com.momo.server.Meet;
 
 import java.time.LocalDateTime;
-
-import com.example.letsmeet.User.User;
 
 import lombok.Data;
 

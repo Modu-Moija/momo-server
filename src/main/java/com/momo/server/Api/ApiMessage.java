@@ -1,4 +1,4 @@
-package com.example.letsmeet.Api;
+package com.momo.server.Api;
 
 import org.springframework.http.HttpStatus;
 

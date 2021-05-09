@@ -1,6 +1,4 @@
-package com.example.letsmeet.Time;
-
-import com.example.letsmeet.User.User;
+package com.momo.server.Time;
 
 import lombok.Data;
 

@@ -1,13 +1,8 @@
-package com.example.letsmeet.Meet;
+package com.momo.server.Meet;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
-
-import org.springframework.format.annotation.DateTimeFormat;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;
 

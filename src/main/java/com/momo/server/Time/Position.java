@@ -1,4 +1,4 @@
-package com.example.letsmeet.Time;
+package com.momo.server.Time;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
