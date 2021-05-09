@@ -6,7 +6,6 @@ import com.mongodb.ServerAddress;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
 
 import static java.util.Collections.singletonList;
@@ -23,15 +22,19 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
     @Value("${dbpassword}")
     private String dbPassword;
 
+    @Value("${dbhost}")
+    private String dbHost;
+
+    @Value("${dbport}")
+    private int dbPort;
+
     @Override
     protected void configureClientSettings(MongoClientSettings.Builder builder) {
-
-        Environment environment;
 
         builder
                 .credential(MongoCredential.createCredential(dbUsername, dbName, dbPassword.toCharArray()))
                 .applyToClusterSettings(settings  -> {
-                    settings.hosts(singletonList(new ServerAddress("visualup.koreacentral.cloudapp.azure.com", 5599)));
+                    settings.hosts(singletonList(new ServerAddress(dbHost, dbPort)));
                 });
     }
 
