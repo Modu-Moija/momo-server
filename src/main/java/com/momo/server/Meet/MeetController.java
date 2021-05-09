@@ -1,4 +1,4 @@
-package com.example.letsmeet.Meet;
+package com.momo.server.Meet;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
@@ -23,8 +23,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.letsmeet.Time.UserInfo;
-import com.example.letsmeet.User.User;
+import com.momo.server.User.UserInfo;
+import com.momo.server.User.User;
 import com.google.common.hash.Hashing;
 
 @RestController

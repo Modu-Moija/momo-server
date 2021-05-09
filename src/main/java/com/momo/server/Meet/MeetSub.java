@@ -1,4 +1,4 @@
-package com.example.letsmeet.Meet;
+package com.momo.server.Meet;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

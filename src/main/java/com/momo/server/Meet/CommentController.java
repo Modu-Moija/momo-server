@@ -1,4 +1,4 @@
-package com.example.letsmeet.Meet;
+package com.momo.server.Meet;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.letsmeet.Time.UserInfo;
-import com.example.letsmeet.User.User;
+import com.momo.server.User.UserInfo;
+import com.momo.server.User.User;
 
 @RestController
 @RequestMapping("/api/comment")
