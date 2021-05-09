@@ -17,7 +17,7 @@ jobs:
       with:
         java-version: 1.8
     - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      run: mvn -B package --file pom.xml -Ddbname=${{ secrets.DBNAME }} -Ddbusername=${{ secrets.DBUERNAME }} -Ddbpassowrd=${{ secrets.DBPASSWORD }} -Ddbhost=${{ secrets.DBHOST }} -Ddbport=${{ secrets.DBPORT }}
       working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
     - name: Azure WebApp
       uses: Azure/webapps-deploy@v2
