@@ -1,8 +1,10 @@
-package com.momo.server.User;
+package com.momo.server.controller;
 
+import com.momo.server.domain.User;
+import com.momo.server.dto.UserInfoDto;
 import javax.annotation.Resource;
 
-import com.momo.server.Meet.Meet;
+import com.momo.server.domain.Meet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -21,12 +23,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     @Resource
-    private UserInfo userInfo;
+    private UserInfoDto userInfo;
 
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    privatse Meet queryMeet;
+    private Meet queryMeet;
     private String message;
     private HttpStatus status;
     private User queryUser;

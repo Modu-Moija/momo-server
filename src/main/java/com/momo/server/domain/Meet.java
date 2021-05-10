@@ -1,4 +1,4 @@
-package com.momo.server.Meet;
+package com.momo.server.domain;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

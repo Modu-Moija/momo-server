@@ -1,6 +1,6 @@
-package com.momo.server.User;
+package com.momo.server.domain;
 
-import com.momo.server.Meet.Meet;
+import com.momo.server.dto.UserInfoDto;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -18,7 +18,7 @@ public class User {
     private String meetId;
     private int[][] userTimes;
 
-    public static boolean checkUser(UserInfo userInfo) {
+    public static boolean checkUser(UserInfoDto userInfo) {
 
         if (userInfo.getUser() == null || userInfo.getUser().getUserId() == null) {
             return false; //로그인 안 되어 있음.

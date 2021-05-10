@@ -1,5 +1,7 @@
-package com.momo.server.Time;
+package com.momo.server.controller;
 
+import com.momo.server.dto.MyTimeDto;
+import com.momo.server.dto.PositionDto;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -17,7 +19,7 @@ import java.util.TreeMap;
 
 import javax.annotation.Resource;
 
-import com.momo.server.User.UserInfo;
+import com.momo.server.dto.UserInfoDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -34,15 +36,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.momo.server.Meet.Meet;
-import com.momo.server.User.User;
+import com.momo.server.domain.Meet;
+import com.momo.server.domain.User;
 
 @RestController
 @RequestMapping("/api/time")
 public class TimeController {
 
     @Resource
-    private UserInfo userInfo;
+    private UserInfoDto userInfo;
 
     @Autowired
     private MongoTemplate mongoTemplate;
@@ -199,11 +201,11 @@ public class TimeController {
 
         int value = table[x][y];
 
-        String result = Position.pos2str(xx++, yy);
+        String result = PositionDto.pos2str(xx++, yy);
 
         while (xx < table.length && table[xx][yy] == value) {
 
-            result += "|" + Position.pos2str(xx, yy);
+            result += "|" + PositionDto.pos2str(xx, yy);
             visited[xx++][yy] = 1;
 
         }
@@ -213,7 +215,7 @@ public class TimeController {
     }
 
     @PutMapping
-    public ResponseEntity<?> myTime(@RequestBody MyTime myTime) {
+    public ResponseEntity<?> myTime(@RequestBody MyTimeDto myTime) {
 
         User user = userInfo.getUser();
 
@@ -308,7 +310,7 @@ public class TimeController {
     }
 
     @DeleteMapping
-    public ResponseEntity<?> deleteMyTime(MyTime time) {
+    public ResponseEntity<?> deleteMyTime(MyTimeDto time) {
 
         User user = userInfo.getUser();
 

@@ -1,5 +1,7 @@
-package com.momo.server.Meet;
+package com.momo.server.controller;
 
+import com.momo.server.domain.Meet;
+import com.momo.server.domain.MeetSub;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -23,8 +25,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.momo.server.User.UserInfo;
-import com.momo.server.User.User;
+import com.momo.server.dto.UserInfoDto;
+import com.momo.server.domain.User;
 import com.google.common.hash.Hashing;
 
 @RestController
@@ -32,7 +34,7 @@ import com.google.common.hash.Hashing;
 public class MeetController {
 
     @Resource
-    private UserInfo userInfo;
+    private UserInfoDto userInfo;
 
     @Autowired
     private MongoTemplate mongoTemplate;
