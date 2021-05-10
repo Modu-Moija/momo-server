@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import lombok.Data;
 
 @Data
-
 public class Meet {
 
     private String meetId;

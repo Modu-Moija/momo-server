@@ -2,6 +2,7 @@ package com.momo.server.controller;
 
 import com.momo.server.domain.User;
 import com.momo.server.dto.UserInfoDto;
+import com.momo.server.service.UserService;
 import javax.annotation.Resource;
 
 import com.momo.server.domain.Meet;
@@ -21,6 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/api/user")
 public class UserController {
+
+    @Autowired
+    private UserService userService;
 
     @Resource
     private UserInfoDto userInfo;
@@ -52,7 +56,7 @@ public class UserController {
                 return new ResponseEntity<String>(message, status);
 
             case 1:
-
+                
                 //새로운 유저.
                 int col = Integer.parseInt(queryMeet.getEnd().split(":")[0]) - Integer
                     .parseInt(queryMeet.getStart().split(":")[0]);

@@ -2,6 +2,7 @@ package com.momo.server.controller;
 
 import com.momo.server.dto.MyTimeDto;
 import com.momo.server.dto.PositionDto;
+import com.momo.server.service.TimeService;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -42,6 +43,9 @@ import com.momo.server.domain.User;
 @RestController
 @RequestMapping("/api/time")
 public class TimeController {
+
+    @Autowired
+    private TimeService timeService;
 
     @Resource
     private UserInfoDto userInfo;

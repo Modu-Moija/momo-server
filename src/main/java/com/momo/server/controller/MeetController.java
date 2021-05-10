@@ -2,6 +2,7 @@ package com.momo.server.controller;
 
 import com.momo.server.domain.Meet;
 import com.momo.server.domain.MeetSub;
+import com.momo.server.service.MeetService;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -32,6 +33,9 @@ import com.google.common.hash.Hashing;
 @RestController
 @RequestMapping(value = "/api/meet")
 public class MeetController {
+
+    @Autowired
+    private MeetService meetService;
 
     @Resource
     private UserInfoDto userInfo;
