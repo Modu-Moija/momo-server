@@ -1,4 +1,4 @@
-package com.momo.server.Meet;
+package com.momo.server.domain;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -19,7 +19,7 @@ public class MeetSub {
     private String where;
     private String how;
 
-    MeetSub(ArrayList<LocalDate> dates) {
+    public MeetSub(ArrayList<LocalDate> dates) {
 
         LocalDate date = dates.get(0);
         int index = dates.size() - 1;

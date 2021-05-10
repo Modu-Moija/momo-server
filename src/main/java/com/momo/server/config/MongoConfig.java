@@ -1,4 +1,4 @@
-package com.momo.server.Config;
+package com.momo.server.config;
 
 import com.mongodb.MongoClientSettings;
 import com.mongodb.MongoCredential;

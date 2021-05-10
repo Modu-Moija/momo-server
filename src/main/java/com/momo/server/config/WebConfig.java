@@ -1,4 +1,4 @@
-package com.momo.server.Config;
+package com.momo.server.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

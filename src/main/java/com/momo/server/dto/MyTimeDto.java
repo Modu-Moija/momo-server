@@ -1,9 +1,9 @@
-package com.momo.server.Time;
+package com.momo.server.dto;
 
 import lombok.Data;
 
 @Data
-public class MyTime {
+public class MyTimeDto {
 
     private int[] checkArray;
     private String userId;

@@ -1,5 +1,6 @@
-package com.momo.server.Meet;
+package com.momo.server.controller;
 
+import com.momo.server.domain.Comment;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,8 +22,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.momo.server.User.UserInfo;
-import com.momo.server.User.User;
+import com.momo.server.dto.UserInfoDto;
+import com.momo.server.domain.User;
 
 @RestController
 @RequestMapping("/api/comment")
@@ -35,7 +36,7 @@ public class CommentController {
     private ResponseEntity response;
 
     @Resource
-    private UserInfo userInfo;
+    private UserInfoDto userInfo;
 
     @PostMapping
     public ResponseEntity<?> newComment(@RequestBody Comment comment) {

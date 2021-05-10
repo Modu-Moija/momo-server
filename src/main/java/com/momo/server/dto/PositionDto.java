@@ -1,11 +1,11 @@
-package com.momo.server.Time;
+package com.momo.server.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @AllArgsConstructor
 @Data
-public class Position {
+public class PositionDto {
 
     int x;
     int y;
