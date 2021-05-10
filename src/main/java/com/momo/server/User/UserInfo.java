@@ -14,13 +14,13 @@ import lombok.Data;
 @Component
 @Data
 @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class UserInfo implements Serializable{
-	
-	private static final long serialVersionUID = 1L;
-	private User user;
-	private String meetId;
-	private int gap; 
-	private ArrayList<LocalDate> dates;
-	private ArrayList<Integer> timetables;
-	
+public class UserInfo implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    private User user;
+    private String meetId;
+    private int gap;
+    private ArrayList<LocalDate> dates;
+    private ArrayList<Integer> timetables;
+
 }

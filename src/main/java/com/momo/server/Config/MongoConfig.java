@@ -32,10 +32,12 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
     protected void configureClientSettings(MongoClientSettings.Builder builder) {
 
         builder
-                .credential(MongoCredential.createCredential(dbUsername, dbName, dbPassword.toCharArray()))
-                .applyToClusterSettings(settings  -> {
-                    settings.hosts(singletonList(new ServerAddress(dbHost, dbPort)));
-                });
+            .credential(
+                MongoCredential.createCredential(dbUsername, dbName, dbPassword.toCharArray()))
+            .applyToClusterSettings(settings -> {
+                settings.hosts(singletonList(new ServerAddress(dbHost, dbPort)));
+            });
+
     }
 
     @Override
