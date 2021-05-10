@@ -7,12 +7,12 @@ import lombok.Data;
 @Data
 public class Position {
 
-	int x;
-	int y;
-	
-	public static String pos2str(int xx, int yy) {
-		
-		return String.valueOf(xx)+","+String.valueOf(yy);
-	}
-	
+    int x;
+    int y;
+
+    public static String pos2str(int xx, int yy) {
+
+        return String.valueOf(xx) + "," + String.valueOf(yy);
+    }
+
 }

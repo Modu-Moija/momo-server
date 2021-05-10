@@ -28,61 +28,61 @@ import com.momo.server.User.User;
 @RequestMapping("/api/comment")
 public class CommentController {
 
-	@Autowired
-	private MongoTemplate mongoTemplate;
-	
-	private User user;
-	private ResponseEntity response;
-	
-	@Resource
-	private UserInfo userInfo;
-	
-	@PostMapping
-	public ResponseEntity<?> newComment(@RequestBody Comment comment) {
-		//댓글 생성 api. 
-		//이미 있으면 수정, 없으면 새로 생성. 
-		
-		user = userInfo.getUser();
-		
-		comment.setCreated(LocalDateTime.now());
-		comment.setUserKey(user.getUserKey());
-		comment.setUserId(user.getUserId());
-		
-		Query query = new Query();
-		query.addCriteria(Criteria.where("userKey").is(user.getUserKey()));
-		
-		if(!User.checkUser(userInfo)) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-		}
-		
-		Update update = new Update();
-		update.set("content", comment.getContent());
-		update.set("userId", comment.getUserId());
-		update.set("created", comment.getCreated());
-		update.set("meetId", user.getMeetId());
-		mongoTemplate.upsert(query, update, Comment.class);
-		
-		return ResponseEntity.ok().build();
-		
-	}
-	
-	@GetMapping
-	public List<Comment> getMeets(){
-		//해당하는 약속에 있는 모든 댓글들을 불러옴. 
-		
-		user = userInfo.getUser();
-		List<Comment> results = new ArrayList<Comment>(); 
-		
-		if(user != null) {
-		Query query = new Query();
-		query.addCriteria(Criteria.where("meetId").is(user.getMeetId()));
-		
-		Map comments = new HashMap<String, String>();
-		results = mongoTemplate.find(query, Comment.class, "comment");
-		
-		}
-		
-		return results;
-		
-	}
+    @Autowired
+    private MongoTemplate mongoTemplate;
+
+    private User user;
+    private ResponseEntity response;
+
+    @Resource
+    private UserInfo userInfo;
+
+    @PostMapping
+    public ResponseEntity<?> newComment(@RequestBody Comment comment) {
+        //댓글 생성 api.
+        //이미 있으면 수정, 없으면 새로 생성.
+
+        user = userInfo.getUser();
+
+        comment.setCreated(LocalDateTime.now());
+        comment.setUserKey(user.getUserKey());
+        comment.setUserId(user.getUserId());
+
+        Query query = new Query();
+        query.addCriteria(Criteria.where("userKey").is(user.getUserKey()));
+
+        if (!User.checkUser(userInfo)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        Update update = new Update();
+        update.set("content", comment.getContent());
+        update.set("userId", comment.getUserId());
+        update.set("created", comment.getCreated());
+        update.set("meetId", user.getMeetId());
+        mongoTemplate.upsert(query, update, Comment.class);
+
+        return ResponseEntity.ok().build();
+
+    }
+
+    @GetMapping
+    public List<Comment> getMeets() {
+        //해당하는 약속에 있는 모든 댓글들을 불러옴.
+
+        user = userInfo.getUser();
+        List<Comment> results = new ArrayList<Comment>();
+
+        if (user != null) {
+            Query query = new Query();
+            query.addCriteria(Criteria.where("meetId").is(user.getMeetId()));
+
+            Map comments = new HashMap<String, String>();
+            results = mongoTemplate.find(query, Comment.class, "comment");
+
+        }
+
+        return results;
+
+    }
 }

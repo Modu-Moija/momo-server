@@ -6,13 +6,13 @@ import lombok.Data;
 
 @Data
 public class ApiMessage {
-	
-	private HttpStatus status;
-	private String message;
-	
-	public ApiMessage(String message, HttpStatus status){
-		this.status = status;
-		this.message = message;
-	}
+
+    private HttpStatus status;
+    private String message;
+
+    public ApiMessage(String message, HttpStatus status) {
+        this.status = status;
+        this.message = message;
+    }
 
 }
