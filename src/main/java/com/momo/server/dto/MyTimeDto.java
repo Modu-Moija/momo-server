@@ -2,12 +2,12 @@ package com.momo.server.dto;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 public class MyTimeDto {
 
-    private int[] checkArray;
-    private String userId;
-    private String meetId;
-    private String userPass;
+    private LocalDateTime date;
+    private int[] times;
 
 }
