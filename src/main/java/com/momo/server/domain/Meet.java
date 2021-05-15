@@ -5,24 +5,23 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import lombok.Data;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
+@Document(collection = "meet")
 public class Meet {
 
     private String meetId;
     private String title;
-    private String start, end;
+    private String start;
+    private String end;
     private LocalDateTime created;
-
     private int gap;
-    private ArrayList<LocalDate> dates;
-    private boolean done;
-    private MeetSub meetSubInfo;
+    private ArrayList<LocalDateTime> dates;
+    private int num;
+    private ArrayList<Integer> users;
+    private int[][] times;
+    private boolean center;
+    private boolean video;
 
-    private int num = 0;
-    private ArrayList<Integer> users = new ArrayList<Integer>();
-
-    private int[] checkArray;
-    private int[][] checkUser;
-    private int[][] userTime;
 }

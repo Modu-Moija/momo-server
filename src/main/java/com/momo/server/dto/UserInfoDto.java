@@ -1,5 +1,6 @@
 package com.momo.server.dto;
 
+import com.momo.server.domain.Meet;
 import com.momo.server.domain.User;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -19,9 +20,6 @@ public class UserInfoDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private User user;
-    private String meetId;
-    private int gap;
-    private ArrayList<LocalDate> dates;
-    private ArrayList<Integer> timetables;
+    private Meet meet;
 
 }
