@@ -17,7 +17,13 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void createUserDatetime() {
+    public void updateUserTimetable() {
 
     }
+
+    @Override
+    public void findUsername() {
+
+    }
+
 }

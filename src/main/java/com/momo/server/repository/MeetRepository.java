@@ -2,6 +2,7 @@ package com.momo.server.repository;
 
 
 import com.momo.server.domain.User;
+import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.ResponseEntity;
@@ -15,4 +16,7 @@ public interface MeetRepository {
     void createMeet();
 
 
+    ArrayList<Integer> findUsers();
+
+    int[][] findTimes();
 }

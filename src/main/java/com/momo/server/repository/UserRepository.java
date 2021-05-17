@@ -12,5 +12,7 @@ public interface UserRepository {
     //유저 생성 메소드
     void createUser();
 
-    void createUserDatetime();
+    void updateUserTimetable();
+
+    void findUsername();
 }
