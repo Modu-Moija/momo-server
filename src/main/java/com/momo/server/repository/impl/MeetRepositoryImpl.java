@@ -1,6 +1,7 @@
 package com.momo.server.repository.impl;
 
 import com.momo.server.repository.MeetRepository;
+import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Repository;
@@ -15,5 +16,15 @@ public class MeetRepositoryImpl implements MeetRepository {
     @Override
     public void createMeet() {
 
+    }
+
+    @Override
+    public ArrayList<Integer> findUsers() {
+        return null;
+    }
+
+    @Override
+    public int[][] findTimes() {
+        return new int[0][];
     }
 }
