@@ -1,8 +1,7 @@
 package com.momo.server.repository.impl;
 
-import com.momo.server.domain.User;
 import com.momo.server.repository.MeetRepository;
-import java.util.Optional;
+import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Repository;
@@ -25,7 +24,8 @@ public class MeetRepositoryImpl implements MeetRepository {
     }
 
     @Override
-    public Optional<User> getUsers() {
-        return null;
+    public ArrayList<Integer> findUsers() {
+        ArrayList users = new ArrayList();
+        return users;
     }
 }

@@ -17,5 +17,5 @@ public interface MeetRepository {
 
     int[][] findTimes();
 
-    Optional<User> getUsers();
+    ArrayList<Integer> findUsers();
 }

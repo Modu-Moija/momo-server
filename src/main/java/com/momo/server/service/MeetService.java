@@ -2,6 +2,7 @@ package com.momo.server.service;
 
 import com.momo.server.domain.User;
 import com.momo.server.repository.MeetRepository;
+import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -14,9 +15,25 @@ public class MeetService {
 
     @Autowired//meetService에 userService있는게 조금 찝찝하긴함
     private UserService userService;
-    //User user = meetRepository.getUsers();
-    //int[][] times = meetRepository.findTimes();
-    //ArrayList Usernames = userService.findUsername();
+
+    ArrayList<Integer> users;
+    int[][] times;
+    ArrayList username;
+
+    public ArrayList<Integer> findUsers(){
+        users = meetRepository.findUsers();
+        return meetRepository.findUsers();
+    };
+
+    public int[][] findTimes(){
+        times = meetRepository.findTimes();
+        return meetRepository.findTimes();
+    };
+
+    public ArrayList findUsername(){
+        username = userService.findUsername();
+        return userService.findUsername();
+    };
 
     //약속 생성메소드
     public ResponseEntity<?> createMeet() {
@@ -27,17 +44,16 @@ public class MeetService {
     //최대가능순 연산
     public String[] getMaxTime() {
         //users와 times 가지고 연산
+        //users와 Username으로 가져온 이름을 매핑시킴
         return new String[0];
-
-        //users와 findUsername으로 가져온 이름을 매핑시킴
     }
 
     //최소가능순 연산
     public String[] getMinTime() {
         //users와 times 가지고 연산
-        return new String[0];
 
         //users와 findUsername으로 가져온 이름을 매핑시킴
+        return new String[0];
     }
 
     //14,15,16 날짜에 색깔 들어가게 하기 위한 연산
@@ -46,7 +62,7 @@ public class MeetService {
         return new String[0];
     }
 
-    //누구랑, 언제, 어디서 생성하기 위한 메소드
+    //'누구랑, 언제, 어디서' 생성하기 위한 메소드
     public ResponseEntity<?> createMeetSub() {
 
         return ResponseEntity.ok().build();
@@ -59,3 +75,5 @@ public class MeetService {
     }
 
 }
+
+
