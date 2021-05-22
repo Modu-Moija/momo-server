@@ -15,16 +15,14 @@ public class MeetController {
     @Autowired
     private MeetService meetService;
 
-    @GetMapping()
+    //@GetMapping()
     public String[] getMaxTime() {
-
         meetService.getMaxTime();
-
         
         return null;
     };
 
-    @GetMapping()
+    //@GetMapping()
     public String[] getMinTime() {
 
         meetService.getMaxTime();

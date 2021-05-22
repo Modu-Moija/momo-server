@@ -2,7 +2,6 @@ package com.momo.server.service;
 
 import com.momo.server.domain.User;
 import com.momo.server.repository.MeetRepository;
-import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -15,11 +14,9 @@ public class MeetService {
 
     @Autowired//meetService에 userService있는게 조금 찝찝하긴함
     private UserService userService;
-
-    ArrayList<Integer> users = meetRepository.findUsers();
-    int[][] times = meetRepository.findTimes();
-
-    ArrayList Usernames = userService.findUsername();
+    //User user = meetRepository.getUsers();
+    //int[][] times = meetRepository.findTimes();
+    //ArrayList Usernames = userService.findUsername();
 
     //약속 생성메소드
     public ResponseEntity<?> createMeet() {
