@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 public class MeetSummary {
 
     private String[] who;
-    private String when;
+    private String[] when;
     private String where;
 
 }
