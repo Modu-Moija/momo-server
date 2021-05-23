@@ -1,5 +1,6 @@
 package com.momo.server.repository.impl;
 
+import com.momo.server.dto.MeetSaveRequestDto;
 import com.momo.server.repository.MeetRepository;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +15,8 @@ public class MeetRepositoryImpl implements MeetRepository {
 
 
     @Override
-    public void createMeet() {
-
+    public void createMeet(MeetSaveRequestDto requestDto) {
+        mongoTemplate.insert(requestDto, "meet");
     }
 
     @Override

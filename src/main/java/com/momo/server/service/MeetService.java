@@ -1,7 +1,10 @@
 package com.momo.server.service;
 
 import com.momo.server.domain.User;
+import com.momo.server.dto.MeetSaveRequestDto;
 import com.momo.server.repository.MeetRepository;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -36,8 +39,33 @@ public class MeetService {
     };
 
     //약속 생성메소드
-    public ResponseEntity<?> createMeet() {
-        meetRepository.createMeet();
+    public ResponseEntity<?> createMeet(MeetSaveRequestDto requestDto, String hashedUrl) {
+        LocalDateTime startDate = requestDto.getDates().get(0);
+        LocalDateTime endDate = requestDto.getDates().get(1);
+
+        ArrayList<LocalDateTime> dates = new ArrayList<LocalDateTime>();
+        LocalDateTime curDate = startDate;
+
+        while (!curDate.equals(endDate.plusDays(1))) {
+            dates.add(curDate);
+            curDate=curDate.plusDays(1);
+        }
+
+        requestDto.setDates(dates);
+
+        String start = requestDto.getStart().split(":")[0];
+        String end = requestDto.getEnd().split(":")[0];
+
+        int col = Integer.parseInt(end) - Integer.parseInt(start);
+        col = (int)(60 / requestDto.getGap()) * col;
+//        int[] checkArray = new int[col];
+//        requestDto.setCheckArray(checkArray);
+        requestDto.setCreated(LocalDateTime.now().plusHours(9));
+
+        requestDto.setMeetId(hashedUrl);
+        //requestDto.setMeetSubInfo(new MeetSub(dates));
+
+        meetRepository.createMeet(requestDto);
         return ResponseEntity.ok().build();
     }
 
