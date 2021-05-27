@@ -14,12 +14,23 @@ public class UserService {
     private UserRepository userRepository;
 
     //로그인 메소드
-    public void login() {
+    public boolean login(User user) {
+
+        boolean isUserExist;
+
+        isUserExist = userRepository.isUserExist(user);
+
+        if (isUserExist){
+            return true;
+        }else{
+            createUser(user);
+            return false;
+        }
     }
 
     //유저 생성
-    public ResponseEntity<?> createUser() {
-        userRepository.createUser();
+    public ResponseEntity<?> createUser(User user) {
+        userRepository.createUser(user);
         return ResponseEntity.ok().build();
     }
 
