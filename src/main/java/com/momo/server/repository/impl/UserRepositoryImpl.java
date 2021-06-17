@@ -1,12 +1,13 @@
 package com.momo.server.repository.impl;
 
+import com.momo.server.domain.Meet;
 import com.momo.server.domain.User;
+import com.momo.server.exception.MeetDoesNotExistException;
 import com.momo.server.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -26,13 +27,13 @@ public class UserRepositoryImpl implements UserRepository {
         Query query = new Query();
         User queryUser;
 
-        query.addCriteria(Criteria.where("userId").is(user.getUserId()));
-        query.addCriteria(Criteria.where("meetId").is(user.getMeetId()));
+        if (!isMeetExist(user.getMeetId()))
+            throw new MeetDoesNotExistException();
+
+        query.addCriteria(Criteria.where("userId").is(user.getUsername()));
         queryUser = mongoTemplate.findOne(query,User.class, "user");
 
-        if( queryUser == null) return false;
-
-        return true;
+        return queryUser != null;
 
     }
 
@@ -44,6 +45,18 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public void findUsername() {
 
+    }
+
+    @Override
+    public boolean isMeetExist(String meetId) {
+
+        Query query = new Query();
+        Meet existing_meet;
+
+        query.addCriteria(Criteria.where("meetId").is(meetId));
+        existing_meet = mongoTemplate.findOne(query, Meet.class, "meet");
+
+        return existing_meet != null;
     }
 
 }

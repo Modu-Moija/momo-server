@@ -1,37 +1,45 @@
 package com.momo.server.service;
 
 import com.momo.server.domain.User;
+import com.momo.server.exception.MeetDoesNotExistException;
 import com.momo.server.repository.UserRepository;
 import java.util.ArrayList;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+
+    private final UserRepository userRepository;
 
     //로그인 메소드
-    public boolean login(User user) {
+    public ResponseEntity<?> login(User user) {
 
         boolean isUserExist;
 
-        isUserExist = userRepository.isUserExist(user);
+        try{
+            isUserExist = userRepository.isUserExist(user);
+        }catch (MeetDoesNotExistException e){
+            return ResponseEntity.noContent().build();
+        }
 
         if (isUserExist){
-            return true;
+            return ResponseEntity.ok().build();
         }else{
-            createUser(user);
-            return false;
+            return createUser(user);
         }
     }
 
     //유저 생성
     public ResponseEntity<?> createUser(User user) {
         userRepository.createUser(user);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     //유저의 시간정보 저장

@@ -17,4 +17,6 @@ public interface UserRepository {
     void updateUserTimetable();
 
     void findUsername();
+
+    boolean isMeetExist(String meetId);
 }

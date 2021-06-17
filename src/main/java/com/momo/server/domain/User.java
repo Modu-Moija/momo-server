@@ -16,7 +16,7 @@ public class User {
 
     @Id
     private int _id;
-    private String userId;
+    private String username;
     private String meetId;
     private int[][] userTimes;
 
