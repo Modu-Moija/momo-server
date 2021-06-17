@@ -1,4 +1,4 @@
-package com.momo.server.Api;
+package com.momo.server.api;
 
 import org.springframework.http.HttpStatus;
 
