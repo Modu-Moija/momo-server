@@ -1,5 +1,6 @@
 package com.momo.server.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.momo.server.dto.UserInfoDto;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.MongoTemplate;

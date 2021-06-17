@@ -31,7 +31,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/login")
-    public void login(User loginRequest, HttpServletRequest request){
+    public User login(User loginRequest, HttpServletRequest request){
 
         userService.login(loginRequest);
         HttpSession session = request.getSession();
@@ -40,5 +40,6 @@ public class UserController {
         session.setAttribute("user", loginRequest);
         session.setAttribute("temp", loginRequest);
 
+        return loginRequest;
     }
 }
