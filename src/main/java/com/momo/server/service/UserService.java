@@ -17,7 +17,7 @@ public class UserService {
 
 
     private final UserRepository userRepository;
-    private final MeetService meetService;
+
 
     //로그인 메소드
     public ResponseEntity<?> login(User user) {
@@ -35,7 +35,6 @@ public class UserService {
     //유저 생성
     public ResponseEntity<?> createUser(User user) {
         user.set_id(userRepository.createUser(user));
-        meetService.addUser(user.getMeetId(), user.get_id());
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
