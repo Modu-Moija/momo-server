@@ -1,4 +1,4 @@
-package com.momo.server.dto;
+package com.momo.server.dto.response;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

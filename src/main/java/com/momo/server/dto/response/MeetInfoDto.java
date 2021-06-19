@@ -1,5 +1,7 @@
-package com.momo.server.dto;
+package com.momo.server.dto.response;
 
+import com.momo.server.dto.CommonTime;
+import com.momo.server.dto.response.MeetSummary;
 import lombok.Data;
 
 import java.util.ArrayList;

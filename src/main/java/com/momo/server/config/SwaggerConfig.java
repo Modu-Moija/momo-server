@@ -14,9 +14,12 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Configuration
 @EnableSwagger2
@@ -34,10 +37,10 @@ public class SwaggerConfig {
     public Docket commonApi() {
 
         TypeResolver typeResolver = new TypeResolver();
-        return new Docket(DocumentationType.SWAGGER_2)
-                .alternateTypeRules(AlternateTypeRules.newRule(
-                        typeResolver.resolve(Collection.class, Instant.class),
-                        typeResolver.resolve(Collection.class, LocalDateTime.class), Ordered.HIGHEST_PRECEDENCE))
+        Docket docket = new Docket(DocumentationType.SWAGGER_2)
+                .alternateTypeRules( AlternateTypeRules.newRule(
+                        typeResolver.resolve(ArrayList.class, LocalDateTime.class),
+                        typeResolver.resolve(ArrayList.class, Date.class), Ordered.HIGHEST_PRECEDENCE))
                 .groupName("momo")
                 .useDefaultResponseMessages(false)
                 .apiInfo(this.apiInfo())
@@ -46,5 +49,7 @@ public class SwaggerConfig {
                         .basePackage("com.momo.server.controller"))
                 .paths(PathSelectors.ant("/api/**"))
                 .build();
+
+        return docket;
     }
 }

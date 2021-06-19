@@ -1,23 +1,24 @@
 package com.momo.server.service;
 
-import com.momo.server.domain.User;
-import com.momo.server.dto.MeetSaveRequestDto;
+import com.momo.server.dto.request.MeetSaveRequestDto;
 import com.momo.server.repository.MeetRepository;
-import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+@RequiredArgsConstructor
 @Service
 public class MeetService {
 
-    @Autowired
-    private MeetRepository meetRepository;
 
-    @Autowired//meetService에 userService있는게 조금 찝찝하긴함
-    private UserService userService;
+    private final MeetRepository meetRepository;
+
+    //meetService에 userService있는게 조금 찝찝하긴함
+    private final UserService userService;
 
     ArrayList<Integer> users;
     int[][] times;
@@ -100,6 +101,10 @@ public class MeetService {
     public ResponseEntity<?> updateMeetTimetable() {
 
         return ResponseEntity.ok().build();
+    }
+
+    public void addUser(String meetId, int userId){
+
     }
 
 }

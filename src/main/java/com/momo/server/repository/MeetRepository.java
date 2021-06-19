@@ -1,7 +1,7 @@
 package com.momo.server.repository;
 
 
-import com.momo.server.dto.MeetSaveRequestDto;
+import com.momo.server.dto.request.MeetSaveRequestDto;
 import java.util.ArrayList;
 
 public interface MeetRepository {
@@ -12,4 +12,6 @@ public interface MeetRepository {
     int[][] findTimes();
 
     ArrayList<Integer> findUsers();
+    boolean isMeetExist(String meetId);
+    void addUser(String meetId, int userId);
 }
