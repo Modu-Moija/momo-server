@@ -1,5 +1,6 @@
 package com.momo.server.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.momo.server.dto.UserInfoDto;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -15,7 +16,7 @@ public class User {
 
     @Id
     private int _id;
-    private String userId;
+    private String username;
     private String meetId;
     private int[][] userTimes;
 
