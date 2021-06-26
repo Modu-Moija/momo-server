@@ -25,12 +25,13 @@ public class MeetSaveRequestDto {
     private String title;
     private String start;
     private String end;
+    
     @DateTimeFormat
     @ApiModelProperty(hidden = true)
     private LocalDateTime created;
     private int gap;
 
-    private ArrayList<LocalDateTime> dates;
+    private ArrayList<LocalDate> dates;
     @ApiModelProperty(hidden = true)
     private int num;
     @ApiModelProperty(hidden = true)
