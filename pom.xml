@@ -75,7 +75,16 @@
 					</excludes>
 				</configuration>
 			</plugin>
-			
+				<plugin>
+	        <groupId>org.apache.maven.plugins</groupId>
+	        <artifactId>maven-resources-plugin</artifactId>
+	        <configuration>
+	          <nonFilteredFileExtensions>
+	            <nonFilteredFileExtension>pdf</nonFilteredFileExtension>
+	            <nonFilteredFileExtension>swf</nonFilteredFileExtension>
+	          </nonFilteredFileExtensions>
+	        </configuration>
+	      </plugin>
 			
 		</plugins>
 	</build>
