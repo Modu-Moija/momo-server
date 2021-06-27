@@ -1,13 +1,14 @@
 package com.momo.server.repository;
 
 
+import com.momo.server.domain.Meet;
 import com.momo.server.dto.request.MeetSaveRequestDto;
 import java.util.ArrayList;
 
 public interface MeetRepository {
 
     //약속생성 메소드
-    void createMeet(MeetSaveRequestDto requestDto);
+    void createMeet(Meet meet);
 
     int[][] findTimes();
 

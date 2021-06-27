@@ -19,8 +19,8 @@ public class MeetRepositoryImpl implements MeetRepository {
 
 
     @Override
-    public void createMeet(MeetSaveRequestDto requestDto) {
-        mongoTemplate.insert(requestDto, "meet");
+    public void createMeet(Meet meet) {
+        mongoTemplate.insert(meet, "meet");
     }
 
     @Override
