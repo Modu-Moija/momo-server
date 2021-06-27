@@ -45,6 +45,7 @@ public class MeetService {
     public ResponseEntity<?> createMeet(MeetSaveRequestDto requestDto, String hashedUrl) {
     	
     	System.out.println(requestDto);
+    	
         LocalDate startDate = requestDto.getDates().get(0);
         LocalDate endDate = requestDto.getDates().get(1);
 
@@ -55,14 +56,8 @@ public class MeetService {
             dates.add(curDate);
             curDate=curDate.plusDays(1);
         }
-
         requestDto.setDates(dates);
 
-        String start = requestDto.getStart().split(":")[0];
-        String end = requestDto.getEnd().split(":")[0];
-
-        int col = Integer.parseInt(end) - Integer.parseInt(start);
-        col = (int)(60 / requestDto.getGap()) * col;
 //        int[] checkArray = new int[col];
 //        requestDto.setCheckArray(checkArray);
         requestDto.setCreated(LocalDateTime.now().plusHours(9));
@@ -70,7 +65,37 @@ public class MeetService {
         //requestDto.setMeetSubInfo(new MeetSub(dates));
 
         
-        //requestDto.getDates().size()
+        //meet의 times 이차원 배열 row 계산
+        String start = requestDto.getStart().split(":")[0];
+        String end = requestDto.getEnd().split(":")[0];
+
+        int row = Integer.parseInt(end) - Integer.parseInt(start);
+        row = (int)(60 / requestDto.getGap()) * row;
+        
+        
+    	//meet의 times 이차원 배열 col 계산
+        int col = dates.size();
+        
+        //meet의 times 이차원배열 0으로 채우기
+        int[][] temptimes = new int[row][col];
+        
+        for (int i = 0; i < row; i++) { // 행 반복
+			for (int j = 0; j < col; j++) { // 열 반복
+				temptimes[i][j] = 0;
+			}
+		}
+        
+        
+        //추후에 성능개선을 위해 캐시프랜들리 코드 적용 생각해보면 좋을 것 같음(행과 열 위치 연산개선)
+        //참조링크 https://hot2364928.tistory.com/58
+        
+//        for (int i = 0; i < row; i++) { // 행 반복
+//			for (int j = 0; j < col; j++) { // 열 반복
+//				System.out.println(i+"행 "+j+"열의 값:"+temptimes[i][j]);
+//			}
+//		}
+        
+        requestDto.setTimes(temptimes);
         meetRepository.createMeet(requestDto.toEntity());
         
         return ResponseEntity.ok().build();
