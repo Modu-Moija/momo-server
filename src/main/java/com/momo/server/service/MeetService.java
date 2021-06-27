@@ -66,11 +66,12 @@ public class MeetService {
 //        int[] checkArray = new int[col];
 //        requestDto.setCheckArray(checkArray);
         requestDto.setCreated(LocalDateTime.now().plusHours(9));
-
         requestDto.setMeetId(hashedUrl);
         //requestDto.setMeetSubInfo(new MeetSub(dates));
 
-        meetRepository.createMeet(requestDto);
+        
+        //requestDto.getDates().size()
+        meetRepository.createMeet(requestDto.toEntity());
         
         return ResponseEntity.ok().build();
     }
