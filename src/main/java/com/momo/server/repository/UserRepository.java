@@ -19,12 +19,9 @@ public interface UserRepository {
 
     void findUsername();
 
-<<<<<<< HEAD
 	void updateUserTime(User user, UserTimeUpdateRequestDto requestDto);
 
-=======
     void increaseMeetNum(String meetId);
->>>>>>> 4355ac99473f025c33d993f8d1bdde7557ca9caa
 
 
 }

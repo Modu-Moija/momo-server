@@ -24,22 +24,11 @@ public class UserTimeUpdateRequestDto {
     private String timeslot;
 	private boolean possible;
 
-	
-	@Builder
 	public UserTimeUpdateRequestDto(String meetId, String date, String timeslot, boolean possible) {
 		this.meetId = meetId;
 		this.date = date;
 		this.timeslot = timeslot;
 		this.possible = possible;
 	}
-
-	
-	 public User toEntity() {
-	        return User.builder()
-	        		.meetId(meetId)
-	        		.build();
-	    }
-
-
 	
 }
