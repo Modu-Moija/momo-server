@@ -1,5 +1,6 @@
 package com.momo.server.repository;
 
+import com.momo.server.domain.Meet;
 import com.momo.server.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -19,6 +20,8 @@ public interface UserRepository {
     void findUsername();
 
     void increaseMeetNum(String meetId);
+
+    Meet getUserMeet(String meetId);
 
 
 }
