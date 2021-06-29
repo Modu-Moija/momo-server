@@ -58,10 +58,8 @@ public class UserRepositoryImpl implements UserRepository {
 		Query query = new Query();
 		User dbuser = mongoTemplate.findOne(Query.query(Criteria.where("_id").is(user.getUserId())), User.class);
 		
-		
 		//DB에서 meet 찾기
 		Meet dbmeet = mongoTemplate.findOne(Query.query(Criteria.where("meetid").is(user.getMeetId())), Meet.class);
-		
 		
 		//i,j를 찾는다
 		
@@ -96,19 +94,29 @@ public class UserRepositoryImpl implements UserRepository {
 		
 		y=(total_hour-input_total_hour)/gap;
 		
-		//true일 때 좌표값 1로 세팅,false일때 좌표값 0으로 세팅
+		//usertimetable 불러오기
 		int[][] temp_userTimes = dbuser.getUserTimes();
 		
+		//meettimetable 불러오기
+		int[][] temp_Times = dbmeet.getTimes();
+		
+		//true일 때 좌표값 1로 세팅,false일때 좌표값 0으로 세팅
 		if(requestDto.isPossible()==true) {
 			temp_userTimes[y][x]=1;
+			temp_Times[y][x]=temp_Times[y][x]+1;
 		}
 		else if(requestDto.isPossible()==true) {
 			temp_userTimes[y][x]=0;
+			temp_Times[y][x]=temp_Times[y][x]-1;
 		}
 		
-		//db에 저장
+		//user db에 저장
 		dbuser.setUserTimes(temp_userTimes);
 		mongoTemplate.save(dbuser);
+		
+		//meet db에 저장
+		dbmeet.setTimes(temp_Times);
+		mongoTemplate.save(dbmeet);
     
 		
     }
