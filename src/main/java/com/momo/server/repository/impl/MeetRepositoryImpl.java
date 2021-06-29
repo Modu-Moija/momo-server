@@ -1,7 +1,9 @@
 package com.momo.server.repository.impl;
 
 import com.momo.server.domain.Meet;
+import com.momo.server.domain.User;
 import com.momo.server.dto.request.MeetSaveRequestDto;
+import com.momo.server.dto.request.UserTimeUpdateRequestDto;
 import com.momo.server.repository.MeetRepository;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,10 +61,13 @@ public class MeetRepositoryImpl implements MeetRepository {
         return existing_meet != null;
     }
 
-	@Override
-	public void updateMeetTime() {
-		
-		
-		
-	}
+//	@Override
+//	public void updateMeetTime(UserTimeUpdateRequestDto requestDto) {
+//		
+//		//DB에서 meet로 유저 찾기
+//		Query query = new Query();
+//		Meet dbmeet = mongoTemplate.findOne(Query.query(Criteria.where("meetid").is(requestDto.getMeetId())), Meet.class);
+//		
+//		
+//	}
 }
