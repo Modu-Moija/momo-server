@@ -36,10 +36,10 @@ public class MeetService {
         return meetRepository.findTimes();
     };
 
-    public ArrayList findUsername(){
-        username = userService.findUsername();
-        return userService.findUsername();
-    };
+//    public ArrayList findUsername(){
+//        username = userService.findUsername();
+//        return userService.findUsername();
+//    };
 
     //약속 생성메소드
     public ResponseEntity<?> createMeet(MeetSaveRequestDto requestDto, String hashedUrl) {
@@ -84,7 +84,6 @@ public class MeetService {
 				temptimes[i][j] = 0;
 			}
 		}
-        
         
         //추후에 성능개선을 위해 캐시프랜들리 코드 적용 생각해보면 좋을 것 같음(행과 열 위치 연산개선)
         //참조링크 https://hot2364928.tistory.com/58

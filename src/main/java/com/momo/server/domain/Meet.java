@@ -31,7 +31,6 @@ public class Meet {
 	public Meet(String meetId, String title, String start, String end, LocalDateTime created, int gap,
 			ArrayList<LocalDate> dates, int num, ArrayList<Integer> users, int[][] times, boolean center,
 			boolean video) {
-		super();
 		this.meetId = meetId;
 		this.title = title;
 		this.start = start;

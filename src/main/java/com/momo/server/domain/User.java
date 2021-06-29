@@ -1,13 +1,10 @@
 package com.momo.server.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.momo.server.dto.UserInfoDto;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 
+
+import lombok.Builder;
 import lombok.Data;
 
 @Data
@@ -19,5 +16,14 @@ public class User {
     private String username;
     private String meetId;
     private int[][] userTimes;
+    
+    
+    @Builder
+	public User(int _id, String username, String meetId, int[][] userTimes) {
+		this._id = _id;
+		this.username = username;
+		this.meetId = meetId;
+		this.userTimes = userTimes;
+	}
 
 }

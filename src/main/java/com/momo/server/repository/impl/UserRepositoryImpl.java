@@ -82,10 +82,15 @@ public class UserRepositoryImpl implements UserRepository {
 		
 		y=(total_hour-input_total_hour)/gap;
 		
-		
-		//좌표값 1로 세팅
+		//true일 때 좌표값 1로 세팅,false일때 좌표값 0으로 세팅
 		int[][] temp_userTimes = dbuser.getUserTimes();
-		temp_userTimes[y][x]=1;
+		
+		if(requestDto.isPossible()==true) {
+			temp_userTimes[y][x]=1;
+		}
+		else if(requestDto.isPossible()==true) {
+			temp_userTimes[y][x]=0;
+		}
 		
 		//db에 저장
 		dbuser.setUserTimes(temp_userTimes);
