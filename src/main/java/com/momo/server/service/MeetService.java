@@ -127,16 +127,6 @@ public class MeetService {
         return ResponseEntity.ok().build();
     }
 
-    //유저가 타임테이블 저장할때 약속의 타임테이블도 갱신하기 위한 메소드
-    public ResponseEntity<?> updateMeetTimetable() {
-
-        return ResponseEntity.ok().build();
-    }
-
-    public void addUser(String meetId, int userId){
-
-    }
-
 }
 
 

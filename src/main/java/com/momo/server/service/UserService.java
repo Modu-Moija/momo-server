@@ -22,7 +22,6 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-
     //로그인 메소드
     public User login(User user) {
 

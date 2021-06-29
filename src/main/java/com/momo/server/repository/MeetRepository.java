@@ -15,4 +15,6 @@ public interface MeetRepository {
     ArrayList<Integer> findUsers();
     boolean isMeetExist(String meetId);
     void addUser(String meetId, int userId);
+
+	void updateMeetTime();
 }

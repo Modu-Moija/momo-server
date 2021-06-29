@@ -16,7 +16,6 @@ public class TimeService {
 
 	
     private final UserRepository userRepository;
-    
     private final MeetRepository meetRepository;
 
     
@@ -24,7 +23,7 @@ public class TimeService {
 	public ResponseEntity<?> updateUsertime(User user, UserTimeUpdateRequestDto requestDto) {
         
         userRepository.updateUserTime(user, requestDto);
-        //meetRepository.updateMeetTime();
+        meetRepository.updateMeetTime();
         return ResponseEntity.ok().build();
 		
 	}
