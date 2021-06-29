@@ -39,7 +39,7 @@ public class SwaggerConfig {
         TypeResolver typeResolver = new TypeResolver();
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
                 .alternateTypeRules( AlternateTypeRules.newRule(
-                        typeResolver.resolve(ArrayList.class, LocalDateTime.class),
+                        typeResolver.resolve(ArrayList.class, LocalDate.class),
                         typeResolver.resolve(ArrayList.class, Date.class), Ordered.HIGHEST_PRECEDENCE))
                 .groupName("momo")
                 .useDefaultResponseMessages(false)

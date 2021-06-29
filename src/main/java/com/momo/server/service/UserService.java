@@ -20,22 +20,22 @@ public class UserService {
 
 
     //로그인 메소드
-    public ResponseEntity<?> login(User user) {
+    public User login(User user) {
 
         boolean isUserExist;
         isUserExist = userRepository.isUserExist(user);
 
         if (isUserExist){
-            return ResponseEntity.ok().build();
+            return null;
         }else{
-            return createUser(user);
+            createUser(user);
+            return user;
         }
     }
 
     //유저 생성
-    public ResponseEntity<?> createUser(User user) {
-        user.set_id(userRepository.createUser(user));
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public void createUser(User user) {
+        userRepository.createUser(user);
     }
 
     //유저의 시간정보 저장
