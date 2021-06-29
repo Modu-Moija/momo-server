@@ -20,5 +20,7 @@ public interface MeetRepository {
     
     void addUser(String meetId, int userId);
 
+	Meet getColorDate(String meetid);
+
 //	void updateMeetTime(UserTimeUpdateRequestDto requestDto);
 }

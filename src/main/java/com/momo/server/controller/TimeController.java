@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.momo.server.domain.User;
 import com.momo.server.dto.request.UserTimeUpdateRequestDto;
+import com.momo.server.dto.response.MeetInfoDto;
 import com.momo.server.service.TimeService;
 
 import lombok.RequiredArgsConstructor;
@@ -36,10 +38,18 @@ public class TimeController {
         return new ResponseEntity<>(HttpStatus.OK);
     };
 
+    
+    
     @GetMapping
-    public void getCommonTime(){
+    public MeetInfoDto getCommonTime(@RequestParam String meetid){
 
+    	MeetInfoDto meetInfoDto = new MeetInfoDto();
+
+    	//날짜에 색깔 들어가게 하기 위한 연산
+    	meetInfoDto.setColorDate(timeService.getColorDate(meetid));
+    	return meetInfoDto;
     }
+    
     
 }
 
