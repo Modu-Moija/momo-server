@@ -100,26 +100,7 @@ public class MeetService {
         return ResponseEntity.ok().build();
     }
 
-    //최대가능순 연산
-    public String[] getMaxTime() {
-        //users와 times 가지고 연산
-        //users와 Username으로 가져온 이름을 매핑시킴
-        return new String[0];
-    }
 
-    //최소가능순 연산
-    public String[] getMinTime() {
-        //users와 times 가지고 연산
-
-        //users와 findUsername으로 가져온 이름을 매핑시킴
-        return new String[0];
-    }
-
-    //14,15,16 날짜에 색깔 들어가게 하기 위한 연산
-    public String[] getColorofDate() {
-
-        return new String[0];
-    }
 
     //'누구랑, 언제, 어디서' 생성하기 위한 메소드
     public ResponseEntity<?> createMeetSub() {
@@ -127,6 +108,24 @@ public class MeetService {
         return ResponseEntity.ok().build();
     }
 
+    
+    
+//  //최대가능순 연산
+//  public String[] getMaxTime() {
+//      //users와 times 가지고 연산
+//      //users와 Username으로 가져온 이름을 매핑시킴
+//      return new String[0];
+//  }
+//
+//  //최소가능순 연산
+//  public String[] getMinTime() {
+//      //users와 times 가지고 연산
+//
+//      //users와 findUsername으로 가져온 이름을 매핑시킴
+//      return new String[0];
+//  }
+    
+    
 }
 
 
