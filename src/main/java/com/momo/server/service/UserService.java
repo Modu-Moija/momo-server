@@ -38,6 +38,7 @@ public class UserService {
 
     //유저 생성
     public void createUser(User user) {
+
         userRepository.createUser(user);
     }
 
