@@ -1,6 +1,8 @@
 package com.momo.server.repository;
 
 import com.momo.server.domain.User;
+import com.momo.server.dto.request.UserTimeUpdateRequestDto;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +16,10 @@ public interface UserRepository {
 
     boolean isUserExist(User user);
 
-    void updateUserTimetable();
 
     void findUsername();
+
+	void updateUserTime(User user, UserTimeUpdateRequestDto requestDto);
 
     void increaseMeetNum(String meetId);
 
