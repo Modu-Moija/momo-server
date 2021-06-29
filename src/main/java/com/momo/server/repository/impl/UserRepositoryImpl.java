@@ -1,19 +1,30 @@
 package com.momo.server.repository.impl;
 
+<<<<<<< HEAD
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
+=======
+import com.momo.server.domain.Meet;
+import com.momo.server.domain.User;
+import com.momo.server.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+>>>>>>> 4355ac99473f025c33d993f8d1bdde7557ca9caa
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
+<<<<<<< HEAD
 import com.momo.server.domain.Meet;
 import com.momo.server.domain.User;
 import com.momo.server.dto.request.UserTimeUpdateRequestDto;
 import com.momo.server.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
+=======
+import java.math.BigInteger;
+>>>>>>> 4355ac99473f025c33d993f8d1bdde7557ca9caa
 
 @RequiredArgsConstructor
 @Repository
@@ -23,8 +34,11 @@ public class UserRepositoryImpl implements UserRepository {
     private final MongoTemplate mongoTemplate;
 
     @Override
-    public int createUser(User user) {
-        return 0;
+    public void createUser(User user) {
+        BigInteger userid = BigInteger.valueOf(Integer.valueOf(Math.abs(user.hashCode())));
+        user.setUserId(userid);
+        mongoTemplate.insert(user, "user");
+
     }
 
     @Override
@@ -32,7 +46,7 @@ public class UserRepositoryImpl implements UserRepository {
 
         Query query = new Query();
         query.addCriteria(Criteria.where("meetId").is(user.getMeetId()));
-        query.addCriteria(Criteria.where("userId").is(user.getUsername()));
+        query.addCriteria(Criteria.where("username").is(user.getUsername()));
 
         return mongoTemplate.findOne(query,User.class, "user") != null;
     }
@@ -104,6 +118,15 @@ public class UserRepositoryImpl implements UserRepository {
 
     }
 
+    @Override
+    public void increaseMeetNum(String meetId) {
+
+        Query query = new Query();
+        query.addCriteria(Criteria.where("meetId").is(meetId));
+        Meet targetMeet = mongoTemplate.findOne(query, Meet.class, "meet");
+
+
+    }
 
 
 }

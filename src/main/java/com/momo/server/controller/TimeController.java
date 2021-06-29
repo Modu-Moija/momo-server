@@ -1,5 +1,6 @@
 package com.momo.server.controller;
 
+<<<<<<< HEAD
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -36,5 +37,25 @@ public class TimeController {
     	timeService.updateUsertime(user, requestDto);
         return new ResponseEntity<>(HttpStatus.OK);
     };
+=======
+import com.momo.server.dto.request.UserTimeSaveRequest;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping(value = "/api/time")
+public class TimeController {
+
+
+    @PutMapping
+    public void saveUserTime(@RequestBody UserTimeSaveRequest request){
+
+    }
+
+    @GetMapping
+    public void getCommonTime(){
+
+    }
+
+>>>>>>> 4355ac99473f025c33d993f8d1bdde7557ca9caa
 
 }

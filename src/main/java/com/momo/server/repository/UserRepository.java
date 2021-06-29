@@ -12,15 +12,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface UserRepository {
 
     //유저 생성 메소드
-    int createUser(User user);
+    void createUser(User user);
 
     boolean isUserExist(User user);
 
 
     void findUsername();
 
+<<<<<<< HEAD
 	void updateUserTime(User user, UserTimeUpdateRequestDto requestDto);
 
+=======
+    void increaseMeetNum(String meetId);
+>>>>>>> 4355ac99473f025c33d993f8d1bdde7557ca9caa
 
 
 }
