@@ -12,5 +12,6 @@ public class MeetInfoDto {
     private MeetSummary summary;
     private ArrayList<CommonTime> most;
     private ArrayList<CommonTime> least;
+    private ArrayList colorDate;
 
 }

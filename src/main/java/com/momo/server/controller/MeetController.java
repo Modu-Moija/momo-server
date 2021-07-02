@@ -30,21 +30,21 @@ public class MeetController {
         return new ResponseEntity<>(hashedUrl, HttpStatus.OK);
     };
 
-    //@GetMapping()
-    public String[] getMaxTime() {
-        meetService.getMaxTime();
-        
-        return null;
-    };
-
-    //@GetMapping()
-    public String[] getMinTime() {
-
-        meetService.getMaxTime();
-
-
-        return null;
-    };
+//    //@GetMapping()
+//    public String[] getMaxTime() {
+//        meetService.getMaxTime();
+//        
+//        return null;
+//    };
+//
+//    //@GetMapping()
+//    public String[] getMinTime() {
+//
+//        meetService.getMaxTime();
+//
+//
+//        return null;
+//    };
 
 
 

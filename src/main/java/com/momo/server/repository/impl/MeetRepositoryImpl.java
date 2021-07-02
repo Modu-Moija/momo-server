@@ -1,17 +1,16 @@
 package com.momo.server.repository.impl;
 
-import com.momo.server.domain.Meet;
-import com.momo.server.domain.User;
-import com.momo.server.dto.request.MeetSaveRequestDto;
-import com.momo.server.dto.request.UserTimeUpdateRequestDto;
-import com.momo.server.repository.MeetRepository;
 import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
+
+import com.momo.server.domain.Meet;
+import com.momo.server.repository.MeetRepository;
 
 @Repository
 public class MeetRepositoryImpl implements MeetRepository {
@@ -60,6 +59,19 @@ public class MeetRepositoryImpl implements MeetRepository {
 
         return existing_meet != null;
     }
+
+	@Override
+	public Meet getColorDate(String meetid) {
+		Query query = new Query();
+        Meet meet;
+
+        query.addCriteria(Criteria.where("meetId").is(meetid));
+        meet = mongoTemplate.findOne(query, Meet.class, "meet");
+
+        
+        
+        return meet;
+	}
 
 //	@Override
 //	public void updateMeetTime(UserTimeUpdateRequestDto requestDto) {
