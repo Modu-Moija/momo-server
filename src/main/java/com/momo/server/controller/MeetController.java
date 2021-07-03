@@ -8,10 +8,7 @@ import java.nio.charset.StandardCharsets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/api/meet")
@@ -29,6 +26,11 @@ public class MeetController {
         meetService.createMeet(requestDto, hashedUrl);
         return new ResponseEntity<>(hashedUrl, HttpStatus.OK);
     };
+
+    @GetMapping("/{meetId}")
+    public ResponseEntity<?> getMeetInfo(@PathVariable("meetId") String meetId){
+        return ResponseEntity.ok().build();
+    }
 
 //    //@GetMapping()
 //    public String[] getMaxTime() {
