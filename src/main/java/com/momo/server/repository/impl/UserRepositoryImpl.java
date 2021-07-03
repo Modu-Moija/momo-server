@@ -37,7 +37,7 @@ public class UserRepositoryImpl implements UserRepository {
         Meet meet = getUserMeet(user.getMeetId());
         int dates = meet.getDates().size();
         int timeslots = Integer.parseInt(meet.getEnd().split(":")[0]) - Integer.parseInt(meet.getStart().split(":")[0]);
-        int[][] userTimes = new int[timeslots][dates];
+        int[][] userTimes = new int[timeslots*((int) 60/meet.getGap())][dates];
         user.setUserTimes(userTimes);
         mongoTemplate.insert(user, "user");
     }
