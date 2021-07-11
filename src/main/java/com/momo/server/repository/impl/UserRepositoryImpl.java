@@ -119,11 +119,7 @@ public class UserRepositoryImpl implements UserRepository {
 		
     }
 
-    @Override
-    public void findUsername() {
-
-    }
-
+	@Transactional
     @Override
     public void increaseMeetNum(String meetId) {
 
@@ -134,11 +130,23 @@ public class UserRepositoryImpl implements UserRepository {
 
     }
 
+    //유저가 속한 Meet 불러오는 메소드
+    @Transactional(readOnly = true)
     @Override
     public Meet getUserMeet(String meetId) {
         Query query = new Query();
         query.addCriteria(Criteria.where("meetId").is(meetId));
         return mongoTemplate.findOne(query, Meet.class, "meet");
+    }
+    
+    
+    //유저아이디로 User 객체 불러오는 메소드
+    @Transactional(readOnly = true)
+	@Override
+    public User getUser(BigInteger userId) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("userId").is(userId));
+        return mongoTemplate.findOne(query, User.class, "user");
     }
 
 

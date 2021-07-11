@@ -10,6 +10,7 @@ import com.momo.server.domain.User;
 import com.momo.server.dto.request.UserTimeUpdateRequestDto;
 import com.momo.server.repository.MeetRepository;
 import com.momo.server.repository.UserRepository;
+import com.momo.server.utils.DateTimeDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,7 +30,7 @@ public class TimeService {
         //meetRepository.updateMeetTime(requestDto);
         return ResponseEntity.ok().build();
 		
-	}
+	};
 
 	//날짜 색깔 구하는 연산
 	public ArrayList getColorDate(String meetid) {
@@ -48,6 +49,8 @@ public class TimeService {
 		}
 		return colorDate;
 	}
+	
+	
 	
     
     

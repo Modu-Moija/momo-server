@@ -7,8 +7,10 @@ import java.util.ArrayList;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.momo.server.domain.User;
 import com.momo.server.dto.request.MeetSaveRequestDto;
 import com.momo.server.repository.MeetRepository;
+import com.momo.server.utils.DateTimeDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -44,7 +46,7 @@ public class MeetService {
     //약속 생성메소드
     public ResponseEntity<?> createMeet(MeetSaveRequestDto requestDto, String hashedUrl) {
     	
-    	System.out.println(requestDto);
+    	//System.out.println(requestDto);
     	
         LocalDate startDate = requestDto.getDates().get(0);
         LocalDate endDate = requestDto.getDates().get(1);
@@ -107,6 +109,8 @@ public class MeetService {
 
         return ResponseEntity.ok().build();
     }
+
+    
 
     
     
