@@ -2,6 +2,7 @@ package com.momo.server.service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
@@ -65,12 +66,13 @@ public class UserService {
 			int hour = Integer.parseInt(start.split(":")[0]);
 			int gapTime = Integer.parseInt(start.split(":")[1]);
 			int totalStartTime = hour*60+gapTime;
+			Map<String, Boolean> time = new HashMap<String, Boolean>();
 			
 			for(int i = 0;i<userTimes[0].length;i++) {
 				DateTimeDto dateTimeDto = new DateTimeDto();
 				
 				dateTimeDto.setDate(String.valueOf(created.getYear())+"/"+String.valueOf(created.getMonthValue())+"/"+String.valueOf(dayOfMonth));
-				Map<String, Boolean> time = dateTimeDto.getTime();
+				time = dateTimeDto.getTime();
 				
 				for(int j=0;j<userTimes.length;j++) {
 					
@@ -91,8 +93,6 @@ public class UserService {
 			return planList;
 			
 		}
-
-	
 
 
 //    //유저이름 찾는 메소드

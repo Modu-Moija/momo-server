@@ -55,19 +55,22 @@ public class UserController {
             String enc = aes128.encrypt(user.getUserId().toString());
             Cookie authCookie = new Cookie("authuser", enc);
             response.addCookie(authCookie);
-
-        }else{
-            responseCode = ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
-        
+            
     		UserMeetRespDto userMeetRespDto = new UserMeetRespDto();
-    		
     		ArrayList<DateTimeDto> planList = userService.mapPlanList(user);
-    		
     		userMeetRespDto.setMeetId(user.getMeetId());
             userMeetRespDto.setPlanList(planList);
             userMeetRespDto.setColorDate(timeService.getColorDate(key));
+            
+            return new ResponseEntity<>(new CmRespDto<>(responseCode, "유저 로그인 성공", userMeetRespDto), HttpStatus.OK);
 
-        return new ResponseEntity<>(new CmRespDto<>(responseCode, "유저 로그인 성공", userMeetRespDto), HttpStatus.OK);
+        }else{
+            responseCode = ResponseEntity.status(HttpStatus.CONFLICT).build();
+            return new ResponseEntity<>(new CmRespDto<>(responseCode, "유저 로그인 실패", null), HttpStatus.OK);
+        }
+        
+
+
+        
     }
 }

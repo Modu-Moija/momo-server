@@ -32,7 +32,7 @@ public class TimeController {
     public ResponseEntity<String> updateUsertime(HttpServletRequest request, @RequestBody UserTimeUpdateRequestDto requestDto) {
 		//세션에서 유저이름찾기
 		HttpSession session = request.getSession();
-		User user=(User) session.getAttribute("user");
+		User user=(User)session.getAttribute("user");
 
     	timeService.updateUsertime(user, requestDto);
         return new ResponseEntity<>(HttpStatus.OK);
