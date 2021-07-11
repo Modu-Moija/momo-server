@@ -17,7 +17,6 @@ public interface UserRepository {
 
     boolean isUserExist(User user);
 
-
     void findUsername();
 
 	void updateUserTime(User user, UserTimeUpdateRequestDto requestDto);

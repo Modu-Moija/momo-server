@@ -25,7 +25,8 @@ public class UserService {
     //로그인 메소드
     public User login(User user) {
 
-        boolean isUserExist;
+        boolean isUserExist = false;
+
         isUserExist = userRepository.isUserExist(user);
 
         if (isUserExist){
@@ -38,7 +39,6 @@ public class UserService {
 
     //유저 생성
     public void createUser(User user) {
-
         userRepository.createUser(user);
     }
 

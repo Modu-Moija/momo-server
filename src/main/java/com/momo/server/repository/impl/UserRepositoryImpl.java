@@ -1,16 +1,13 @@
 package com.momo.server.repository.impl;
 
-import java.text.SimpleDateFormat;
+import java.math.BigInteger;
 import java.util.ArrayList;
 
-import com.momo.server.domain.Meet;
-import com.momo.server.domain.User;
-import com.momo.server.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.momo.server.domain.Meet;
 import com.momo.server.domain.User;
@@ -18,9 +15,6 @@ import com.momo.server.dto.request.UserTimeUpdateRequestDto;
 import com.momo.server.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
-import java.math.BigInteger;
-import java.time.Duration;
-import java.time.Period;
 
 @RequiredArgsConstructor
 @Repository
@@ -29,12 +23,16 @@ public class UserRepositoryImpl implements UserRepository {
 
     private final MongoTemplate mongoTemplate;
 
-
+    @Transactional
     @Override
     public void createUser(User user) {
         BigInteger userid = BigInteger.valueOf(Integer.valueOf(Math.abs(user.hashCode())));
+        
+        
         user.setUserId(userid);
         Meet meet = getUserMeet(user.getMeetId());
+        
+        
         int dates = meet.getDates().size();
         int timeslots = Integer.parseInt(meet.getEnd().split(":")[0]) - Integer.parseInt(meet.getStart().split(":")[0]);
         int[][] userTimes = new int[timeslots*((int) 60/meet.getGap())][dates];
