@@ -34,7 +34,6 @@ public class UserController {
 
     private final UserService userService;
     private final TimeService timeService;
-    private final MeetService meetService;
     
     @Value("${aesKey}")
     private String key;
