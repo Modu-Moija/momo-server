@@ -53,11 +53,12 @@ public class UserRepositoryImpl implements UserRepository {
     public void updateUserTime(User user, UserTimeUpdateRequestDto requestDto) {
 		
 		//DB에서 유저 찾기
-		Query query = new Query();
-		User dbuser = mongoTemplate.findOne(Query.query(Criteria.where("_id").is(user.getUserId())), User.class);
+		User dbuser = mongoTemplate.findOne(Query.query(Criteria.where("userId").is(user.getUserId())), User.class);
 		
 		//DB에서 meet 찾기
-		Meet dbmeet = mongoTemplate.findOne(Query.query(Criteria.where("meetid").is(user.getMeetId())), Meet.class);
+		Meet dbmeet = mongoTemplate.findOne(Query.query(Criteria.where("meetId").is(user.getMeetId())), Meet.class);
+		
+		System.out.println(dbmeet);
 		
 		//i,j를 찾는다
 		
