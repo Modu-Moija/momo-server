@@ -50,81 +50,17 @@ public class UserRepositoryImpl implements UserRepository {
         query.addCriteria(Criteria.where("username").is(user.getUsername()));
         return mongoTemplate.findOne(query,User.class, "user") != null;
     }
+    
+    
+    @Override
+    public User findUser(User user) {
+
+    	User dbuser = mongoTemplate.findOne(Query.query(Criteria.where("userId").is(user.getUserId())), User.class);
+        return dbuser;
+    }
 
 	@Override
-    public void updateUserTime(User user, UserTimeUpdateRequestDto requestDto) {
-		
-		
-		User dbuser = mongoTemplate.findOne(Query.query(Criteria.where("userId").is(user.getUserId())), User.class);
-		Meet dbmeet = mongoTemplate.findOne(Query.query(Criteria.where("meetId").is(user.getMeetId())), Meet.class);
-		
-		//dbmeet로 column 위치 계산
-		ArrayList<LocalDate> dates = dbmeet.getDates();
-		
-		int x=0;
-		for(int i =0; i<dates.size();i++) {
-//			System.out.println(requestDto.getDate());
-//			System.out.println(dates.get(i));
-			if(requestDto.getDate().equals(dates.get(i))) {
-				x=i;
-				break;
-			}
-		}
-		x=x+1;
-		
-		//dbmeet로 row 위치 계산
-		int y=0;
-		String start = dbmeet.getStart();
-		//System.out.println(start);
-		int hour = Integer.parseInt(start.substring(0,2));
-		
-		//System.out.println(hour);
-		int min = Integer.parseInt(start.substring(3,5));
-		//System.out.println(min);
-		
-		
-		int total_hour = hour*60+min;
-		//System.out.println(total_hour);
-		
-		
-		String timeslot = requestDto.getTimeslot();
-		
-		//System.out.println(timeslot);
-		int input_hour = Integer.parseInt(timeslot.substring(0,2));
-		
-		//System.out.println(input_hour);
-		int input_min = Integer.parseInt(timeslot.substring(3,5));
-		//System.out.println(input_min);
-		
-		
-		int input_total_hour = input_hour*60+input_min;
-		//System.out.println(input_total_hour);
-		int gap = dbmeet.getGap();
-		//System.out.println(gap);
-		
-		y=(input_total_hour-total_hour)/gap;
-		System.out.println(y);
-		
-		
-		//usertimetable 불러오기
-		int[][] temp_userTimes = dbuser.getUserTimes();
-		
-		//meettimetable 불러오기
-		int[][] temp_Times = dbmeet.getTimes();
-		
-		//true일 때 좌표값 1로 세팅,false일때 좌표값 0으로 세팅
-		if(requestDto.isPossible()==true) {
-			temp_userTimes[y][x]=1;
-			temp_Times[y][x]=temp_Times[y][x]+1;
-		}
-		else if(requestDto.isPossible()==false) {
-			temp_userTimes[y][x]=0;
-			temp_Times[y][x]=temp_Times[y][x]-1;
-		}
-		
-
-		dbuser.setUserTimes(temp_userTimes);
-		dbmeet.setTimes(temp_Times);
+    public void updateUserTime(User user, int[][] temp_userTimes,  int[][] temp_Times) {
 		
 		//DB에서 user 찾기
 		Query query = new Query(Criteria.where("userId").is(user.getUserId()));
@@ -149,8 +85,6 @@ public class UserRepositoryImpl implements UserRepository {
         Query query = new Query();
         query.addCriteria(Criteria.where("meetId").is(meetId));
         Meet targetMeet = mongoTemplate.findOne(query, Meet.class, "meet");
-
-
     }
 
     //유저가 속한 Meet 불러오는 메소드

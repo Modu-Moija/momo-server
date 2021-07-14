@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import com.momo.server.domain.Meet;
+import com.momo.server.domain.User;
 import com.momo.server.repository.MeetRepository;
 
 @Repository
@@ -23,11 +24,14 @@ public class MeetRepositoryImpl implements MeetRepository {
     public void createMeet(Meet meet) {
         mongoTemplate.insert(meet, "meet");
     }
+    
+	@Override
+    public Meet findMeet(User user) {
 
-    @Override
-    public int[][] findTimes() {
-        return new int[0][];
+    	Meet dbmeet = mongoTemplate.findOne(Query.query(Criteria.where("meetId").is(user.getMeetId())), Meet.class);
+        return dbmeet;
     }
+
 
     @Override
     public ArrayList<Integer> findUsers() {

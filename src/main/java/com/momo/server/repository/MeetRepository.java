@@ -2,6 +2,7 @@ package com.momo.server.repository;
 
 
 import com.momo.server.domain.Meet;
+import com.momo.server.domain.User;
 import com.momo.server.dto.request.MeetSaveRequestDto;
 import com.momo.server.dto.request.UserTimeUpdateRequestDto;
 
@@ -12,8 +13,6 @@ public interface MeetRepository {
     //약속생성 메소드
     void createMeet(Meet meet);
 
-    int[][] findTimes();
-
     ArrayList<Integer> findUsers();
     
     boolean isMeetExist(String meetId);
@@ -22,5 +21,6 @@ public interface MeetRepository {
 
 	Meet getColorDate(String meetid);
 
-//	void updateMeetTime(UserTimeUpdateRequestDto requestDto);
+	Meet findMeet(User user);
+
 }

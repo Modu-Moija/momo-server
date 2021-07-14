@@ -33,11 +33,6 @@ public class MeetService {
         return meetRepository.findUsers();
     };
 
-    public int[][] findTimes(){
-        times = meetRepository.findTimes();
-        return meetRepository.findTimes();
-    };
-
 //    public ArrayList findUsername(){
 //        username = userService.findUsername();
 //        return userService.findUsername();
