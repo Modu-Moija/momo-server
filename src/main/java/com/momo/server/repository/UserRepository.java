@@ -4,6 +4,8 @@ import com.momo.server.domain.Meet;
 import com.momo.server.domain.User;
 import com.momo.server.dto.request.UserTimeUpdateRequestDto;
 
+import java.math.BigInteger;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.ResponseEntity;
@@ -17,14 +19,15 @@ public interface UserRepository {
 
     boolean isUserExist(User user);
 
-
-    void findUsername();
-
-	void updateUserTime(User user, UserTimeUpdateRequestDto requestDto);
-
     void increaseMeetNum(String meetId);
 
     Meet getUserMeet(String meetId);
+
+	User getUser(BigInteger bigInteger);
+
+	User findUser(User user);
+
+	void updateUserTime(User user, int[][] temp_userTimes, int[][] temp_Times);
 
 
 }
