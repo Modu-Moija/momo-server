@@ -12,7 +12,6 @@ import com.momo.server.domain.Meet;
 import com.momo.server.domain.User;
 import com.momo.server.repository.MeetRepository;
 import com.momo.server.repository.UserRepository;
-import com.momo.server.utils.DateTimeDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -77,32 +76,26 @@ public class UserService {
 //				}
 			//2차원 배열 돌면서 데이터 저장
 			for(int i = 0;i<userTimes[0].length;i++) {
-				Map<String, Boolean> time = new LinkedHashMap<String, Boolean>();
-				dateTimeDto.setDate(String.valueOf(startDate.getYear())+"/"+String.valueOf(startDate.getMonthValue())+"/"+String.valueOf(dayOfMonth));
-				//time = dateTimeDto.getTime()
-				//String hourTime = String.valueOf(totalStartTime/60)+":"+String.valueOf(totalStartTime%60);
-				System.out.println(userTimes.length);
+				//Map date = new LinkedHashMap();
+				LinkedHashMap<String, Boolean> time = new LinkedHashMap<String, Boolean>();
+				
+				String temp_date = String.valueOf(startDate.getYear())+"/"+String.valueOf(startDate.getMonthValue())+"/"+String.valueOf(dayOfMonth);
 				int temp_totalStartTime = totalStartTime;
 				
 				for(int j = 0;j<userTimes.length;j++) {
-					System.out.print(userTimes[j][i]+ " ");
-					//System.out.print("j :"+j+ " ");
-					//System.out.print("hourtime :"+hourTime+ " ");
 					if(userTimes[j][i]==0) {
 						time.put(String.valueOf(temp_totalStartTime/60)+":"+String.valueOf(temp_totalStartTime%60), false);
 					}else if(userTimes[j][i]==1) {
-						System.out.println("실행됨?");
-						//time.put(String.valueOf(temp_totalStartTime/60)+":"+String.valueOf(temp_totalStartTime%60), true);
+						time.put(String.valueOf(temp_totalStartTime/60)+":"+String.valueOf(temp_totalStartTime%60), true);
 					}
 					temp_totalStartTime=temp_totalStartTime+gap;
 				}
-				System.out.println("분기");
-				dateTimeDto.setTime(time);
+				//System.out.println("분기");
+				//dateTimeDto.setTime(time);
 				dayOfMonth++;
-				planList.add(dateTimeDto);
+				planList.put(temp_date, time);
 			}
 			return planList;
-			
 		}
 
 
