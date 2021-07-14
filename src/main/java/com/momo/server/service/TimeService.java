@@ -32,14 +32,13 @@ public class TimeService {
 
 		//dbmeet로 column 위치 계산
 		ArrayList<LocalDate> dates = dbmeet.getDates();
-		System.out.println(dates.get(0));
-		System.out.println(dates.get(1));
+		
 		int x=0;
 		for(int i =0; i<dates.size();i++) {
-			System.out.println(requestDto.getDate());
-			System.out.println(dates.get(i));
+//			System.out.println("요청 "+requestDto.getDate());
+//			System.out.println("db날짜 "+dates.get(i));
 			if(requestDto.getDate().equals(dates.get(i))) {
-				System.out.println(i);
+				//System.out.println(i);
 				x=i;
 				break;
 			}
