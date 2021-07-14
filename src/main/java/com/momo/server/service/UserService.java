@@ -1,8 +1,9 @@
 package com.momo.server.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
@@ -45,7 +46,7 @@ public class UserService {
     
     
     
-    //나중에 코드좀더 쉽게 할수도 있을듯
+    //희은님 부탁사항으로 만든 메소드
 		public ArrayList<DateTimeDto> mapPlanList(User user) {
 			
 			ArrayList<DateTimeDto> planList = new ArrayList<DateTimeDto>();
@@ -54,33 +55,37 @@ public class UserService {
 			User userEntity = userRepository.getUser(user.getUserId());
 			Meet meetEntity = userRepository.getUserMeet(user.getMeetId());
 			
-			
+			//데이터 db에서 불러오기
 			int[][] userTimes = userEntity.getUserTimes();
-			LocalDateTime created = meetEntity.getCreated();
 			String start = meetEntity.getStart();
 			String end = meetEntity.getEnd();
 			int gap = meetEntity.getGap();
-			int dayOfMonth = created.getDayOfMonth();
+			
+			LocalDate startDate = meetEntity.getDates().get(0);
+			
+			int dayOfMonth = startDate.getDayOfMonth();
 			
 			
 			int hour = Integer.parseInt(start.split(":")[0]);
 			int gapTime = Integer.parseInt(start.split(":")[1]);
 			int totalStartTime = hour*60+gapTime;
-			Map<String, Boolean> time = new HashMap<String, Boolean>();
+			Map<String, Boolean> time = new LinkedHashMap<String, Boolean>();//순서 저장을 위해 링크드해쉬맵 사용
 			
+			
+			//2차원 배열 돌면서 데이터 저장
 			for(int i = 0;i<userTimes[0].length;i++) {
 				DateTimeDto dateTimeDto = new DateTimeDto();
 				
-				dateTimeDto.setDate(String.valueOf(created.getYear())+"/"+String.valueOf(created.getMonthValue())+"/"+String.valueOf(dayOfMonth));
-				time = dateTimeDto.getTime();
+				dateTimeDto.setDate(String.valueOf(startDate.getYear())+"/"+String.valueOf(startDate.getMonthValue())+"/"+String.valueOf(dayOfMonth));
+				//time = dateTimeDto.getTime();
 				
 				for(int j=0;j<userTimes.length;j++) {
 					
 					String hourTime = String.valueOf(totalStartTime/60)+":"+String.valueOf(totalStartTime%60);
 					
-					if(userTimes[i][j]==0) {
+					if(userTimes[j][i]==0) {
 						time.put(hourTime, false);
-					}else {
+					}else if(userTimes[j][i]==1) {
 						time.put(hourTime, true);
 					}
 				}

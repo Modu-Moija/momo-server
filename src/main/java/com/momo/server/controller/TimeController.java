@@ -31,9 +31,8 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping(value = "/api/time")
 public class TimeController {
 	
-	@Autowired
-    private TimeService timeService;
-	private UserService userService;
+    private final TimeService timeService;
+	private final UserService userService;
 
     @PutMapping
     public ResponseEntity<String> updateUsertime(HttpServletRequest request, @RequestBody UserTimeUpdateRequestDto requestDto) {//@CookieValue(value="gender", required=false) Cookie genderCookie
@@ -61,7 +60,7 @@ public class TimeController {
 //    }
     
     
-    @GetMapping
+    @GetMapping("/usertime")
     public UserMeetRespDto getUserTime(HttpServletRequest request){
     
     	//세션에서 유저찾기
