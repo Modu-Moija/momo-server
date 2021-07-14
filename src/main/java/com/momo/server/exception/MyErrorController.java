@@ -1,4 +1,4 @@
-package com.momo.server.error;
+package com.momo.server.exception;
 
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;

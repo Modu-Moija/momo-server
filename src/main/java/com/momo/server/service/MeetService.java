@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.momo.server.domain.User;
 import com.momo.server.dto.request.MeetSaveRequestDto;
@@ -20,24 +21,9 @@ public class MeetService {
 
     private final MeetRepository meetRepository;
 
-    //meetService에 userService있는게 조금 찝찝하긴함
-    private final UserService userService;
-
-    ArrayList<Integer> users;
-    int[][] times;
-    ArrayList username;
-
-    public ArrayList<Integer> findUsers(){
-        users = meetRepository.findUsers();
-        return meetRepository.findUsers();
-    };
-
-//    public ArrayList findUsername(){
-//        username = userService.findUsername();
-//        return userService.findUsername();
-//    };
 
     //약속 생성메소드
+    @Transactional
     public ResponseEntity<?> createMeet(MeetSaveRequestDto requestDto, String hashedUrl) {
     	
     	//System.out.println(requestDto);
@@ -53,9 +39,6 @@ public class MeetService {
             curDate=curDate.plusDays(1);
         }
         requestDto.setDates(dates);
-
-//        int[] checkArray = new int[col];
-//        requestDto.setCheckArray(checkArray);
         requestDto.setCreated(LocalDateTime.now().plusHours(9));
         requestDto.setMeetId(hashedUrl);
         //requestDto.setMeetSubInfo(new MeetSub(dates));
@@ -92,37 +75,14 @@ public class MeetService {
         
         requestDto.setTimes(temptimes);
         meetRepository.createMeet(requestDto.toEntity());
-        
         return ResponseEntity.ok().build();
     }
-
-
 
     //'누구랑, 언제, 어디서' 생성하기 위한 메소드
+    @Transactional
     public ResponseEntity<?> createMeetSub() {
-
         return ResponseEntity.ok().build();
     }
-
-    
-
-    
-    
-//  //최대가능순 연산
-//  public String[] getMaxTime() {
-//      //users와 times 가지고 연산
-//      //users와 Username으로 가져온 이름을 매핑시킴
-//      return new String[0];
-//  }
-//
-//  //최소가능순 연산
-//  public String[] getMinTime() {
-//      //users와 times 가지고 연산
-//
-//      //users와 findUsername으로 가져온 이름을 매핑시킴
-//      return new String[0];
-//  }
-    
     
 }
 

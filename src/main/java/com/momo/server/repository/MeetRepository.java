@@ -12,8 +12,6 @@ public interface MeetRepository {
 
     //약속생성 메소드
     void createMeet(Meet meet);
-
-    ArrayList<Integer> findUsers();
     
     boolean isMeetExist(String meetId);
     

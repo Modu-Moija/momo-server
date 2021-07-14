@@ -21,10 +21,6 @@ public interface UserRepository {
 
     void increaseMeetNum(String meetId);
 
-    Meet getUserMeet(String meetId);
-
-	User getUser(BigInteger bigInteger);
-
 	User findUser(User user);
 
 	void updateUserTime(User user, int[][] temp_userTimes, int[][] temp_Times);
