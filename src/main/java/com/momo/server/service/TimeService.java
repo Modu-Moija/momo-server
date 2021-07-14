@@ -28,18 +28,15 @@ public class TimeService {
     @Transactional
 	public ResponseEntity<?> updateUsertime(User user, UserTimeUpdateRequestDto requestDto) {
 		
-		User dbuser = userRepository.findUser(user);
-		Meet dbmeet = meetRepository.findMeet(user);
+		User userEntity = userRepository.findUser(user);
+		Meet meetEntity = meetRepository.findMeet(user);
 
 		//dbmeet로 column 위치 계산
-		ArrayList<LocalDate> dates = dbmeet.getDates();
+		ArrayList<LocalDate> dates = meetEntity.getDates();
 		
 		int x=0;
 		for(int i =0; i<dates.size();i++) {
-//			System.out.println("요청 "+requestDto.getDate());
-//			System.out.println("db날짜 "+dates.get(i));
 			if(requestDto.getDate().equals(dates.get(i))) {
-				//System.out.println(i);
 				x=i;
 				break;
 			}
@@ -47,7 +44,7 @@ public class TimeService {
 		
 		//dbmeet로 row 위치 계산
 		int y=0;
-		String start = dbmeet.getStart();
+		String start = meetEntity.getStart();
 		int hour = Integer.parseInt(start.substring(0,2));
 		int min = Integer.parseInt(start.substring(3,5));
 		int total_hour = hour*60+min;
@@ -55,16 +52,16 @@ public class TimeService {
 		int input_hour = Integer.parseInt(timeslot.substring(0,2));
 		int input_min = Integer.parseInt(timeslot.substring(3,5));
 		int input_total_hour = input_hour*60+input_min;
-		int gap = dbmeet.getGap();
+		int gap = meetEntity.getGap();
 		
 		y=(input_total_hour-total_hour)/gap;
 		
 		
 		//usertimetable 불러오기
-		int[][] temp_userTimes = dbuser.getUserTimes();
+		int[][] temp_userTimes = userEntity.getUserTimes();
 		
 		//meettimetable 불러오기
-		int[][] temp_Times = dbmeet.getTimes();
+		int[][] temp_Times = meetEntity.getTimes();
 		
 		//true일 때 좌표값 1로 세팅,false일때 좌표값 0으로 세팅
 		if(requestDto.isPossible()==true) {
@@ -77,7 +74,6 @@ public class TimeService {
 		}
         
         userRepository.updateUserTime(user, temp_userTimes, temp_Times);
-        
         return ResponseEntity.ok().build();
 		
 	};

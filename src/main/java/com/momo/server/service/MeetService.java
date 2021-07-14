@@ -75,11 +75,8 @@ public class MeetService {
         
         requestDto.setTimes(temptimes);
         meetRepository.createMeet(requestDto.toEntity());
-        
         return ResponseEntity.ok().build();
     }
-
-
 
     //'누구랑, 언제, 어디서' 생성하기 위한 메소드
     @Transactional

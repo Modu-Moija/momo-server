@@ -28,8 +28,8 @@ public class MeetRepositoryImpl implements MeetRepository {
 	@Override
     public Meet findMeet(User user) {
 
-    	Meet dbmeet = mongoTemplate.findOne(Query.query(Criteria.where("meetId").is(user.getMeetId())), Meet.class);
-        return dbmeet;
+    	Meet meetEntity = mongoTemplate.findOne(Query.query(Criteria.where("meetId").is(user.getMeetId())), Meet.class);
+        return meetEntity;
     }
 
     @Override
@@ -38,11 +38,11 @@ public class MeetRepositoryImpl implements MeetRepository {
         Query query = new Query();
         query.addCriteria(Criteria.where("_id").is(meetId));
         Meet meet = mongoTemplate.findOne(query, Meet.class, "meet");
+        
+        
         Update update = new Update();
         update.inc("num", 1);
         mongoTemplate.updateFirst(query, update, "meet");
-
-
     }
 
     @Override
@@ -64,19 +64,7 @@ public class MeetRepositoryImpl implements MeetRepository {
 
         query.addCriteria(Criteria.where("meetId").is(meetid));
         meet = mongoTemplate.findOne(query, Meet.class, "meet");
-
-        
         
         return meet;
 	}
-
-//	@Override
-//	public void updateMeetTime(UserTimeUpdateRequestDto requestDto) {
-//		
-//		//DB에서 meet로 유저 찾기
-//		Query query = new Query();
-//		Meet dbmeet = mongoTemplate.findOne(Query.query(Criteria.where("meetid").is(requestDto.getMeetId())), Meet.class);
-//		
-//		
-//	}
 }

@@ -1,5 +1,6 @@
 package com.momo.server.service;
 
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
 
@@ -8,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.momo.server.domain.Meet;
 import com.momo.server.domain.User;
+import com.momo.server.repository.MeetRepository;
 import com.momo.server.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -17,7 +19,9 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
 
 	private final UserRepository userRepository;
-
+	private final MeetRepository	meetRepository;
+	
+	
 	@Transactional
 	// 로그인 메소드
 	public User login(User user) {
@@ -37,6 +41,17 @@ public class UserService {
 	@Transactional
 	// 유저 생성
 	public void createUser(User user) {
+
+		BigInteger userid = BigInteger.valueOf(Integer.valueOf(Math.abs(user.hashCode())));
+
+		user.setUserId(userid);
+		Meet meetEntity = meetRepository.findMeet(user);
+
+		int dates = meetEntity.getDates().size();
+		int timeslots = Integer.parseInt(meetEntity.getEnd().split(":")[0]) - Integer.parseInt(meetEntity.getStart().split(":")[0]);
+		int[][] userTimes = new int[timeslots * ((int) 60 / meetEntity.getGap())][dates];
+		user.setUserTimes(userTimes);
+
 		userRepository.createUser(user);
 	}
 
@@ -47,8 +62,8 @@ public class UserService {
 		LinkedHashMap<String, LinkedHashMap<String, Boolean>> planList = new LinkedHashMap<String, LinkedHashMap<String, Boolean>>();
 
 		// 데이터 db에서 불러오기
-		User userEntity = userRepository.getUser(user.getUserId());
-		Meet meetEntity = userRepository.getUserMeet(user.getMeetId());
+		User userEntity = userRepository.findUser(user);
+		Meet meetEntity = meetRepository.findMeet(user);
 
 		int[][] userTimes = userEntity.getUserTimes();
 		String start = meetEntity.getStart();
