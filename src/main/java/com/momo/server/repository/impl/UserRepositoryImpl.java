@@ -1,11 +1,13 @@
 package com.momo.server.repository.impl;
 
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,46 +54,57 @@ public class UserRepositoryImpl implements UserRepository {
 	@Override
     public void updateUserTime(User user, UserTimeUpdateRequestDto requestDto) {
 		
-		//DB에서 유저 찾기
-		User dbuser = mongoTemplate.findOne(Query.query(Criteria.where("userId").is(user.getUserId())), User.class);
 		
-		//DB에서 meet 찾기
+		User dbuser = mongoTemplate.findOne(Query.query(Criteria.where("userId").is(user.getUserId())), User.class);
 		Meet dbmeet = mongoTemplate.findOne(Query.query(Criteria.where("meetId").is(user.getMeetId())), Meet.class);
 		
-		System.out.println(dbmeet);
-		
-		//i,j를 찾는다
-		
 		//dbmeet로 column 위치 계산
-		ArrayList dates = dbmeet.getDates();
+		ArrayList<LocalDate> dates = dbmeet.getDates();
 		
 		int x=0;
 		for(int i =0; i<dates.size();i++) {
+//			System.out.println(requestDto.getDate());
+//			System.out.println(dates.get(i));
 			if(requestDto.getDate().equals(dates.get(i))) {
 				x=i;
 				break;
 			}
 		}
-		
+		x=x+1;
 		
 		//dbmeet로 row 위치 계산
 		int y=0;
 		String start = dbmeet.getStart();
-		int hour = Integer.parseInt(start.substring(0,1));
-		int min = Integer.parseInt(start.substring(3,4));
+		//System.out.println(start);
+		int hour = Integer.parseInt(start.substring(0,2));
+		
+		//System.out.println(hour);
+		int min = Integer.parseInt(start.substring(3,5));
+		//System.out.println(min);
 		
 		
 		int total_hour = hour*60+min;
+		//System.out.println(total_hour);
+		
 		
 		String timeslot = requestDto.getTimeslot();
-		int input_hour = Integer.parseInt(timeslot.substring(0,1));
-		int input_min = Integer.parseInt(timeslot.substring(3,4));
+		
+		//System.out.println(timeslot);
+		int input_hour = Integer.parseInt(timeslot.substring(0,2));
+		
+		//System.out.println(input_hour);
+		int input_min = Integer.parseInt(timeslot.substring(3,5));
+		//System.out.println(input_min);
+		
 		
 		int input_total_hour = input_hour*60+input_min;
-		
+		//System.out.println(input_total_hour);
 		int gap = dbmeet.getGap();
+		//System.out.println(gap);
 		
-		y=(total_hour-input_total_hour)/gap;
+		y=(input_total_hour-total_hour)/gap;
+		System.out.println(y);
+		
 		
 		//usertimetable 불러오기
 		int[][] temp_userTimes = dbuser.getUserTimes();
@@ -104,19 +117,28 @@ public class UserRepositoryImpl implements UserRepository {
 			temp_userTimes[y][x]=1;
 			temp_Times[y][x]=temp_Times[y][x]+1;
 		}
-		else if(requestDto.isPossible()==true) {
+		else if(requestDto.isPossible()==false) {
 			temp_userTimes[y][x]=0;
 			temp_Times[y][x]=temp_Times[y][x]-1;
 		}
 		
-		//user db에 저장
+
 		dbuser.setUserTimes(temp_userTimes);
-		mongoTemplate.save(dbuser);
-		
-		//meet db에 저장
 		dbmeet.setTimes(temp_Times);
-		mongoTemplate.save(dbmeet);
-    
+		
+		//DB에서 user 찾기
+		Query query = new Query(Criteria.where("userId").is(user.getUserId()));
+		Update update = new Update();
+	    update.set("userTimes", temp_userTimes);
+	    mongoTemplate.updateFirst(query, update, User.class);
+	   
+	    
+		//DB에서 meet 찾기
+	    Query meetQuery = new Query(Criteria.where("meetId").is(user.getMeetId()));
+		Update meetUpdate = new Update();
+		meetUpdate.set("times", temp_Times);
+	    mongoTemplate.updateFirst(meetQuery, meetUpdate, Meet.class);
+	    
 		
     }
 

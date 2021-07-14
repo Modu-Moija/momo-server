@@ -20,11 +20,11 @@ public class UserTimeUpdateRequestDto {
 	
 	
 	private String meetId;
-    private String date;
+    private LocalDate date;
     private String timeslot;
 	private boolean possible;
 
-	public UserTimeUpdateRequestDto(String meetId, String date, String timeslot, boolean possible) {
+	public UserTimeUpdateRequestDto(String meetId, LocalDate date, String timeslot, boolean possible) {
 		this.meetId = meetId;
 		this.date = date;
 		this.timeslot = timeslot;
