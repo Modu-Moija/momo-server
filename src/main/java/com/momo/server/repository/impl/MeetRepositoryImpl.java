@@ -32,13 +32,6 @@ public class MeetRepositoryImpl implements MeetRepository {
         return dbmeet;
     }
 
-
-    @Override
-    public ArrayList<Integer> findUsers() {
-        ArrayList users = new ArrayList();
-        return users;
-    }
-
     @Override
     public void addUser(String meetId, int userId) {
 
