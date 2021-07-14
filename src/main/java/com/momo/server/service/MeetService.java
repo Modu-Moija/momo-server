@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import com.momo.server.domain.User;
 import com.momo.server.dto.request.MeetSaveRequestDto;
 import com.momo.server.repository.MeetRepository;
-import com.momo.server.utils.DateTimeDto;
 
 import lombok.RequiredArgsConstructor;
 

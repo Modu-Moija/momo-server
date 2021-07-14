@@ -2,6 +2,7 @@ package com.momo.server.controller;
 
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +23,6 @@ import com.momo.server.dto.request.UserTimeUpdateRequestDto;
 import com.momo.server.dto.response.UserMeetRespDto;
 import com.momo.server.service.TimeService;
 import com.momo.server.service.UserService;
-import com.momo.server.utils.DateTimeDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -68,7 +68,7 @@ public class TimeController {
 		User user=(User)session.getAttribute("user");
         
         UserMeetRespDto userMeetRespDto = new UserMeetRespDto();
-    	ArrayList<DateTimeDto> planList = userService.mapPlanList(user);
+        LinkedHashMap<String, LinkedHashMap<String, Boolean>> planList = userService.mapPlanList(user);
     	userMeetRespDto.setMeetId(user.getMeetId());
         userMeetRespDto.setPlanList(planList);
         userMeetRespDto.setColorDate(timeService.getColorDate(user.getMeetId()));

@@ -1,8 +1,8 @@
 package com.momo.server.dto.response;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
-import com.momo.server.utils.DateTimeDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,7 +15,7 @@ public class UserMeetRespDto {
 
 
 	private String meetId;
-	private ArrayList<DateTimeDto> PlanList;
+	private LinkedHashMap<String, LinkedHashMap<String, Boolean>> PlanList;
 	private ArrayList colorDate;
 	
 }

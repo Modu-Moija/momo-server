@@ -47,51 +47,57 @@ public class UserService {
     
     
     //희은님 부탁사항으로 만든 메소드
-		public ArrayList<DateTimeDto> mapPlanList(User user) {
+		public LinkedHashMap<String, LinkedHashMap<String, Boolean>> mapPlanList(User user) {
 			
-			ArrayList<DateTimeDto> planList = new ArrayList<DateTimeDto>();
-			
-			
+			LinkedHashMap<String, LinkedHashMap<String, Boolean>> planList = new LinkedHashMap<String, LinkedHashMap<String, Boolean>>();
+
+			//데이터 db에서 불러오기
 			User userEntity = userRepository.getUser(user.getUserId());
 			Meet meetEntity = userRepository.getUserMeet(user.getMeetId());
 			
-			//데이터 db에서 불러오기
 			int[][] userTimes = userEntity.getUserTimes();
 			String start = meetEntity.getStart();
 			String end = meetEntity.getEnd();
 			int gap = meetEntity.getGap();
-			
 			LocalDate startDate = meetEntity.getDates().get(0);
-			
 			int dayOfMonth = startDate.getDayOfMonth();
-			
 			
 			int hour = Integer.parseInt(start.split(":")[0]);
 			int gapTime = Integer.parseInt(start.split(":")[1]);
 			int totalStartTime = hour*60+gapTime;
-			Map<String, Boolean> time = new LinkedHashMap<String, Boolean>();//순서 저장을 위해 링크드해쉬맵 사용
+			//순서 저장을 위해 링크드해쉬맵 사용
 			
 			
+			//이차원배열 출력해보는 테스트코드
+//			for (int i = 0; i < userTimes[0].length; i++) {
+//				for (int j = 0; j < userTimes.length; j++) {
+//				System.out.print(userTimes[j][i] + " ");
+//				}
+//				System.out.println();
+//				}
 			//2차원 배열 돌면서 데이터 저장
 			for(int i = 0;i<userTimes[0].length;i++) {
-				DateTimeDto dateTimeDto = new DateTimeDto();
-				
+				Map<String, Boolean> time = new LinkedHashMap<String, Boolean>();
 				dateTimeDto.setDate(String.valueOf(startDate.getYear())+"/"+String.valueOf(startDate.getMonthValue())+"/"+String.valueOf(dayOfMonth));
-				//time = dateTimeDto.getTime();
+				//time = dateTimeDto.getTime()
+				//String hourTime = String.valueOf(totalStartTime/60)+":"+String.valueOf(totalStartTime%60);
+				System.out.println(userTimes.length);
+				int temp_totalStartTime = totalStartTime;
 				
-				for(int j=0;j<userTimes.length;j++) {
-					
-					String hourTime = String.valueOf(totalStartTime/60)+":"+String.valueOf(totalStartTime%60);
-					
+				for(int j = 0;j<userTimes.length;j++) {
+					System.out.print(userTimes[j][i]+ " ");
+					//System.out.print("j :"+j+ " ");
+					//System.out.print("hourtime :"+hourTime+ " ");
 					if(userTimes[j][i]==0) {
-						time.put(hourTime, false);
+						time.put(String.valueOf(temp_totalStartTime/60)+":"+String.valueOf(temp_totalStartTime%60), false);
 					}else if(userTimes[j][i]==1) {
-						time.put(hourTime, true);
+						System.out.println("실행됨?");
+						//time.put(String.valueOf(temp_totalStartTime/60)+":"+String.valueOf(temp_totalStartTime%60), true);
 					}
+					temp_totalStartTime=temp_totalStartTime+gap;
 				}
+				System.out.println("분기");
 				dateTimeDto.setTime(time);
-				
-				totalStartTime=totalStartTime+gap;
 				dayOfMonth++;
 				planList.add(dateTimeDto);
 			}
