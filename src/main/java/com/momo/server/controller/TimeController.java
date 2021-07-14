@@ -32,7 +32,6 @@ import lombok.RequiredArgsConstructor;
 public class TimeController {
 	
     private final TimeService timeService;
-	private final UserService userService;
 
     @PutMapping
     public ResponseEntity<String> updateUsertime(HttpServletRequest request, @RequestBody UserTimeUpdateRequestDto requestDto) {//@CookieValue(value="gender", required=false) Cookie genderCookie
@@ -46,18 +45,6 @@ public class TimeController {
     	timeService.updateUsertime(user, requestDto);
         return new ResponseEntity<>(HttpStatus.OK);
     };
-
-    
-    
-//    @GetMapping
-//    public MeetInfoDto getCommonTime(@RequestParam String meetid){
-//
-//    	MeetInfoDto meetInfoDto = new MeetInfoDto();
-//
-//    	//날짜에 색깔 들어가게 하기 위한 연산
-//    	meetInfoDto.setColorDate(timeService.getColorDate(meetid));
-//    	return meetInfoDto;
-//    }
     
     
     @GetMapping("/usertime")
@@ -67,15 +54,10 @@ public class TimeController {
 		HttpSession session = request.getSession();
 		User user=(User)session.getAttribute("user");
         
-        UserMeetRespDto userMeetRespDto = new UserMeetRespDto();
-        LinkedHashMap<String, LinkedHashMap<String, Boolean>> planList = userService.mapPlanList(user);
-    	userMeetRespDto.setMeetId(user.getMeetId());
-        userMeetRespDto.setPlanList(planList);
-        userMeetRespDto.setColorDate(timeService.getColorDate(user.getMeetId()));
+        UserMeetRespDto userMeetRespDto = timeService.mapUserMeetRespDto(user);
+    	
 		return userMeetRespDto;
     }
-    
-    
 }
 
 
