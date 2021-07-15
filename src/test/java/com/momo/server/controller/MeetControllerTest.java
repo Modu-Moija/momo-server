@@ -1,22 +1,25 @@
 package com.momo.server.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.Test;
+import java.time.LocalDate;
+import java.util.ArrayList;
+
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.momo.server.dto.request.MeetSaveRequestDto;
 
-
-@RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
-@WebMvcTest(MeetController.class)
+@SpringBootTest
 public class MeetControllerTest {
 	
 	@Autowired
@@ -28,21 +31,33 @@ public class MeetControllerTest {
 	@Test
 	public void 약속을_생성() throws Exception {
 		
-//		
-//		//given
-//		String content = objectMapper.writeValueAsString(new MeetSaveRequestDto(null, "약속생성테스트", "11:00", "19:00",null,  ["2021-07-20", "2021-07-30"], true, true, 30);
-//		
-//		
-//		new MeetSaveRequestDto(content, content, content, content, null, 0, null, 0, null, null, false, false)
-//		//when & then
-//
-//		mockMvc.perform(post("/api/meet")
-//		        .content(content)
-//		        .contentType(MediaType.APPLICATION_JSON)
-//		        .accept(MediaType.APPLICATION_JSON))
-//		        .andExpect(status().isOk())
-//		        .andExpect(content().string("데일의 블로그입니다. dale"))
-//		        .andDo(print());
-//		
+		
+		//given
+		ArrayList<LocalDate> testDate = new ArrayList<LocalDate>();
+		
+		testDate.add(LocalDate.parse("2021-07-20"));
+		testDate.add(LocalDate.parse("2021-07-30"));
+		
+		MeetSaveRequestDto meetSaveRequestDto = MeetSaveRequestDto.builder()
+				.title("약속생성테스트")
+				.start("11:00")
+				.end("19:00")
+				.dates(testDate)
+				.gap(30)
+				.video(true)
+				.center(true)
+				.build();
+		
+		//when & then
+
+    mockMvc.perform(post("/api/meet")
+	      		.contentType(MediaType.APPLICATION_JSON)
+	      		.accept(MediaType.APPLICATION_JSON)
+	      		.content(objectMapper.writeValueAsString(meetSaveRequestDto)))
+	            .andDo(print())
+	            .andExpect(status().isCreated());
+
+		//참조 https://engkimbs.tistory.com/858
+    //http://honeymon.io/tech/2019/10/23/spring-deprecated-media-type.html
 	}
 }

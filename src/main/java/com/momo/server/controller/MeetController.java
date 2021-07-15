@@ -24,7 +24,7 @@ public class MeetController {
             .hashString(requestDto.toString(), StandardCharsets.UTF_8)
             .toString().substring(0,15);
         meetService.createMeet(requestDto, hashedUrl);
-        return new ResponseEntity<>(hashedUrl, HttpStatus.OK);
+        return new ResponseEntity<>(hashedUrl, HttpStatus.CREATED);
     };
 
     @GetMapping("/{meetId}")
