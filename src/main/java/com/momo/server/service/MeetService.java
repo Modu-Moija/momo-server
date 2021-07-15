@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.momo.server.domain.Meet;
 import com.momo.server.domain.User;
 import com.momo.server.dto.request.MeetSaveRequestDto;
 import com.momo.server.repository.MeetRepository;
@@ -26,7 +27,7 @@ public class MeetService {
     @Transactional
     public ResponseEntity<?> createMeet(MeetSaveRequestDto requestDto, String hashedUrl) {
     	
-    	//System.out.println(requestDto);
+    	Meet meet = new Meet();
     	
         LocalDate startDate = requestDto.getDates().get(0);
         LocalDate endDate = requestDto.getDates().get(1);
@@ -38,11 +39,6 @@ public class MeetService {
             dates.add(curDate);
             curDate=curDate.plusDays(1);
         }
-        requestDto.setDates(dates);
-        requestDto.setCreated(LocalDateTime.now().plusHours(9));
-        requestDto.setMeetId(hashedUrl);
-        //requestDto.setMeetSubInfo(new MeetSub(dates));
-
         
         //meet의 times 이차원 배열 row 계산
         String start = requestDto.getStart().split(":")[0];
@@ -72,9 +68,19 @@ public class MeetService {
 //				System.out.println(i+"행 "+j+"열의 값:"+temptimes[i][j]);
 //			}
 //		}
-        
-        requestDto.setTimes(temptimes);
-        meetRepository.createMeet(requestDto.toEntity());
+
+        //meet로 저장
+        meet.setMeetId(hashedUrl);
+        meet.setStart(requestDto.getStart());
+        meet.setEnd(requestDto.getEnd());
+        meet.setCreated(LocalDateTime.now().plusHours(9));
+        meet.setGap(requestDto.getGap());
+        meet.setDates(dates);
+        //meet.setMeetSubInfo
+        meet.setTimes(temptimes);
+        meet.setCenter(requestDto.isCenter());
+        meet.setCenter(requestDto.isVideo());
+        meetRepository.createMeet(meet);
         return ResponseEntity.ok().build();
     }
 
