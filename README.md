@@ -3,10 +3,11 @@
 
 ## 기술 스택
    - Springboot
-   - spring-boot-starter-data-mongodb
+   - spring-data-mongodb
    - lombok
    - spring-session
    - springfox-swagger2
+   - junit5
    
 ## DB구조
 
