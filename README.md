@@ -7,7 +7,7 @@
    - lombok
    - spring-session
    - springfox-swagger2
-   - junit4
+   - junit5
    
 ## DB구조
 
