@@ -10,7 +10,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -32,10 +31,10 @@ public class MeetControllerTest {
     @Autowired
     private MeetRepository meetRepository;
 
-    @AfterAll
-    public void afterAll() {
-	meetRepository.deleteMeet();// 한번씩 저장소를 지워줌
-    }
+//    @AfterAll
+//    public void afterAll() {
+//	meetRepository.deleteMeet();// 한번씩 저장소를 지워줌
+//    }
 
     @Autowired
     private MockMvc mockMvc;
@@ -69,12 +68,12 @@ public class MeetControllerTest {
     @Test
     public void 약속조회() throws Exception {
 
-	String meetId = "3a71e9276e1621e";
+	String meetId = "e8e1bf2ec5ab131";
 
 	mockMvc.perform(get("/api/meet/" + meetId)) // 1, 2
 		.andExpect(status().isOk()) // 4
 		.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-		.andExpect(jsonPath("$.data.summary.title").value("14테스트sdf")).andDo(print());
+		.andExpect(jsonPath("$.data.summary.title").value("약속생성테스트")).andDo(print());
 
     }
 
