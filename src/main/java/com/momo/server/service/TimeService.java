@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.momo.server.domain.Meet;
 import com.momo.server.domain.User;
 import com.momo.server.dto.request.UserTimeUpdateRequestDto;
+import com.momo.server.dto.response.MostLeastTimeRespDto;
 import com.momo.server.dto.response.UserMeetRespDto;
 import com.momo.server.repository.MeetRepository;
 import com.momo.server.repository.UserRepository;
@@ -146,6 +147,17 @@ public class TimeService {
 	    temp = 0;
 	}
 	return colorDate;
+    }
+
+    public MostLeastTimeRespDto getMostLeastTime(String meetId) {
+
+	MostLeastTimeRespDto mostLeastTimeRespDto = new MostLeastTimeRespDto();
+	Meet meetEntity = meetRepository.findMeet(meetId);
+
+	mostLeastTimeRespDto.setLeast(null);
+	mostLeastTimeRespDto.setMost(null);
+	return mostLeastTimeRespDto;
+
     }
 
 }

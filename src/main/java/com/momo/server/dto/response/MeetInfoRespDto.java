@@ -1,9 +1,9 @@
 package com.momo.server.dto.response;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
-import com.momo.server.dto.CommonTime;
-import com.momo.server.dto.MeetSummary;
+import com.momo.server.dto.MeetSubInfo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,8 +14,13 @@ import lombok.NoArgsConstructor;
 @Data
 public class MeetInfoRespDto {
 
-    private MeetSummary summary;
-    private ArrayList<CommonTime> most;
-    private ArrayList<CommonTime> least;
+    private String title;
+    private String start;
+    private String end;
+    private int gap;
+    private ArrayList<LocalDate> dates;
+    private Boolean center;
+    private Boolean video;
+    private MeetSubInfo meetSubInfo;
 
 }

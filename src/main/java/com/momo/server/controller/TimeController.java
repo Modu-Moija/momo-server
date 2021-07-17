@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.momo.server.domain.User;
 import com.momo.server.dto.request.UserTimeUpdateRequestDto;
+import com.momo.server.dto.response.MostLeastTimeRespDto;
 import com.momo.server.dto.response.UserMeetRespDto;
 import com.momo.server.service.TimeService;
 
@@ -49,5 +50,16 @@ public class TimeController {
 	UserMeetRespDto userMeetRespDto = timeService.mapUserMeetRespDto(user);
 
 	return userMeetRespDto;
+    }
+
+    @GetMapping("/MostLeast")
+    public MostLeastTimeRespDto getMostLeastTime(HttpServletRequest request) {
+
+	// 세션에서 유저찾기
+	HttpSession session = request.getSession();
+	User user = (User) session.getAttribute("user");
+
+	MostLeastTimeRespDto MostLeastTimeRespDto = timeService.getMostLeastTime(user.getMeetId());
+	return MostLeastTimeRespDto;
     }
 }

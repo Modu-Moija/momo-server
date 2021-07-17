@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.momo.server.domain.Meet;
 import com.momo.server.dto.MeetSubInfo;
-import com.momo.server.dto.MeetSummary;
 import com.momo.server.dto.request.MeetSaveRequestDto;
 import com.momo.server.dto.response.MeetInfoRespDto;
 import com.momo.server.repository.MeetRepository;
@@ -87,20 +86,18 @@ public class MeetService {
 
     public MeetInfoRespDto getMeetInfo(String meetId) {
 	MeetInfoRespDto meetInfoRespDto = new MeetInfoRespDto();
-	MeetSummary meetSummary = new MeetSummary();
 
 	Meet meetEntity = meetRepository.findMeet(meetId);
 
-	meetSummary.setCenter(meetEntity.isCenter());
-	meetSummary.setVideo(meetEntity.isVideo());
-	meetSummary.setTitle(meetEntity.getTitle());
-	meetSummary.setDates(meetEntity.getDates());
-	meetSummary.setStart(meetEntity.getStart());
-	meetSummary.setEnd(meetEntity.getEnd());
-	meetSummary.setGap(meetEntity.getGap());
+	meetInfoRespDto.setCenter(meetEntity.isCenter());
+	meetInfoRespDto.setVideo(meetEntity.isVideo());
+	meetInfoRespDto.setTitle(meetEntity.getTitle());
+	meetInfoRespDto.setDates(meetEntity.getDates());
+	meetInfoRespDto.setStart(meetEntity.getStart());
+	meetInfoRespDto.setEnd(meetEntity.getEnd());
+	meetInfoRespDto.setGap(meetEntity.getGap());
 
-	meetSummary.setMeetSubInfo(applyMeetSubInfo(meetEntity));
-	meetInfoRespDto.setSummary(meetSummary);
+	meetInfoRespDto.setMeetSubInfo(applyMeetSubInfo(meetEntity));
 
 	return meetInfoRespDto;
     }
