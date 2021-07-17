@@ -10,7 +10,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,10 +22,20 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.momo.server.dto.request.MeetSaveRequestDto;
+import com.momo.server.repository.MeetRepository;
 
 @AutoConfigureMockMvc
 @SpringBootTest
+@TestInstance(Lifecycle.PER_CLASS) // @AfterAll 어노테이션에는 필요함
 public class MeetControllerTest {
+
+    @Autowired
+    private MeetRepository meetRepository;
+
+    @AfterAll
+    public void afterAll() {
+	meetRepository.deleteMeet();// 한번씩 저장소를 지워줌
+    }
 
     @Autowired
     private MockMvc mockMvc;
@@ -44,6 +57,7 @@ public class MeetControllerTest {
 
 	// when & then
 
+	System.out.println(meetSaveRequestDto);
 	mockMvc.perform(post("/api/meet").contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
 		.content(objectMapper.writeValueAsString(meetSaveRequestDto))).andDo(print())
 		.andExpect(status().isCreated());
