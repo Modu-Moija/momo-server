@@ -9,9 +9,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.momo.server.domain.Meet;
+import com.momo.server.dto.MeetSubInfo;
+import com.momo.server.dto.MeetSummary;
 import com.momo.server.dto.request.MeetSaveRequestDto;
 import com.momo.server.dto.response.MeetInfoRespDto;
-import com.momo.server.dto.response.MeetSummary;
 import com.momo.server.repository.MeetRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -61,6 +62,7 @@ public class MeetService {
 	// 추후에 성능개선을 위해 캐시프랜들리 코드 적용 생각해보면 좋을 것 같음(행과 열 위치 연산개선)
 	// 참조링크 https://hot2364928.tistory.com/58
 
+	// 테스트코드
 //        for (int i = 0; i < row; i++) { // 행 반복
 //			for (int j = 0; j < col; j++) { // 열 반복
 //				System.out.println(i+"행 "+j+"열의 값:"+temptimes[i][j]);
@@ -83,12 +85,6 @@ public class MeetService {
 	return ResponseEntity.ok().build();
     }
 
-    // '누구랑, 언제, 어디서' 생성하기 위한 메소드
-    @Transactional
-    public ResponseEntity<?> createMeetSub() {
-	return ResponseEntity.ok().build();
-    }
-
     public MeetInfoRespDto getMeetInfo(String meetId) {
 	MeetInfoRespDto meetInfoRespDto = new MeetInfoRespDto();
 	MeetSummary meetSummary = new MeetSummary();
@@ -102,10 +98,37 @@ public class MeetService {
 	meetSummary.setStart(meetEntity.getStart());
 	meetSummary.setEnd(meetEntity.getEnd());
 	meetSummary.setGap(meetEntity.getGap());
-	meetSummary.setMeetSubInfo(null);
 
+	meetSummary.setMeetSubInfo(applyMeetSubInfo(meetEntity));
 	meetInfoRespDto.setSummary(meetSummary);
+
 	return meetInfoRespDto;
+    }
+
+    public MeetSubInfo applyMeetSubInfo(Meet meetEntity) {
+
+	MeetSubInfo meetSubInfo = new MeetSubInfo();
+
+	meetSubInfo.setWhen(
+		meetEntity.getDates().get(0) + " ~ " + meetEntity.getDates().get(meetEntity.getDates().size() - 1));
+
+	String where = null;
+	if (meetEntity.isVideo() == true) {
+	    where = "화상회의";
+	} else {
+	    where = "대면회의";
+	}
+	meetSubInfo.setWhere(where);
+
+	ArrayList<String> who = new ArrayList<String>();
+	who.add("조은학");
+	who.add("호날두");
+	who.add("메시");
+
+	meetSubInfo.setWho(who);
+
+	return meetSubInfo;
+
     }
 
 }

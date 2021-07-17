@@ -1,9 +1,7 @@
-package com.momo.server.dto.response;
+package com.momo.server.dto;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-
-import com.momo.server.dto.MeetSubInfo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
