@@ -1,13 +1,17 @@
 package com.momo.server.dto.response;
 
-import com.momo.server.dto.CommonTime;
-import com.momo.server.dto.response.MeetSummary;
-import lombok.Data;
-
 import java.util.ArrayList;
 
+import com.momo.server.dto.CommonTime;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
-public class MeetInfoDto {
+public class MeetInfoRespDto {
 
     private MeetSummary summary;
     private ArrayList<CommonTime> most;

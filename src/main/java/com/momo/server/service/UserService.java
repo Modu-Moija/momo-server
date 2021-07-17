@@ -1,8 +1,6 @@
 package com.momo.server.service;
 
 import java.math.BigInteger;
-import java.time.LocalDate;
-import java.util.LinkedHashMap;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,42 +16,41 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserService {
 
-	private final UserRepository userRepository;
-	private final MeetRepository	meetRepository;
-	
-	
-	@Transactional
-	// 로그인 메소드
-	public User login(User user) {
+    private final UserRepository userRepository;
+    private final MeetRepository meetRepository;
 
-		boolean isUserExist = false;
+    @Transactional
+    // 로그인 메소드
+    public User login(User user) {
 
-		isUserExist = userRepository.isUserExist(user);
+	boolean isUserExist = false;
 
-		if (isUserExist) {
-			return null;
-		} else {
-			createUser(user);
-			return user;
-		}
+	isUserExist = userRepository.isUserExist(user);
+
+	if (isUserExist) {
+	    return null;
+	} else {
+	    createUser(user);
+	    return user;
 	}
+    }
 
-	@Transactional
-	// 유저 생성
-	public void createUser(User user) {
+    @Transactional
+    // 유저 생성
+    public void createUser(User user) {
 
-		BigInteger userid = BigInteger.valueOf(Integer.valueOf(Math.abs(user.hashCode())));
+	BigInteger userid = BigInteger.valueOf(Integer.valueOf(Math.abs(user.hashCode())));
 
-		user.setUserId(userid);
-		Meet meetEntity = meetRepository.findMeet(user);
+	user.setUserId(userid);
+	Meet meetEntity = meetRepository.findMeet(user.getMeetId());
 
-		int dates = meetEntity.getDates().size();
-		int timeslots = Integer.parseInt(meetEntity.getEnd().split(":")[0]) - Integer.parseInt(meetEntity.getStart().split(":")[0]);
-		int[][] userTimes = new int[timeslots * ((int) 60 / meetEntity.getGap())][dates];
-		user.setUserTimes(userTimes);
+	int dates = meetEntity.getDates().size();
+	int timeslots = Integer.parseInt(meetEntity.getEnd().split(":")[0])
+		- Integer.parseInt(meetEntity.getStart().split(":")[0]);
+	int[][] userTimes = new int[timeslots * ((int) 60 / meetEntity.getGap())][dates];
+	user.setUserTimes(userTimes);
 
-		userRepository.createUser(user);
-	}
-
+	userRepository.createUser(user);
+    }
 
 }
