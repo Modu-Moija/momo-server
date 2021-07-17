@@ -69,6 +69,7 @@ public class MeetService {
 
 	// meet로 저장
 	meet.setMeetId(hashedUrl);
+	meet.setTitle(requestDto.getTitle());
 	meet.setStart(requestDto.getStart());
 	meet.setEnd(requestDto.getEnd());
 	meet.setCreated(LocalDateTime.now().plusHours(9));

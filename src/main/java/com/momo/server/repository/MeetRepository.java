@@ -15,4 +15,6 @@ public interface MeetRepository {
 
     Meet findMeet(String meetId);
 
+    void deleteMeet();
+
 }
