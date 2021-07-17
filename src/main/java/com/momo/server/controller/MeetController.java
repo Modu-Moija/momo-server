@@ -42,23 +42,7 @@ public class MeetController {
 	MeetInfoRespDto meetInfoRespDto = meetService.getMeetInfo(meetId);
 
 	ResponseEntity<?> responseCode = ResponseEntity.status(HttpStatus.OK).build();
-	return new ResponseEntity<>(new CmRespDto<>(responseCode, "유저 로그인 성공", meetInfoRespDto), HttpStatus.OK);
+	return new ResponseEntity<>(new CmRespDto<>(responseCode, "유저 약속조회 성공", meetInfoRespDto), HttpStatus.OK);
     }
-
-    // //@GetMapping()
-    // public String[] getMaxTime() {
-    // meetService.getMaxTime();
-    //
-    // return null;
-    // };
-    //
-    // //@GetMapping()
-    // public String[] getMinTime() {
-    //
-    // meetService.getMaxTime();
-    //
-    //
-    // return null;
-    // };
 
 }

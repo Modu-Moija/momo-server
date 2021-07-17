@@ -104,7 +104,7 @@ public class MeetService {
 	meetSummary.setMeetSubInfo(null);
 
 	meetInfoRespDto.setSummary(meetSummary);
-	return null;
+	return meetInfoRespDto;
     }
 
 }
