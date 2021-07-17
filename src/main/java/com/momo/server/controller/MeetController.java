@@ -35,6 +35,15 @@ public class MeetController {
 	return new ResponseEntity<>(hashedUrl, HttpStatus.CREATED);
     };
 
+//    @PostMapping
+//    public ResponseEntity<String> createMeetSub(@RequestBody MeetSaveRequestDto requestDto) {
+//
+//	String hashedUrl = Hashing.sha256().hashString(requestDto.toString(), StandardCharsets.UTF_8).toString()
+//		.substring(0, 15);
+//	meetService.createMeet(requestDto, hashedUrl);
+//	return new ResponseEntity<>(hashedUrl, HttpStatus.CREATED);
+//    };
+
     @GetMapping("/{meetId}")
     @ResponseBody
     public ResponseEntity<?> getMeetInfo(@PathVariable("meetId") String meetId) {
@@ -42,7 +51,7 @@ public class MeetController {
 	MeetInfoRespDto meetInfoRespDto = meetService.getMeetInfo(meetId);
 
 	ResponseEntity<?> responseCode = ResponseEntity.status(HttpStatus.OK).build();
-	return new ResponseEntity<>(new CmRespDto<>(responseCode, "유저 약속조회 성공", meetInfoRespDto), HttpStatus.OK);
+	return new ResponseEntity<>(new CmRespDto<>(responseCode, "약속조회 성공", meetInfoRespDto), HttpStatus.OK);
     }
 
 }
