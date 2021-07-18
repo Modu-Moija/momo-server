@@ -11,7 +11,7 @@ public interface MeetRepository {
 
     boolean isMeetExist(String meetId);
 
-    void addUser(String meetId, BigInteger userid);
+    void addUser(Meet meet, BigInteger userid);
 
     Meet getColorDate(String meetid);
 

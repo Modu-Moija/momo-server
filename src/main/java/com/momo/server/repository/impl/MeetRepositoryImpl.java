@@ -37,11 +37,7 @@ public class MeetRepositoryImpl implements MeetRepository {
     }
 
     @Override
-    public void addUser(String meetId, BigInteger userId) {
-
-	Query query = new Query();
-	query.addCriteria(Criteria.where("meetId").is(meetId));
-	Meet meetEntity = mongoTemplate.findOne(query, Meet.class, "meet");
+    public void addUser(Meet meetEntity, BigInteger userId) {
 
 	ArrayList<BigInteger> userList = new ArrayList<BigInteger>();
 
@@ -52,14 +48,11 @@ public class MeetRepositoryImpl implements MeetRepository {
 	    userList.add(userId);
 	}
 
-	Update update = new Update();
-	update.inc("num", 1);
-	mongoTemplate.updateFirst(query, update, "meet");
-
-	Query addUserQuery = new Query(Criteria.where("meetId").is(meetId));
+	Query addUserQuery = new Query(Criteria.where("meetId").is(meetEntity.getMeetId()));
 	Update addUserUpdate = new Update();
 	addUserUpdate.set("users", userList);
-	mongoTemplate.updateFirst(addUserQuery, addUserUpdate, Meet.class);
+	addUserUpdate.inc("num", 1);
+	mongoTemplate.updateMulti(addUserQuery, addUserUpdate, Meet.class);
     }
 
     @Override
