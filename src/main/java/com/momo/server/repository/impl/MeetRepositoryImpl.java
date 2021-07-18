@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import com.momo.server.domain.Meet;
+import com.momo.server.domain.User;
 import com.momo.server.repository.MeetRepository;
 
 @Repository
@@ -36,21 +37,34 @@ public class MeetRepositoryImpl implements MeetRepository {
 	return meetEntity;
     }
 
+    // Meet에 user 추가하는연산
     @Override
-    public void addUser(Meet meetEntity, BigInteger userId) {
+    public void addUser(Meet meetEntity, User userEntity) {
 
+	// userId 업데이트 연산
 	ArrayList<BigInteger> userList = new ArrayList<BigInteger>();
 
 	if (meetEntity.getUsers() == null) {
-	    userList.add(userId);
+	    userList.add(userEntity.getUserId());
 	} else {
 	    userList = meetEntity.getUsers();
-	    userList.add(userId);
+	    userList.add(userEntity.getUserId());
+	}
+
+	// username 업데이트 연산
+	ArrayList<String> userNameList = new ArrayList<String>();
+
+	if (meetEntity.getUsers() == null) {
+	    userNameList.add(userEntity.getUsername());
+	} else {
+	    userNameList = meetEntity.getUserNames();
+	    userNameList.add(userEntity.getUsername());
 	}
 
 	Query addUserQuery = new Query(Criteria.where("meetId").is(meetEntity.getMeetId()));
 	Update addUserUpdate = new Update();
 	addUserUpdate.set("users", userList);
+	addUserUpdate.set("userNames", userNameList);
 	addUserUpdate.inc("num", 1);
 	mongoTemplate.updateMulti(addUserQuery, addUserUpdate, Meet.class);
     }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.momo.server.domain.Meet;
 import com.momo.server.domain.User;
+import com.momo.server.dto.request.LoginRequestDto;
 import com.momo.server.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -32,12 +33,12 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public boolean isUserExist(User user) {
+    public User isUserExist(LoginRequestDto loginRequestDto) {
 
 	Query query = new Query();
-	query.addCriteria(Criteria.where("meetId").is(user.getMeetId()));
-	query.addCriteria(Criteria.where("username").is(user.getUsername()));
-	return mongoTemplate.findOne(query, User.class, "user") != null;
+	query.addCriteria(Criteria.where("meetId").is(loginRequestDto.getMeetId()));
+	query.addCriteria(Criteria.where("username").is(loginRequestDto.getUsername()));
+	return mongoTemplate.findOne(query, User.class, "user");
     }
 
     // 유저시간 업데이트연산
