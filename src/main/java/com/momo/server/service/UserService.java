@@ -26,7 +26,6 @@ public class UserService {
 	boolean isUserExist = false;
 
 	isUserExist = userRepository.isUserExist(user);
-
 	if (isUserExist) {
 	    return null;
 	} else {
@@ -49,7 +48,7 @@ public class UserService {
 	int[][] userTimes = new int[timeslots * ((int) 60 / meetEntity.getGap())][dates];
 	user.setUserTimes(userTimes);
 
-	meetRepository.addUser(user.getMeetId(), userid);
+	meetRepository.addUser(meetEntity, userid);
 	userRepository.createUser(user);
     }
 
