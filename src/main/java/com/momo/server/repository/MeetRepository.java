@@ -1,8 +1,7 @@
 package com.momo.server.repository;
 
-import java.math.BigInteger;
-
 import com.momo.server.domain.Meet;
+import com.momo.server.domain.User;
 
 public interface MeetRepository {
 
@@ -11,7 +10,7 @@ public interface MeetRepository {
 
     boolean isMeetExist(String meetId);
 
-    void addUser(Meet meet, BigInteger userid);
+    void addUser(Meet meet, User user);
 
     Meet getColorDate(String meetid);
 

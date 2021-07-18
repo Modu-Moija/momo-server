@@ -34,32 +34,34 @@ public class UserController {
     private String key;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequest, HttpServletRequest request,
+    public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequestDto, HttpServletRequest request,
 	    HttpServletResponse response) throws Exception {
 
-	User requestUser = new User();
-	requestUser.setUsername(loginRequest.getUsername());
-	requestUser.setMeetId(loginRequest.getMeetId());
-	User user = userService.login(requestUser);
+	User userEntity = userService.login(loginRequestDto);// 추후에 로직 수정해야함
 	ResponseEntity<?> responseCode;
 
-	if (user != null) {
+	if (userEntity == null) {// 유저 존재하지않음(신규유저)
 
 	    // 세션에 정보저장, 일단 세션으로 구현해놨습니다.. 추후에 쿠키로 수정할수있습니다.
 	    HttpSession session = request.getSession();
-	    session.setAttribute("user", user);
+	    session.setAttribute("user", userEntity);
 
-	    request.setAttribute("authuser", user);
 	    responseCode = ResponseEntity.status(HttpStatus.CREATED).build();
+	    return new ResponseEntity<>(new CmRespDto<>(responseCode, "신규 유저 로그인 성공", null), HttpStatus.CREATED);
+
+	} else {// 유저 존재(기존 유저)
+
+	    HttpSession session = request.getSession();
+	    session.setAttribute("user", userEntity);
+
+	    request.setAttribute("authuser", userEntity);
 	    Aes128 aes128 = new Aes128(key);
-	    String enc = aes128.encrypt(user.getUserId().toString());
+	    String enc = aes128.encrypt(userEntity.getUserId().toString());
 	    Cookie authCookie = new Cookie("authuser", enc);
 	    response.addCookie(authCookie);
 
-	    return new ResponseEntity<>(new CmRespDto<>(responseCode, "유저 로그인 성공", null), HttpStatus.OK);
-	} else {
-	    responseCode = ResponseEntity.status(HttpStatus.CONFLICT).build();
-	    return new ResponseEntity<>(new CmRespDto<>(responseCode, "유저 로그인 실패", null), HttpStatus.CONFLICT);
+	    responseCode = ResponseEntity.status(HttpStatus.OK).build();
+	    return new ResponseEntity<>(new CmRespDto<>(responseCode, "기존 유저 로그인 성공", null), HttpStatus.OK);
 	}
     }
 

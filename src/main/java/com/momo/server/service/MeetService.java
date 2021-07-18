@@ -116,13 +116,7 @@ public class MeetService {
 	    where = "대면회의";
 	}
 	meetSubInfo.setWhere(where);
-
-	ArrayList<String> who = new ArrayList<String>();
-	who.add("조은학");
-	who.add("호날두");
-	who.add("메시");
-
-	meetSubInfo.setWho(who);
+	meetSubInfo.setWho(meetEntity.getUserNames());
 
 	return meetSubInfo;
 
