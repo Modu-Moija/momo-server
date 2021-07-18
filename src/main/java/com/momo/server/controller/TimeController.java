@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.momo.server.domain.User;
+import com.momo.server.dto.CmRespDto;
 import com.momo.server.dto.request.UserTimeUpdateRequestDto;
 import com.momo.server.dto.response.MostLeastTimeRespDto;
 import com.momo.server.dto.response.UserMeetRespDto;
@@ -27,7 +28,7 @@ public class TimeController {
     private final TimeService timeService;
 
     @PutMapping
-    public ResponseEntity<String> updateUsertime(HttpServletRequest request,
+    public ResponseEntity<?> updateUsertime(HttpServletRequest request,
 	    @RequestBody UserTimeUpdateRequestDto requestDto) {// @CookieValue(value="gender", required=false) Cookie
 							       // genderCookie
 
@@ -37,7 +38,9 @@ public class TimeController {
 
 	// System.out.println(user);
 	timeService.updateUsertime(user, requestDto);
-	return new ResponseEntity<>(HttpStatus.OK);
+
+	ResponseEntity<?> responseCode = new ResponseEntity<>(HttpStatus.OK);
+	return new ResponseEntity<>(new CmRespDto<>(responseCode, "시간 수정 성공", null), HttpStatus.OK);
     };
 
     @GetMapping("/usertime")

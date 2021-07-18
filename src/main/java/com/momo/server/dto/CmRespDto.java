@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CmRespDto<T> {
 //공통된 response dto
-	
-	private ResponseEntity<?> code;//1은 성공, -1은 실패
-	private String message;
-	private T data;
+
+    private ResponseEntity<?> code;
+    private String message;
+    private T data;
 }

@@ -37,7 +37,6 @@ public class UserController {
     public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequest, HttpServletRequest request,
 	    HttpServletResponse response) throws Exception {
 
-	// System.out.println(loginRequest);
 	User requestUser = new User();
 	requestUser.setUsername(loginRequest.getUsername());
 	requestUser.setMeetId(loginRequest.getMeetId());

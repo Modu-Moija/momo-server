@@ -36,8 +36,7 @@ public class UserService {
     }
 
     @Transactional
-    // 유저 생성
-    public void createUser(User user) {
+    public void createUser(User user) {// 유저 생성
 
 	BigInteger userid = BigInteger.valueOf(Integer.valueOf(Math.abs(user.hashCode())));
 
@@ -50,6 +49,7 @@ public class UserService {
 	int[][] userTimes = new int[timeslots * ((int) 60 / meetEntity.getGap())][dates];
 	user.setUserTimes(userTimes);
 
+	meetRepository.addUser(user.getMeetId(), userid);
 	userRepository.createUser(user);
     }
 

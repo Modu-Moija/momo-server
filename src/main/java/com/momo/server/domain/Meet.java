@@ -1,5 +1,6 @@
 package com.momo.server.domain;
 
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -23,30 +24,27 @@ public class Meet {
     private int gap;
     private ArrayList<LocalDate> dates;
     private int num;
-    private ArrayList<Integer> users;
+    private ArrayList<BigInteger> users;
     private int[][] times;
     private boolean center;
     private boolean video;
-    
+
     @Builder
-	public Meet(String meetId, String title, String start, String end, LocalDateTime created, int gap,
-			ArrayList<LocalDate> dates, int num, ArrayList<Integer> users, int[][] times, boolean center,
-			boolean video) {
-		this.meetId = meetId;
-		this.title = title;
-		this.start = start;
-		this.end = end;
-		this.created = created;
-		this.gap = gap;
-		this.dates = dates;
-		this.num = num;
-		this.users = users;
-		this.times = times;
-		this.center = center;
-		this.video = video;
-	}
+    public Meet(String meetId, String title, String start, String end, LocalDateTime created, int gap,
+	    ArrayList<LocalDate> dates, int num, ArrayList<BigInteger> users, int[][] times, boolean center,
+	    boolean video) {
+	this.meetId = meetId;
+	this.title = title;
+	this.start = start;
+	this.end = end;
+	this.created = created;
+	this.gap = gap;
+	this.dates = dates;
+	this.num = num;
+	this.users = users;
+	this.times = times;
+	this.center = center;
+	this.video = video;
+    }
 
-
-    
-    
 }

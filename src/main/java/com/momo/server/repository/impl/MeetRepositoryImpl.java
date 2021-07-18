@@ -1,5 +1,8 @@
 package com.momo.server.repository.impl;
 
+import java.math.BigInteger;
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -34,15 +37,29 @@ public class MeetRepositoryImpl implements MeetRepository {
     }
 
     @Override
-    public void addUser(String meetId, int userId) {
+    public void addUser(String meetId, BigInteger userId) {
 
 	Query query = new Query();
-	query.addCriteria(Criteria.where("_id").is(meetId));
-	Meet meet = mongoTemplate.findOne(query, Meet.class, "meet");
+	query.addCriteria(Criteria.where("meetId").is(meetId));
+	Meet meetEntity = mongoTemplate.findOne(query, Meet.class, "meet");
+
+	ArrayList<BigInteger> userList = new ArrayList<BigInteger>();
+
+	if (meetEntity.getUsers() == null) {
+	    userList.add(userId);
+	} else {
+	    userList = meetEntity.getUsers();
+	    userList.add(userId);
+	}
 
 	Update update = new Update();
 	update.inc("num", 1);
 	mongoTemplate.updateFirst(query, update, "meet");
+
+	Query addUserQuery = new Query(Criteria.where("meetId").is(meetId));
+	Update addUserUpdate = new Update();
+	addUserUpdate.set("users", userList);
+	mongoTemplate.updateFirst(addUserQuery, addUserUpdate, Meet.class);
     }
 
     @Override

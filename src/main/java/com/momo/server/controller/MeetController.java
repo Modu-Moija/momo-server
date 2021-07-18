@@ -2,7 +2,6 @@ package com.momo.server.controller;
 
 import java.nio.charset.StandardCharsets;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,20 +18,24 @@ import com.momo.server.dto.request.MeetSaveRequestDto;
 import com.momo.server.dto.response.MeetInfoRespDto;
 import com.momo.server.service.MeetService;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(value = "/api/meet")
 public class MeetController {
 
-    @Autowired
-    private MeetService meetService;
+    private final MeetService meetService;
 
     @PostMapping
-    public ResponseEntity<String> createMeet(@RequestBody MeetSaveRequestDto requestDto) {
+    public ResponseEntity<?> createMeet(@RequestBody MeetSaveRequestDto requestDto) {
 
 	String hashedUrl = Hashing.sha256().hashString(requestDto.toString(), StandardCharsets.UTF_8).toString()
 		.substring(0, 15);
 	meetService.createMeet(requestDto, hashedUrl);
-	return new ResponseEntity<>(hashedUrl, HttpStatus.CREATED);
+
+	ResponseEntity<?> responseCode = ResponseEntity.status(HttpStatus.CREATED).build();
+	return new ResponseEntity<>(new CmRespDto<>(responseCode, "약속 생성 성공", hashedUrl), HttpStatus.CREATED);
     };
 
     @GetMapping("/{meetId}")
