@@ -22,7 +22,6 @@ import com.momo.server.utils.Aes128;
 
 import lombok.RequiredArgsConstructor;
 
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/api/user")
@@ -30,45 +29,38 @@ public class UserController {
 
     private final UserService userService;
     private final TimeService timeService;
-    
+
     @Value("${aesKey}")
     private String key;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequest, HttpServletRequest request, HttpServletResponse response) throws Exception {
-    	
-    	
+    public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequest, HttpServletRequest request,
+	    HttpServletResponse response) throws Exception {
 
-        //System.out.println(loginRequest);
-        User requestUser = new User();
-        requestUser.setUsername(loginRequest.getUsername());
-        requestUser.setMeetId(loginRequest.getMeetId());
-        User user = userService.login(requestUser);
-        ResponseEntity<?> responseCode;
+	User requestUser = new User();
+	requestUser.setUsername(loginRequest.getUsername());
+	requestUser.setMeetId(loginRequest.getMeetId());
+	User user = userService.login(requestUser);
+	ResponseEntity<?> responseCode;
 
-        if (user != null){
-        	
-        	//세션에 정보저장, 일단 세션으로 구현해놨습니다.. 추후에 쿠키로 수정할수있습니다.
-        	HttpSession session = request.getSession();
-        	session.setAttribute("user", user);
-        	
-        	
-        	
-            request.setAttribute("authuser", user);
-            responseCode = ResponseEntity.status(HttpStatus.CREATED).build();
-            Aes128 aes128 = new Aes128(key);
-            String enc = aes128.encrypt(user.getUserId().toString());
-            Cookie authCookie = new Cookie("authuser", enc);
-            response.addCookie(authCookie);
-            
-            return new ResponseEntity<>(new CmRespDto<>(responseCode, "유저 로그인 성공", null), HttpStatus.OK);
-        }else{
-            responseCode = ResponseEntity.status(HttpStatus.CONFLICT).build();
-            return new ResponseEntity<>(new CmRespDto<>(responseCode, "유저 로그인 실패", null), HttpStatus.OK);
-        }
+	if (user != null) {
+
+	    // 세션에 정보저장, 일단 세션으로 구현해놨습니다.. 추후에 쿠키로 수정할수있습니다.
+	    HttpSession session = request.getSession();
+	    session.setAttribute("user", user);
+
+	    request.setAttribute("authuser", user);
+	    responseCode = ResponseEntity.status(HttpStatus.CREATED).build();
+	    Aes128 aes128 = new Aes128(key);
+	    String enc = aes128.encrypt(user.getUserId().toString());
+	    Cookie authCookie = new Cookie("authuser", enc);
+	    response.addCookie(authCookie);
+
+	    return new ResponseEntity<>(new CmRespDto<>(responseCode, "유저 로그인 성공", null), HttpStatus.OK);
+	} else {
+	    responseCode = ResponseEntity.status(HttpStatus.CONFLICT).build();
+	    return new ResponseEntity<>(new CmRespDto<>(responseCode, "유저 로그인 실패", null), HttpStatus.CONFLICT);
+	}
     }
-    
-    
 
-    
 }

@@ -1,12 +1,16 @@
 package com.momo.server.dto;
 
-import lombok.Data;
-
 import java.time.LocalDate;
 
-@Data
-public class CommonTime {
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+
+public class CommonTime {
     private String meetId;
     private LocalDate date;
     private String timeslot;
