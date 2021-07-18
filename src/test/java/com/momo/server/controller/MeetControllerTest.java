@@ -73,7 +73,7 @@ public class MeetControllerTest {
 	mockMvc.perform(get("/api/meet/" + meetId)) // 1, 2
 		.andExpect(status().isOk()) // 4
 		.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-		.andExpect(jsonPath("$.data.summary.title").value("약속생성테스트")).andDo(print());
+		.andExpect(jsonPath("$.data.title").value("약속생성테스트")).andDo(print());
 
     }
 
