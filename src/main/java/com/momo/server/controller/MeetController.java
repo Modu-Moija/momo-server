@@ -39,7 +39,6 @@ public class MeetController {
     };
 
     @GetMapping("/{meetId}")
-    @ResponseBody
     public ResponseEntity<?> getMeetInfo(@PathVariable("meetId") String meetId) {
 
 	MeetInfoRespDto meetInfoRespDto = meetService.getMeetInfo(meetId);

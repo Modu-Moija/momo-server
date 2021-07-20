@@ -35,7 +35,7 @@ public class UserService {
 
     // 유저 생성
     @Transactional
-    public void createUser(LoginRequestDto loginRequestDto) {
+    public User createUser(LoginRequestDto loginRequestDto) {
 
 	User userEntity = new User();
 
@@ -56,6 +56,8 @@ public class UserService {
 
 	meetRepository.addUser(meetEntity, userEntity);
 	userRepository.createUser(userEntity);
+
+    return userEntity;
     }
 
 }
