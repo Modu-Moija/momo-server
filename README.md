@@ -16,3 +16,8 @@
 - [API 설계서](https://app.swaggerhub.com/apis-docs/su-ram/momo/1.0.0)
 - [기능 명세서](https://www.notion.so/452c8c2414eb4e728c4f276fd02b075f?v=ab3467090fbf4f1ba295b68434339353)
 - [UI/UX](https://xd.adobe.com/view/96c60e58-6479-4449-be6e-20c8b7928544-c395/)
+
+
+## 참조
+- [스프링부트 2.4.1 공식문서](https://docs.spring.io/spring-boot/docs/2.4.1-SNAPSHOT/reference/pdf/spring-boot-reference.pdf)
+- [spring-data-mongoDB 공식문서](https://docs.spring.io/spring-data/mongodb/docs/3.2.3/reference/html/#reference)
