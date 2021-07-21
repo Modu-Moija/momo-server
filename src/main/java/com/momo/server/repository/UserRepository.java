@@ -8,6 +8,8 @@ public interface UserRepository {
     // 유저 생성 메소드
     void createUser(User user);
 
+    void deleteUser();
+
     User isUserExist(LoginRequestDto loginRequestDto);
 
     void increaseMeetNum(String meetId);

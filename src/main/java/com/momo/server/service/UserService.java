@@ -1,6 +1,7 @@
 package com.momo.server.service;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,10 +55,35 @@ public class UserService {
 	int[][] userTimes = new int[timeslots * ((int) 60 / meetEntity.getGap())][dates];
 	userEntity.setUserTimes(userTimes);
 
-	meetRepository.addUser(meetEntity, userEntity);
 	userRepository.createUser(userEntity);
 
-    return userEntity;
+	return userEntity;
+    }
+
+    public void addUser(Meet meetEntity, User userEntity) {
+
+	// userId 업데이트 연산
+	ArrayList<BigInteger> userList = new ArrayList<BigInteger>();
+
+	if (meetEntity.getUsers() == null) {
+	    userList.add(userEntity.getUserId());
+	} else {
+	    userList = meetEntity.getUsers();
+	    userList.add(userEntity.getUserId());
+	}
+
+	// username 업데이트 연산
+	ArrayList<String> userNameList = new ArrayList<String>();
+
+	if (meetEntity.getUsers() == null) {
+	    userNameList.add(userEntity.getUsername());
+	} else {
+	    userNameList = meetEntity.getUserNames();
+	    userNameList.add(userEntity.getUsername());
+	}
+
+	meetRepository.addUser(meetEntity, userList, userNameList);
+
     }
 
 }

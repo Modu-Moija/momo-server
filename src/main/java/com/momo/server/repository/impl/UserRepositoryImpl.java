@@ -25,6 +25,11 @@ public class UserRepositoryImpl implements UserRepository {
 	mongoTemplate.insert(user, "user");
     }
 
+    @Override // 테스트코드를 위한 deleUser메소드 추가
+    public void deleteUser() {
+	mongoTemplate.remove(new Query(), "user");
+    }
+
     @Override
     public User findUser(User user) {
 
