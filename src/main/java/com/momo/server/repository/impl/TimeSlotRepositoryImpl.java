@@ -1,5 +1,7 @@
 package com.momo.server.repository.impl;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Repository;
@@ -14,8 +16,9 @@ public class TimeSlotRepositoryImpl implements TimeSlotRepository {
     private MongoTemplate mongoTemplate;
 
     @Override
-    public void createTimeSlot(TimeSlot timeslot) {
-	mongoTemplate.insert(timeslot, "timeslot");
+    public void createTimeSlot(ArrayList<TimeSlot> timeSlotList) {
+
+	mongoTemplate.insertAll(timeSlotList);
 
     }
 

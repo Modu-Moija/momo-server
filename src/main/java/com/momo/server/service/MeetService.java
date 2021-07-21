@@ -114,25 +114,35 @@ public class MeetService {
     @Transactional
     public void createTimeSlot(String hashedUrl, int row, int col, int start, int end, int gap,
 	    ArrayList<LocalDate> dates) {
-	TimeSlot timeSlot = new TimeSlot();
-	ArrayList<String> users = new ArrayList<String>();
-	timeSlot.setMeetId(hashedUrl);
-	timeSlot.setNum(0);
-	timeSlot.setUsers(users);
 
 	int totalMin = start * 60;
 
+	ArrayList<TimeSlot> timeSlotList = new ArrayList<TimeSlot>();
+
 	for (int i = 0; i < col; i++) {
-	    timeSlot.setDate(dates.get(i));
 	    int temp_Min = totalMin;
 	    for (int j = 0; j < row; j++) {
+		TimeSlot timeSlot = new TimeSlot();
+		ArrayList<String> users = new ArrayList<String>();
+		timeSlot.setMeetId(hashedUrl);
+		timeSlot.setNum(0);
+		timeSlot.setUsers(users);
+		timeSlot.setDate(dates.get(i));
 		timeSlot.setTime(String.valueOf(temp_Min / 60) + ":" + String.valueOf(temp_Min % 60));
 		temp_Min = temp_Min + gap;
-		timeSlotRepository.createTimeSlot(timeSlot);
+
+		timeSlotList.add(timeSlot);
 	    }
 	}
+//
+//	for (int i = 0; i < timeSlotList.size(); i++) {
+//
+//	    System.out.println(timeSlotList.get(i));
+//	}
+	timeSlotRepository.createTimeSlot(timeSlotList);
     }
 
+    // meet정보 반환해줄 때 MeetSub 적용해주는 메소드
     public MeetSubInfo applyMeetSubInfo(Meet meetEntity) {
 
 	MeetSubInfo meetSubInfo = new MeetSubInfo();
