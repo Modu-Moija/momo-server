@@ -2,7 +2,7 @@
 - 여러 사람들이 약속을 잡는데 도움을 주는 사이트로 사용자들이 자신이 가능한 시간을 테이블에 선택하면 모두 가능한 시간을 계산하여 약속시간으로 추천해주는 사이트입니다.
 
 ## 기술 스택
-   - Springboot
+   - Springboot 2.4.1
    - spring-data-mongodb
    - lombok
    - spring-session
