@@ -1,7 +1,9 @@
 package com.momo.server.repository;
 
+import java.math.BigInteger;
+import java.util.ArrayList;
+
 import com.momo.server.domain.Meet;
-import com.momo.server.domain.User;
 
 public interface MeetRepository {
 
@@ -10,12 +12,12 @@ public interface MeetRepository {
 
     boolean isMeetExist(String meetId);
 
-    void addUser(Meet meet, User user);
-
     Meet getColorDate(String meetid);
 
     Meet findMeet(String meetId);
 
     void deleteMeet();
+
+    void addUser(Meet meetEntity, ArrayList<BigInteger> userList, ArrayList<String> userNameList);
 
 }

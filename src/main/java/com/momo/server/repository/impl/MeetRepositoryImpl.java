@@ -11,7 +11,6 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import com.momo.server.domain.Meet;
-import com.momo.server.domain.User;
 import com.momo.server.repository.MeetRepository;
 
 @Repository
@@ -39,27 +38,7 @@ public class MeetRepositoryImpl implements MeetRepository {
 
     // Meet에 user 추가하는연산
     @Override
-    public void addUser(Meet meetEntity, User userEntity) {
-
-	// userId 업데이트 연산
-	ArrayList<BigInteger> userList = new ArrayList<BigInteger>();
-
-	if (meetEntity.getUsers() == null) {
-	    userList.add(userEntity.getUserId());
-	} else {
-	    userList = meetEntity.getUsers();
-	    userList.add(userEntity.getUserId());
-	}
-
-	// username 업데이트 연산
-	ArrayList<String> userNameList = new ArrayList<String>();
-
-	if (meetEntity.getUsers() == null) {
-	    userNameList.add(userEntity.getUsername());
-	} else {
-	    userNameList = meetEntity.getUserNames();
-	    userNameList.add(userEntity.getUsername());
-	}
+    public void addUser(Meet meetEntity, ArrayList<BigInteger> userList, ArrayList<String> userNameList) {
 
 	Query addUserQuery = new Query(Criteria.where("meetId").is(meetEntity.getMeetId()));
 	Update addUserUpdate = new Update();
