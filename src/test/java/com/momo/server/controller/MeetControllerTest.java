@@ -10,7 +10,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -32,10 +31,10 @@ public class MeetControllerTest {
     @Autowired
     private MeetRepository meetRepository;
 
-    @AfterEach
-    public void afterEach() {
-	meetRepository.deleteMeet();// 한번씩 저장소를 지워줌
-    }
+//    @AfterEach
+//    public void afterEach() {
+//	meetRepository.deleteMeet();// 한번씩 저장소를 지워줌
+//    }
 
     @Autowired
     private MockMvc mockMvc;
