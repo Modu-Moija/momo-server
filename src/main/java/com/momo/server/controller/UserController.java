@@ -41,7 +41,7 @@ public class UserController {
 	ResponseEntity<?> responseCode;
 
 	if (userEntity == null) {// 유저 존재하지않음(신규유저)
-
+		userEntity = userService.createUser(loginRequestDto);
 	    // 세션에 정보저장, 일단 세션으로 구현해놨습니다.. 추후에 쿠키로 수정할수있습니다.
 	    HttpSession session = request.getSession();
 	    session.setAttribute("user", userEntity);
