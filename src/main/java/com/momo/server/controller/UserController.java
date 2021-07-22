@@ -48,6 +48,12 @@ public class UserController {
 	    HttpSession session = request.getSession();
 	    session.setAttribute("user", userEntity);
 
+	    request.setAttribute("authuser", userEntity);
+	    Aes128 aes128 = new Aes128(key);
+	    String enc = aes128.encrypt(userEntity.getUserId().toString());
+	    Cookie authCookie = new Cookie("authuser", enc);
+	    response.addCookie(authCookie);
+
 	    responseCode = ResponseEntity.status(HttpStatus.CREATED).build();
 	    return new ResponseEntity<>(new CmRespDto<>(responseCode, "신규 유저 로그인 성공", null), HttpStatus.CREATED);
 
