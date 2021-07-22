@@ -3,6 +3,7 @@ package com.momo.server.service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,8 @@ import com.momo.server.domain.User;
 import com.momo.server.dto.request.UserTimeUpdateRequestDto;
 import com.momo.server.dto.response.MostLeastTimeRespDto;
 import com.momo.server.dto.response.UserMeetRespDto;
+import com.momo.server.exception.MeetNotFoundException;
+import com.momo.server.exception.UserNotFoundException;
 import com.momo.server.repository.MeetRepository;
 import com.momo.server.repository.UserRepository;
 
@@ -87,7 +90,10 @@ public class TimeService {
 
 	// 데이터 db에서 불러오기
 	User userEntity = userRepository.findUser(user);
+	Optional.ofNullable(userEntity).orElseThrow(() -> new UserNotFoundException(user.getUserId()));
+
 	Meet meetEntity = meetRepository.findMeet(user.getMeetId());
+	Optional.ofNullable(meetEntity).orElseThrow(() -> new MeetNotFoundException(user.getMeetId()));
 
 	int[][] userTimes = userEntity.getUserTimes();
 	String start = meetEntity.getStart();
