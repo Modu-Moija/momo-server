@@ -2,14 +2,16 @@ package com.momo.server.controller;
 
 import java.nio.charset.StandardCharsets;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.hash.Hashing;
@@ -28,7 +30,8 @@ public class MeetController {
     private final MeetService meetService;
 
     @PostMapping
-    public ResponseEntity<?> createMeet(@RequestBody MeetSaveRequestDto requestDto) {
+    public ResponseEntity<?> createMeet(@RequestBody @Valid MeetSaveRequestDto requestDto,
+	    BindingResult bindingResult) {
 
 	String hashedUrl = Hashing.sha256().hashString(requestDto.toString(), StandardCharsets.UTF_8).toString()
 		.substring(0, 15);

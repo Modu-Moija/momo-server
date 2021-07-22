@@ -4,10 +4,12 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,8 +36,8 @@ public class UserController {
     private String key;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequestDto, HttpServletRequest request,
-	    HttpServletResponse response) throws Exception {
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDto loginRequestDto, BindingResult bindingResult,
+	    HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 	User userEntity = userService.login(loginRequestDto);// 추후에 로직 수정해야함
 	ResponseEntity<?> responseCode;

@@ -3,6 +3,7 @@ package com.momo.server.service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import com.momo.server.domain.TimeSlot;
 import com.momo.server.dto.MeetSubInfo;
 import com.momo.server.dto.request.MeetSaveRequestDto;
 import com.momo.server.dto.response.MeetInfoRespDto;
+import com.momo.server.exception.notfound.MeetNotFoundException;
 import com.momo.server.repository.MeetRepository;
 import com.momo.server.repository.TimeSlotRepository;
 
@@ -97,6 +99,7 @@ public class MeetService {
 
 	Meet meetEntity = meetRepository.findMeet(meetId);
 
+	Optional.ofNullable(meetEntity).orElseThrow(() -> new MeetNotFoundException(meetId));
 	meetInfoRespDto.setCenter(meetEntity.isCenter());
 	meetInfoRespDto.setVideo(meetEntity.isVideo());
 	meetInfoRespDto.setTitle(meetEntity.getTitle());

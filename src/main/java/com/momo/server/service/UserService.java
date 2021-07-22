@@ -2,6 +2,7 @@ package com.momo.server.service;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.momo.server.domain.Meet;
 import com.momo.server.domain.User;
 import com.momo.server.dto.request.LoginRequestDto;
+import com.momo.server.exception.notfound.MeetNotFoundException;
 import com.momo.server.repository.MeetRepository;
 import com.momo.server.repository.UserRepository;
 
@@ -26,6 +28,7 @@ public class UserService {
     public User login(LoginRequestDto loginRequestDto) {
 
 	User userEntity = userRepository.isUserExist(loginRequestDto);
+
 	if (userEntity == null) {// 유저 존재하지않음(신규유저)
 	    createUser(loginRequestDto);
 	    return null;
@@ -48,6 +51,7 @@ public class UserService {
 	userEntity.setMeetId(loginRequestDto.getMeetId());
 
 	Meet meetEntity = meetRepository.findMeet(loginRequestDto.getMeetId());
+	Optional.ofNullable(meetEntity).orElseThrow(() -> new MeetNotFoundException(loginRequestDto.getMeetId()));
 
 	int dates = meetEntity.getDates().size();
 	int timeslots = Integer.parseInt(meetEntity.getEnd().split(":")[0])
