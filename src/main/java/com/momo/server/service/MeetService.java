@@ -14,7 +14,7 @@ import com.momo.server.domain.TimeSlot;
 import com.momo.server.dto.MeetSubInfo;
 import com.momo.server.dto.request.MeetSaveRequestDto;
 import com.momo.server.dto.response.MeetInfoRespDto;
-import com.momo.server.exception.MeetNotFoundException;
+import com.momo.server.exception.notfound.MeetNotFoundException;
 import com.momo.server.repository.MeetRepository;
 import com.momo.server.repository.TimeSlotRepository;
 

@@ -14,8 +14,8 @@ import com.momo.server.domain.User;
 import com.momo.server.dto.request.UserTimeUpdateRequestDto;
 import com.momo.server.dto.response.MostLeastTimeRespDto;
 import com.momo.server.dto.response.UserMeetRespDto;
-import com.momo.server.exception.MeetNotFoundException;
-import com.momo.server.exception.UserNotFoundException;
+import com.momo.server.exception.notfound.MeetNotFoundException;
+import com.momo.server.exception.notfound.UserNotFoundException;
 import com.momo.server.repository.MeetRepository;
 import com.momo.server.repository.UserRepository;
 

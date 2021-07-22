@@ -1,4 +1,4 @@
-package com.momo.server.exception;
+package com.momo.server.exception.notfound;
 
 import java.math.BigInteger;
 

@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.momo.server.dto.CmRespDto;
+import com.momo.server.exception.notfound.CommonException;
+import com.momo.server.exception.valid.UsernameValidExecption;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,6 +21,16 @@ public class ApiControllerAdvice {
 
 	ResponseEntity<?> responseCode = new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	return new ResponseEntity<>(new CmRespDto<>(responseCode, e.getMessage(), null), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(UsernameValidExecption.class)
+    public ResponseEntity<?> userNamehandleValidException(UsernameValidExecption e) {
+	log.info("ValidException", e);
+
+	ResponseEntity<?> responseCode = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+	return new ResponseEntity<>(new CmRespDto<>(responseCode, e.getMessage(), e.getErrorMap()),
+		HttpStatus.BAD_REQUEST);
     }
 
 }
