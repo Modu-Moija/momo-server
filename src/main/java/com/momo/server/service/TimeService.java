@@ -33,7 +33,10 @@ public class TimeService {
     public ResponseEntity<?> updateUsertime(User user, UserTimeUpdateRequestDto requestDto) {
 
 	User userEntity = userRepository.findUser(user);
+	Optional.ofNullable(userEntity).orElseThrow(() -> new UserNotFoundException(user.getUserId()));
+
 	Meet meetEntity = meetRepository.findMeet(user.getMeetId());
+	Optional.ofNullable(meetEntity).orElseThrow(() -> new MeetNotFoundException(user.getMeetId()));
 
 	// dbmeet로 column 위치 계산
 	ArrayList<LocalDate> dates = meetEntity.getDates();

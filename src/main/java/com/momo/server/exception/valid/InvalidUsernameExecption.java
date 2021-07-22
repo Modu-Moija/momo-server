@@ -3,16 +3,16 @@ package com.momo.server.exception.valid;
 import java.util.Map;
 
 @SuppressWarnings("serial")
-public class UsernameValidExecption extends RuntimeException {
+public class InvalidUsernameExecption extends RuntimeException {
 
     private Map<String, String> errorMap;
 
-    public UsernameValidExecption(String message, Map<String, String> errorMap) {
+    public InvalidUsernameExecption(String message, Map<String, String> errorMap) {
 	super(message);
 	this.errorMap = errorMap;
     }
 
-    public UsernameValidExecption(String message) {
+    public InvalidUsernameExecption(String message) {
 	super(message);
     }
 

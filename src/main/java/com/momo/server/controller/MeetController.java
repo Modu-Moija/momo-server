@@ -21,7 +21,7 @@ import com.google.common.hash.Hashing;
 import com.momo.server.dto.CmRespDto;
 import com.momo.server.dto.request.MeetSaveRequestDto;
 import com.momo.server.dto.response.MeetInfoRespDto;
-import com.momo.server.exception.valid.MeetSaveValidException;
+import com.momo.server.exception.valid.InvalidMeetException;
 import com.momo.server.service.MeetService;
 
 import lombok.RequiredArgsConstructor;
@@ -43,7 +43,7 @@ public class MeetController {
 	    for (FieldError error : bindingResult.getFieldErrors()) {
 		errorMap.put(error.getField(), error.getDefaultMessage());
 	    }
-	    throw new MeetSaveValidException("유효성 검사 실패", errorMap);
+	    throw new InvalidMeetException("유효성 검사 실패", errorMap);
 	}
 
 	String hashedUrl = Hashing.sha256().hashString(requestDto.toString(), StandardCharsets.UTF_8).toString()

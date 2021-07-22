@@ -1,5 +1,7 @@
 package com.momo.server.exception.notfound;
 
+import com.momo.server.exception.CommonException;
+
 @SuppressWarnings("serial") // https://zzznara2.tistory.com/186, 서프레스 워닝 해결
 public class MeetNotFoundException extends CommonException {
 

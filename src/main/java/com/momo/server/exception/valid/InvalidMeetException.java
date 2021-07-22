@@ -3,16 +3,16 @@ package com.momo.server.exception.valid;
 import java.util.Map;
 
 @SuppressWarnings("serial")
-public class MeetSaveValidException extends RuntimeException {
+public class InvalidMeetException extends RuntimeException {
 
     private Map<String, String> errorMap;
 
-    public MeetSaveValidException(String message, Map<String, String> errorMap) {
+    public InvalidMeetException(String message, Map<String, String> errorMap) {
 	super(message);
 	this.errorMap = errorMap;
     }
 
-    public MeetSaveValidException(String message) {
+    public InvalidMeetException(String message) {
 	super(message);
     }
 

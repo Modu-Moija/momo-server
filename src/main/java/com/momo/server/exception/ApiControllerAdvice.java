@@ -6,9 +6,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.momo.server.dto.CmRespDto;
-import com.momo.server.exception.notfound.CommonException;
-import com.momo.server.exception.valid.MeetSaveValidException;
-import com.momo.server.exception.valid.UsernameValidExecption;
+import com.momo.server.exception.auth.UnauthorizedException;
+import com.momo.server.exception.valid.InvalidMeetException;
+import com.momo.server.exception.valid.InvalidUsernameExecption;
+import com.momo.server.exception.valid.InvalidUserTimeExcpetion;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,8 +25,8 @@ public class ApiControllerAdvice {
 	return new ResponseEntity<>(new CmRespDto<>(responseCode, e.getMessage(), null), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(UsernameValidExecption.class)
-    public ResponseEntity<?> userNamehandleValidException(UsernameValidExecption e) {
+    @ExceptionHandler(InvalidUsernameExecption.class)
+    public ResponseEntity<?> userNamehandleValidException(InvalidUsernameExecption e) {
 	log.info("ValidException", e);
 
 	ResponseEntity<?> responseCode = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -34,14 +35,33 @@ public class ApiControllerAdvice {
 		HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(MeetSaveValidException.class)
-    public ResponseEntity<?> meetSavehandleValidException(MeetSaveValidException e) {
+    @ExceptionHandler(InvalidMeetException.class)
+    public ResponseEntity<?> meetSavehandleValidException(InvalidMeetException e) {
 	log.info("ValidException", e);
 
 	ResponseEntity<?> responseCode = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
 	return new ResponseEntity<>(new CmRespDto<>(responseCode, e.getMessage(), e.getErrorMap()),
 		HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidUserTimeExcpetion.class)
+    public ResponseEntity<?> userTimeUpdatehandleValidException(InvalidUserTimeExcpetion e) {
+	log.info("ValidException", e);
+
+	ResponseEntity<?> responseCode = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+	return new ResponseEntity<>(new CmRespDto<>(responseCode, e.getMessage(), e.getErrorMap()),
+		HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<?> handleUnauthorizedException(UnauthorizedException e) {
+	log.info("권한없음 Exception", e);
+
+	ResponseEntity<?> responseCode = new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
+	return new ResponseEntity<>(new CmRespDto<>(responseCode, e.getMessage(), null), HttpStatus.UNAUTHORIZED);
     }
 
 }

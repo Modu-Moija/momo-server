@@ -2,6 +2,8 @@ package com.momo.server.exception.notfound;
 
 import java.math.BigInteger;
 
+import com.momo.server.exception.CommonException;
+
 @SuppressWarnings("serial")
 public class UserNotFoundException extends CommonException {
 

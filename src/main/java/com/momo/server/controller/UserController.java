@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.momo.server.domain.User;
 import com.momo.server.dto.CmRespDto;
 import com.momo.server.dto.request.LoginRequestDto;
-import com.momo.server.exception.valid.UsernameValidExecption;
+import com.momo.server.exception.valid.InvalidUsernameExecption;
 import com.momo.server.service.TimeService;
 import com.momo.server.service.UserService;
 import com.momo.server.utils.Aes128;
@@ -44,13 +44,14 @@ public class UserController {
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDto loginRequestDto, BindingResult bindingResult,
 	    HttpServletRequest request, HttpServletResponse response) throws Exception {
 
+	// 추후에 aop로 다 뺄예정
 	if (bindingResult.hasErrors()) {
 	    Map<String, String> errorMap = new HashMap<>();
 
 	    for (FieldError error : bindingResult.getFieldErrors()) {
 		errorMap.put(error.getField(), error.getDefaultMessage());
 	    }
-	    throw new UsernameValidExecption("유효성 검사 실패", errorMap);
+	    throw new InvalidUsernameExecption("유효성 검사 실패", errorMap);
 	}
 
 	User userEntity = userService.login(loginRequestDto);// 추후에 로직 수정해야함
