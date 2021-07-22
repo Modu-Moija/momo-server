@@ -1,15 +1,12 @@
 package com.momo.server.controller;
 
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +18,6 @@ import com.google.common.hash.Hashing;
 import com.momo.server.dto.CmRespDto;
 import com.momo.server.dto.request.MeetSaveRequestDto;
 import com.momo.server.dto.response.MeetInfoRespDto;
-import com.momo.server.exception.valid.InvalidMeetException;
 import com.momo.server.service.MeetService;
 
 import lombok.RequiredArgsConstructor;
@@ -36,15 +32,6 @@ public class MeetController {
     @PostMapping
     public ResponseEntity<?> createMeet(@RequestBody @Valid MeetSaveRequestDto requestDto,
 	    BindingResult bindingResult) {
-
-	if (bindingResult.hasErrors()) {
-	    Map<String, String> errorMap = new HashMap<>();
-
-	    for (FieldError error : bindingResult.getFieldErrors()) {
-		errorMap.put(error.getField(), error.getDefaultMessage());
-	    }
-	    throw new InvalidMeetException("유효성 검사 실패", errorMap);
-	}
 
 	String hashedUrl = Hashing.sha256().hashString(requestDto.toString(), StandardCharsets.UTF_8).toString()
 		.substring(0, 15);

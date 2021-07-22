@@ -1,8 +1,5 @@
 package com.momo.server.controller;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.momo.server.domain.User;
 import com.momo.server.dto.CmRespDto;
 import com.momo.server.dto.request.LoginRequestDto;
-import com.momo.server.exception.valid.InvalidUsernameExecption;
 import com.momo.server.service.TimeService;
 import com.momo.server.service.UserService;
 import com.momo.server.utils.Aes128;
@@ -43,16 +38,6 @@ public class UserController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDto loginRequestDto, BindingResult bindingResult,
 	    HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-	// 추후에 aop로 다 뺄예정
-	if (bindingResult.hasErrors()) {
-	    Map<String, String> errorMap = new HashMap<>();
-
-	    for (FieldError error : bindingResult.getFieldErrors()) {
-		errorMap.put(error.getField(), error.getDefaultMessage());
-	    }
-	    throw new InvalidUsernameExecption("유효성 검사 실패", errorMap);
-	}
 
 	User userEntity = userService.login(loginRequestDto);// 추후에 로직 수정해야함
 	ResponseEntity<?> responseCode;
