@@ -1,14 +1,14 @@
 package com.momo.server.config;
 
-import com.mongodb.MongoClientSettings;
-import com.mongodb.MongoCredential;
-import com.mongodb.ServerAddress;
+import static java.util.Collections.singletonList;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
 
-import static java.util.Collections.singletonList;
+import com.mongodb.MongoClientSettings;
+import com.mongodb.MongoCredential;
+import com.mongodb.ServerAddress;
 
 @Configuration
 public class MongoConfig extends AbstractMongoClientConfiguration {
@@ -31,17 +31,15 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
     @Override
     protected void configureClientSettings(MongoClientSettings.Builder builder) {
 
-        builder
-            .credential(
-                MongoCredential.createCredential(dbUsername, dbName, dbPassword.toCharArray()))
-            .applyToClusterSettings(settings -> {
-                settings.hosts(singletonList(new ServerAddress(dbHost, dbPort)));
-            });
+	builder.credential(MongoCredential.createCredential(dbUsername, dbName, dbPassword.toCharArray()))
+		.applyToClusterSettings(settings -> {
+		    settings.hosts(singletonList(new ServerAddress(dbHost, dbPort)));
+		});
 
     }
 
     @Override
     protected String getDatabaseName() {
-        return dbName;
+	return dbName;
     }
 }
