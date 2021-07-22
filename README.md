@@ -3,7 +3,9 @@
 
 ## 기술 스택
    - Springboot 2.4.1
-   - spring-data-mongodb
+   - spring-boot-starter-data-mongodb
+   - spring-boot-starter-validation
+   - spring-boot-starter-aop
    - lombok
    - spring-session
    - springfox-swagger2
