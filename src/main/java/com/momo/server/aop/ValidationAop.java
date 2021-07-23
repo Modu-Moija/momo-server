@@ -14,11 +14,11 @@ import com.momo.server.exception.valid.InvalidMeetException;
 
 @Component
 @Aspect
-public class ValidationAdvice {
+public class ValidationAop {
 
     @Around("execution(* com.momo.server.controller.*Controller.*(..))")
     public Object apiAdvice(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-	System.out.println("컨트롤러 aop 실행");
+	// System.out.println("컨트롤러 aop 실행");
 
 	Object[] args = proceedingJoinPoint.getArgs();
 	for (Object arg : args) {
