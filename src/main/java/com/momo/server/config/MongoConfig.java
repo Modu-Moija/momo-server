@@ -3,7 +3,10 @@ package com.momo.server.config;
 import static java.util.Collections.singletonList;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.MongoDbFactory;
+import org.springframework.data.mongodb.MongoTransactionManager;
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
 
 import com.mongodb.MongoClientSettings;
@@ -12,6 +15,11 @@ import com.mongodb.ServerAddress;
 
 @Configuration
 public class MongoConfig extends AbstractMongoClientConfiguration {
+
+    // @Bean
+    // MongoTransactionManager transactionManager(MongoDbFactory dbFactory) {
+	// return new MongoTransactionManager(dbFactory);
+    // }
 
     @Value("${dbname}")
     private String dbName;

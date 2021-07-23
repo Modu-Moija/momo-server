@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -43,6 +44,7 @@ public class MeetControllerTest {
     private ObjectMapper objectMapper;// json매핑을 위해
 
     @Test
+    @Rollback(true)
     public void 약속을_생성() throws Exception {
 
 	// given
@@ -66,6 +68,7 @@ public class MeetControllerTest {
     }
 
     @Test
+    @Rollback(true)
     public void 약속조회() throws Exception {
 
 	String meetId = "e8e1bf2ec5ab131";
