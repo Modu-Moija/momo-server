@@ -6,7 +6,7 @@
    - spring-boot-starter-data-mongodb
    - spring-boot-starter-validation
    - spring-boot-starter-aop
-   - lombok
+   - lombok( + Slf4j)
    - spring-session
    - springfox-swagger2
    - junit5
