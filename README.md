@@ -10,7 +10,7 @@
    - spring-session
    - springfox-swagger2
    - junit5
-   - github actions
+
    
 ## DB구조
 
