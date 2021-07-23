@@ -2,7 +2,9 @@ package com.momo.server.domain;
 
 import java.math.BigInteger;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import lombok.Data;
 
@@ -15,6 +17,8 @@ public class User {
 //	@CreatedDate
 //	private Date createdDate; 
 
+    @MongoId
+    private ObjectId id;
     private BigInteger userId;
     private String username;
     private String meetId;
