@@ -25,8 +25,10 @@ public class MeetRepositoryImpl implements MeetRepository {
     }
 
     @Override // 테스트코드를 위한 deleteMeet메소드 추가
-    public void deleteMeet() {
-	mongoTemplate.remove(new Query(), "meet");
+    public void findAllAndRemoveMeet(String meetId) {
+
+	Query findMeetQuery = new Query(Criteria.where("meetId").is(meetId));
+	mongoTemplate.findAllAndRemove(findMeetQuery, Meet.class);
     }
 
     @Override

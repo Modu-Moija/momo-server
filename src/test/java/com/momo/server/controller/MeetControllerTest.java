@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -17,12 +18,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.momo.server.dto.request.MeetSaveRequestDto;
 import com.momo.server.repository.MeetRepository;
+import com.momo.server.repository.TimeSlotRepository;
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -32,10 +33,14 @@ public class MeetControllerTest {
     @Autowired
     private MeetRepository meetRepository;
 
-//    @AfterEach
-//    public void afterEach() {
-//	meetRepository.deleteMeet();// 한번씩 저장소를 지워줌
-//    }
+    @Autowired
+    private TimeSlotRepository timeSlotRepository;
+
+    @AfterAll
+    public void afterAll() {// 생성된 약속 찾아서 지워주기 @Transactional이 동작안해서직접 구현함
+	meetRepository.findAllAndRemoveMeet("e8e1bf2ec5ab131");
+	timeSlotRepository.findAllAndRemoveTimeSlot("e8e1bf2ec5ab131");
+    }
 
     @Autowired
     private MockMvc mockMvc;
@@ -44,7 +49,6 @@ public class MeetControllerTest {
     private ObjectMapper objectMapper;// json매핑을 위해
 
     @Test
-    @Rollback(true)
     public void 약속을_생성() throws Exception {
 
 	// given
@@ -68,7 +72,6 @@ public class MeetControllerTest {
     }
 
     @Test
-    @Rollback(true)
     public void 약속조회() throws Exception {
 
 	String meetId = "e8e1bf2ec5ab131";
