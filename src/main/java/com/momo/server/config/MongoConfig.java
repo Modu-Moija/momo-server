@@ -13,6 +13,11 @@ import com.mongodb.ServerAddress;
 @Configuration
 public class MongoConfig extends AbstractMongoClientConfiguration {
 
+//    @Bean
+//    MongoTransactionManager transactionManager(MongoDatabaseFactory dbFactory) {
+//	return new MongoTransactionManager(dbFactory);
+//    }
+
     @Value("${dbname}")
     private String dbName;
 

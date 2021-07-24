@@ -62,11 +62,11 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void increaseMeetNum(String meetId) {
+    public void findAndRemoveUser(String userId) {
 
-	Query query = new Query();
-	query.addCriteria(Criteria.where("meetId").is(meetId));
-	Meet targetMeet = mongoTemplate.findOne(query, Meet.class, "meet");
+	Query findUserQuery = new Query(Criteria.where("userId").is(userId));
+	mongoTemplate.findAndRemove(findUserQuery, Meet.class);
+
     }
 
 }

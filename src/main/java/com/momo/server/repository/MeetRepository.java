@@ -16,8 +16,8 @@ public interface MeetRepository {
 
     Meet findMeet(String meetId);
 
-    void deleteMeet();
-
     void addUser(Meet meetEntity, ArrayList<BigInteger> userList, ArrayList<String> userNameList);
+
+    void findAllAndRemoveMeet(String meetId);
 
 }

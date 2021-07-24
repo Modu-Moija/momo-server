@@ -12,10 +12,10 @@ public interface UserRepository {
 
     User isUserExist(LoginRequestDto loginRequestDto);
 
-    void increaseMeetNum(String meetId);
-
     User findUser(User user);
 
     void updateUserTime(User user, int[][] temp_userTimes, int[][] temp_Times);
+
+    void findAndRemoveUser(String userId);
 
 }
