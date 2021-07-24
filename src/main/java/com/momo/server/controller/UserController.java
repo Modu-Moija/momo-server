@@ -49,6 +49,7 @@ public class UserController {
 	Aes128 aes128 = new Aes128(key);
 	String enc = aes128.encrypt(loginRequestDto.getUsername().toString());// 유저이름으로 암호화시켜도 안전한지 모르겠습니다
 	Cookie authCookie = new Cookie("authuser", enc);
+	authCookie.setHttpOnly(false);
 	response.addCookie(authCookie);
 
 	// 유저 존재하지않음(신규유저)
