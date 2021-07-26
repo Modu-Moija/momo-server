@@ -17,6 +17,7 @@ import com.momo.server.dto.response.UserMeetRespDto;
 import com.momo.server.exception.notfound.MeetNotFoundException;
 import com.momo.server.exception.notfound.UserNotFoundException;
 import com.momo.server.repository.MeetRepository;
+import com.momo.server.repository.TimeSlotRepository;
 import com.momo.server.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ public class TimeService {
 
     private final UserRepository userRepository;
     private final MeetRepository meetRepository;
+    private final TimeSlotRepository timeSlotRepository;
 
     // 유저의 시간정보 저장
     @Transactional
@@ -36,8 +38,6 @@ public class TimeService {
 
 	Meet meetEntity = meetRepository.findMeet(userEntity.getMeetId());
 	Optional.ofNullable(meetEntity).orElseThrow(() -> new MeetNotFoundException(userEntity.getMeetId()));
-
-	System.out.println(requestDto);
 
 	// 유저 시간 업데이트
 	// dbmeet로 column 위치 계산
@@ -61,10 +61,7 @@ public class TimeService {
 	    // requestDto의 date 찾기
 	    for (int j = 0; j < requestDto.getUsertimes().size(); j++) {
 		if (requestDto.getUsertimes().get(j).getDate().equals(dates.get(i))) {
-		    System.out.println(requestDto.getUsertimes().get(j).getDate());
-		    System.out.println(dates.get(i));
 		    col = i;
-
 		    // requestDto의 시간배열 크기만큼 반복
 		    for (int t = 0; t < requestDto.getUsertimes().get(j).getTimeslots().size(); t++) {
 			String timeslot = requestDto.getUsertimes().get(j).getTimeslots().get(t).getTime();
@@ -90,16 +87,18 @@ public class TimeService {
 	    }
 	}
 
-	userRepository.updateUserTime(userEntity, temp_userTimes, temp_Times);
+	userRepository.updateUserTime(userEntity, temp_userTimes);
+
 	// TimeSlot 갱신
+	updateTimeSlot(requestDto);
 
 	// Meet 시간 업데이트
-	meetRepository.updateMeetTime(userEntity.getMeetId(), temp_userTimes, temp_Times);
+	meetRepository.updateMeetTime(userEntity.getMeetId(), temp_userTimes);
 	return ResponseEntity.ok().build();
 
     };
 
-    public void updateMeetTime() {
+    private void updateTimeSlot(UserTimeUpdateRequestDto requestDto) {
 
     }
 

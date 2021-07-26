@@ -20,6 +20,6 @@ public interface MeetRepository {
 
     void findAllAndRemoveMeet(String meetId);
 
-    void updateMeetTime(String meetId, int[][] temp_userTimes, int[][] temp_Times);
+    void updateMeetTime(String meetId, int[][] temp_userTimes);
 
 }

@@ -9,4 +9,5 @@ public interface TimeSlotRepository {
     void createTimeSlot(ArrayList<TimeSlot> timeSlotList);
 
     void findAllAndRemoveTimeSlot(String meetId);
+
 }

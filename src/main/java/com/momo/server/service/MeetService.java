@@ -68,13 +68,6 @@ public class MeetService {
 	// 추후에 성능개선을 위해 캐시프랜들리 코드 적용 생각해보면 좋을 것 같음(행과 열 위치 연산개선)
 	// 참조링크 https://hot2364928.tistory.com/58
 
-	// 테스트코드
-//        for (int i = 0; i < row; i++) { // 행 반복
-//			for (int j = 0; j < col; j++) { // 열 반복
-//				System.out.println(i+"행 "+j+"열의 값:"+temptimes[i][j]);
-//			}
-//		}
-
 	// meet로 저장
 	meet.setMeetId(hashedUrl);
 	meet.setTitle(requestDto.getTitle());
@@ -83,7 +76,6 @@ public class MeetService {
 	meet.setCreated(LocalDateTime.now().plusHours(9));
 	meet.setGap(requestDto.getGap());
 	meet.setDates(dates);
-	// meet.setMeetSubInfo
 	meet.setTimes(temptimes);
 	meet.setCenter(requestDto.isCenter());
 	meet.setCenter(requestDto.isVideo());

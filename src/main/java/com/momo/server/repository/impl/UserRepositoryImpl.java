@@ -48,7 +48,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     // 유저시간 업데이트연산
     @Override
-    public void updateUserTime(User user, int[][] temp_userTimes, int[][] temp_Times) {
+    public void updateUserTime(User user, int[][] temp_userTimes) {
 
 	Query query = new Query(Criteria.where("userId").is(user.getUserId()));
 	Update update = new Update();
