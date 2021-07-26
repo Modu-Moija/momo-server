@@ -1,33 +1,28 @@
 package com.momo.server.dto.request;
 
-import java.time.LocalDate;
+import java.util.List;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.momo.server.dto.DateTimeEntry;
 
-@Getter
-@Setter
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserTimeUpdateRequestDto {
 
     @Size(max = 100, message = "meetId는 100자 이하여야 합니다.")
     @NotBlank
-    private String meetId;
+    String meetId;
 
     @NotNull
-    private LocalDate date;
-
-    @NotBlank
-    private String timeslot;
-
-    @NotNull
-    private boolean possible;
-
+    List<DateTimeEntry> usertimes;
 }
+
+//참조 https://stackoverflow.com/questions/49012470/consuming-a-nested-json-array-using-spring-boot-and-resttemplate

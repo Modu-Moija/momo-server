@@ -137,11 +137,6 @@ public class MeetService {
 		timeSlotList.add(timeSlot);
 	    }
 	}
-//
-//	for (int i = 0; i < timeSlotList.size(); i++) {
-//
-//	    System.out.println(timeSlotList.get(i));
-//	}
 	timeSlotRepository.createTimeSlot(timeSlotList);
     }
 

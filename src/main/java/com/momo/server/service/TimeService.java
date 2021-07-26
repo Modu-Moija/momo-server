@@ -30,38 +30,18 @@ public class TimeService {
 
     // 유저의 시간정보 저장
     @Transactional
-    public ResponseEntity<?> updateUsertime(User user, UserTimeUpdateRequestDto requestDto) {
+    public ResponseEntity<?> updateUsertime(User userEntity, UserTimeUpdateRequestDto requestDto) {
 
-	User userEntity = userRepository.findUser(user);
-	Optional.ofNullable(userEntity).orElseThrow(() -> new UserNotFoundException(user.getUserId()));
+	Optional.ofNullable(userEntity).orElseThrow(() -> new UserNotFoundException(userEntity.getUserId()));
 
-	Meet meetEntity = meetRepository.findMeet(user.getMeetId());
-	Optional.ofNullable(meetEntity).orElseThrow(() -> new MeetNotFoundException(user.getMeetId()));
+	Meet meetEntity = meetRepository.findMeet(userEntity.getMeetId());
+	Optional.ofNullable(meetEntity).orElseThrow(() -> new MeetNotFoundException(userEntity.getMeetId()));
 
+	System.out.println(requestDto);
+
+	// 유저 시간 업데이트
 	// dbmeet로 column 위치 계산
 	ArrayList<LocalDate> dates = meetEntity.getDates();
-
-	int x = 0;
-	for (int i = 0; i < dates.size(); i++) {
-	    if (requestDto.getDate().equals(dates.get(i))) {
-		x = i;
-		break;
-	    }
-	}
-
-	// dbmeet로 row 위치 계산
-	int y = 0;
-	String start = meetEntity.getStart();
-	int hour = Integer.parseInt(start.substring(0, 2));
-	int min = Integer.parseInt(start.substring(3, 5));
-	int total_hour = hour * 60 + min;
-	String timeslot = requestDto.getTimeslot();
-	int input_hour = Integer.parseInt(timeslot.substring(0, 2));
-	int input_min = Integer.parseInt(timeslot.substring(3, 5));
-	int input_total_hour = input_hour * 60 + input_min;
-	int gap = meetEntity.getGap();
-
-	y = (input_total_hour - total_hour) / gap;
 
 	// usertimetable 불러오기
 	int[][] temp_userTimes = userEntity.getUserTimes();
@@ -69,21 +49,65 @@ public class TimeService {
 	// meettimetable 불러오기
 	int[][] temp_Times = meetEntity.getTimes();
 
-	// true일 때 좌표값 1로 세팅,false일때 좌표값 0으로 세팅
-	if (requestDto.isPossible() == true) {
-	    temp_userTimes[y][x] = 1;
-	    temp_Times[y][x] = temp_Times[y][x] + 1;
-	} else if (requestDto.isPossible() == false) {
-	    temp_userTimes[y][x] = 0;
-	    temp_Times[y][x] = temp_Times[y][x] - 1;
+	int gap = meetEntity.getGap();
+	String start = meetEntity.getStart();
+	int hour = Integer.parseInt(start.substring(0, 2));
+	int min = Integer.parseInt(start.substring(3, 5));
+	int total_hour = hour * 60 + min;
+
+	int col = 0;
+	// db meet의 date로 날짜 찾기
+	for (int i = 0; i < dates.size(); i++) {
+	    // requestDto의 date 찾기
+	    for (int j = 0; j < requestDto.getUsertimes().size(); j++) {
+		if (requestDto.getUsertimes().get(j).getDate().equals(dates.get(i))) {
+		    System.out.println(requestDto.getUsertimes().get(j).getDate());
+		    System.out.println(dates.get(i));
+		    col = i;
+		    // requestDto의 시간배열 크기만큼 반복
+
+		    for (int t = 0; t < requestDto.getUsertimes().get(j).getTimeslots().size(); t++) {
+			// 시간 설정
+			String timeslot = requestDto.getUsertimes().get(j).getTimeslots().get(t).getTime();
+
+			// dbmeet로 row 위치 계산
+			int row = 0;
+
+			int input_hour = Integer.parseInt(timeslot.substring(0, 2));
+			int input_min = Integer.parseInt(timeslot.substring(3, 5));
+			int input_total_hour = input_hour * 60 + input_min;
+
+			row = (input_total_hour - total_hour) / gap;
+
+			// true일 때 좌표값 1로 세팅,false일때 좌표값 0으로 세팅
+			if (requestDto.getUsertimes().get(j).getTimeslots().get(t).getPossible() == true) {
+
+			    temp_userTimes[row][col] = 1;
+			    temp_Times[row][col] = temp_Times[row][col] + 1;
+			} else if (requestDto.getUsertimes().get(j).getTimeslots().get(t).getPossible() == false) {
+			    temp_userTimes[row][col] = 0;
+			    temp_Times[row][col] = temp_Times[row][col] - 1;
+			}
+		    }
+		}
+	    }
 	}
 
-	userRepository.updateUserTime(user, temp_userTimes, temp_Times);
+	userRepository.updateUserTime(userEntity, temp_userTimes, temp_Times);
+//	// TimeSlot 갱신
+
+	// Meet 시간 업데이트
 	return ResponseEntity.ok().build();
 
     };
 
-    // 희은님 부탁사항으로 만든 메소드
+    public void updateMeetTime() {
+
+    }
+
+    /*
+     * 약속관련정보 매핑하는 메소드
+     */
     @Transactional(readOnly = true)
     public UserMeetRespDto mapUserMeetRespDto(User user) {
 
