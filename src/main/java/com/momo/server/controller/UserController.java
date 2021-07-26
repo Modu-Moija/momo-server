@@ -43,7 +43,7 @@ public class UserController {
 	ResponseEntity<?> responseCode;
 
 	HttpSession session = request.getSession();
-	session.setAttribute("user", loginRequestDto);
+	session.setAttribute("user", userEntity);
 
 	request.setAttribute("authuser", loginRequestDto);
 	Aes128 aes128 = new Aes128(key);
