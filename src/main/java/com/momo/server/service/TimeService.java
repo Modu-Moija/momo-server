@@ -66,6 +66,7 @@ public class TimeService {
 	    // requestDto의 date 찾기
 	    for (int j = 0; j < requestDto.getUsertimes().size(); j++) {
 		if (requestDto.getUsertimes().get(j).getDate().equals(dates.get(i))) {
+		    System.out.println("col" + col);
 		    col = i;
 		    // requestDto의 시간배열 크기만큼 반복
 		    for (int t = 0; t < requestDto.getUsertimes().get(j).getTimeslots().size(); t++) {
@@ -74,7 +75,7 @@ public class TimeService {
 			// dbmeet로 row 위치 계산
 			int row = 0;
 			int input_hour = Integer.parseInt(timeslot.substring(0, 2));
-			int input_min = Integer.parseInt(timeslot.substring(3, 4));
+			int input_min = Integer.parseInt(timeslot.substring(3, 5));
 			int input_total_hour = input_hour * 60 + input_min;
 			row = (input_total_hour - total_hour) / gap;
 
@@ -212,7 +213,6 @@ public class TimeService {
     public MostLeastTimeRespDto getMostLeastTime(String meetId) {
 
 	MostLeastTimeRespDto mostLeastTimeRespDto = new MostLeastTimeRespDto();
-	Meet meetEntity = meetRepository.findMeet(meetId);
 
 	mostLeastTimeRespDto.setLeast(null);
 	mostLeastTimeRespDto.setMost(null);

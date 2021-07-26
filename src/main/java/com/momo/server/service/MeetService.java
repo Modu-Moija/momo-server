@@ -124,7 +124,15 @@ public class MeetService {
 		timeSlot.setNum(0);
 		timeSlot.setUsers(users);
 		timeSlot.setDate(dates.get(i));
-		timeSlot.setTime(String.valueOf(temp_Min / 60) + ":" + temp_Min % 60);
+
+		int min = temp_Min % 60;
+		String strMin = null;
+		if (min == 0) {
+		    strMin = String.valueOf(min + "0");
+		} else {
+		    strMin = String.valueOf(min);
+		}
+		timeSlot.setTime(String.valueOf(temp_Min / 60) + ":" + strMin);
 		temp_Min = temp_Min + gap;
 
 		timeSlotList.add(timeSlot);
