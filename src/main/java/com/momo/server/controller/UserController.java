@@ -39,11 +39,8 @@ public class UserController {
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDto loginRequestDto, BindingResult bindingResult,
 	    HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-	User userEntity = userService.login(loginRequestDto);// 추후에 로직 수정해야함
+	User userEntity = userService.login(loginRequestDto);
 	ResponseEntity<?> responseCode;
-
-	HttpSession session = request.getSession();
-	session.setAttribute("user", loginRequestDto);
 
 	request.setAttribute("authuser", loginRequestDto);
 	Aes128 aes128 = new Aes128(key);
@@ -56,10 +53,16 @@ public class UserController {
 	if (userEntity == null) {
 	    userEntity = userService.createUser(loginRequestDto);
 
+	    HttpSession session = request.getSession();
+	    session.setAttribute("user", userEntity);
+
 	    responseCode = ResponseEntity.status(HttpStatus.CREATED).build();
 	    return new ResponseEntity<>(new CmRespDto<>(responseCode, "신규 유저 로그인 성공", null), HttpStatus.CREATED);
 
 	} else {// 유저 존재(기존 유저)
+
+	    HttpSession session = request.getSession();
+	    session.setAttribute("user", userEntity);
 
 	    responseCode = ResponseEntity.status(HttpStatus.OK).build();
 	    return new ResponseEntity<>(new CmRespDto<>(responseCode, "기존 유저 로그인 성공", null), HttpStatus.OK);
