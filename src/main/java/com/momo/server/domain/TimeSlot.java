@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Document(collection = "timeslot")
-public class TimeSlot {
+public class TimeSlot implements Comparable<TimeSlot> {
 
     @MongoId
     private ObjectId id;
@@ -23,6 +23,18 @@ public class TimeSlot {
     private HashSet<String> users;
     private String time;
     private LocalDate date;
-    private int num;
+    private Integer num;
+
+    @Override
+    public int compareTo(TimeSlot o) {
+	int res = o.getNum().compareTo(this.getNum());
+	if (res == 0) {
+	    res = o.getDate().compareTo(this.getDate());
+	} else if (res == 0) {
+	    res = o.getTime().compareTo(this.getTime());
+	}
+	// num순 정렬
+	return res;
+    }
 
 }

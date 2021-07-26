@@ -2,6 +2,7 @@ package com.momo.server.service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -66,7 +67,6 @@ public class TimeService {
 	    // requestDto의 date 찾기
 	    for (int j = 0; j < requestDto.getUsertimes().size(); j++) {
 		if (requestDto.getUsertimes().get(j).getDate().equals(dates.get(i))) {
-		    System.out.println("col" + col);
 		    col = i;
 		    // requestDto의 시간배열 크기만큼 반복
 		    for (int t = 0; t < requestDto.getUsertimes().get(j).getTimeslots().size(); t++) {
@@ -119,7 +119,7 @@ public class TimeService {
 			if (requestDto.getUsertimes().get(i).getTimeslots().get(t).getTime()
 				.equals(timeSlots.get(j).getTime())) {
 
-			    HashSet<String> users = timeSlots.get(i).getUsers();
+			    HashSet<String> users = timeSlots.get(j).getUsers();
 			    users.add(userEntity.getUsername());
 
 			    timeSlotRepository.updateTimeSlot(requestDto.getMeetId(), users,
@@ -210,13 +210,18 @@ public class TimeService {
 	return colorDate;
     }
 
-    public MostLeastTimeRespDto getMostLeastTime(String meetId) {
+    @Transactional(readOnly = true)
+    public List<TimeSlot> getMostLeastTime(String meetId) {
+
+	List<TimeSlot> timeSlots = timeSlotRepository.findAllTimeSlot(meetId);
+
+	Collections.sort(timeSlots);
 
 	MostLeastTimeRespDto mostLeastTimeRespDto = new MostLeastTimeRespDto();
 
 	mostLeastTimeRespDto.setLeast(null);
 	mostLeastTimeRespDto.setMost(null);
-	return mostLeastTimeRespDto;
+	return timeSlots;
 
     }
 
