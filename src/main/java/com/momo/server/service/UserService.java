@@ -30,8 +30,8 @@ public class UserService {
 	User userEntity = userRepository.isUserExist(loginRequestDto);
 
 	if (userEntity == null) {// 유저 존재하지않음(신규유저)
-	    createUser(loginRequestDto);
-	    return null;
+	    this.createUser(loginRequestDto);
+	    return userEntity;
 	} else {// 유저 존재(기존 유저)
 	    return userEntity;
 	}
