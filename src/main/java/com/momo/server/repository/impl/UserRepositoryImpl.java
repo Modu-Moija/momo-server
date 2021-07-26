@@ -54,11 +54,6 @@ public class UserRepositoryImpl implements UserRepository {
 	Update update = new Update();
 	update.set("userTimes", temp_userTimes);
 	mongoTemplate.updateFirst(query, update, User.class);
-
-	Query meetQuery = new Query(Criteria.where("meetId").is(user.getMeetId()));
-	Update meetUpdate = new Update();
-	meetUpdate.set("times", temp_Times);
-	mongoTemplate.updateFirst(meetQuery, meetUpdate, Meet.class);
     }
 
     @Override

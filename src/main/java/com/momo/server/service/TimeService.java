@@ -64,19 +64,16 @@ public class TimeService {
 		    System.out.println(requestDto.getUsertimes().get(j).getDate());
 		    System.out.println(dates.get(i));
 		    col = i;
-		    // requestDto의 시간배열 크기만큼 반복
 
+		    // requestDto의 시간배열 크기만큼 반복
 		    for (int t = 0; t < requestDto.getUsertimes().get(j).getTimeslots().size(); t++) {
-			// 시간 설정
 			String timeslot = requestDto.getUsertimes().get(j).getTimeslots().get(t).getTime();
 
 			// dbmeet로 row 위치 계산
 			int row = 0;
-
 			int input_hour = Integer.parseInt(timeslot.substring(0, 2));
 			int input_min = Integer.parseInt(timeslot.substring(3, 5));
 			int input_total_hour = input_hour * 60 + input_min;
-
 			row = (input_total_hour - total_hour) / gap;
 
 			// true일 때 좌표값 1로 세팅,false일때 좌표값 0으로 세팅
@@ -94,9 +91,10 @@ public class TimeService {
 	}
 
 	userRepository.updateUserTime(userEntity, temp_userTimes, temp_Times);
-//	// TimeSlot 갱신
+	// TimeSlot 갱신
 
 	// Meet 시간 업데이트
+	meetRepository.updateMeetTime(userEntity.getMeetId(), temp_userTimes, temp_Times);
 	return ResponseEntity.ok().build();
 
     };
