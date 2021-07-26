@@ -64,10 +64,17 @@ public class TimeController {
 	return userMeetRespDto;
     }
 
-    @GetMapping("/{meetId}/mostleast")
-    public List<TimeSlot> getMostLeastTime(@PathVariable("meetId") String meetId) {
+    @GetMapping("/{meetId}/least")
+    public List<TimeSlot> getLeastTime(@PathVariable("meetId") String meetId) {
 
-	List<TimeSlot> timeSlots = timeService.getMostLeastTime(meetId);
+	List<TimeSlot> timeSlots = timeService.getLeastTime(meetId);
+	return timeSlots;
+    }
+
+    @GetMapping("/{meetId}/most")
+    public List<TimeSlot> getMostTime(@PathVariable("meetId") String meetId) {
+
+	List<TimeSlot> timeSlots = timeService.getMostTime(meetId);
 	return timeSlots;
     }
 }

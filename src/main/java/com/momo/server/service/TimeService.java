@@ -3,6 +3,7 @@ package com.momo.server.service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -16,7 +17,6 @@ import com.momo.server.domain.Meet;
 import com.momo.server.domain.TimeSlot;
 import com.momo.server.domain.User;
 import com.momo.server.dto.request.UserTimeUpdateRequestDto;
-import com.momo.server.dto.response.MostLeastTimeRespDto;
 import com.momo.server.dto.response.UserMeetRespDto;
 import com.momo.server.exception.notfound.MeetNotFoundException;
 import com.momo.server.exception.notfound.UserNotFoundException;
@@ -211,16 +211,53 @@ public class TimeService {
     }
 
     @Transactional(readOnly = true)
-    public List<TimeSlot> getMostLeastTime(String meetId) {
+    public List<TimeSlot> getLeastTime(String meetId) {
 
 	List<TimeSlot> timeSlots = timeSlotRepository.findAllTimeSlot(meetId);
 
-	Collections.sort(timeSlots);
+	Collections.sort(timeSlots, new Comparator<TimeSlot>() {
 
-	MostLeastTimeRespDto mostLeastTimeRespDto = new MostLeastTimeRespDto();
+	    @Override
+	    public int compare(TimeSlot t1, TimeSlot t2) {
 
-	mostLeastTimeRespDto.setLeast(null);
-	mostLeastTimeRespDto.setMost(null);
+		int res = t1.getNum().compareTo(t2.getNum());
+		if (res == 0) {
+		    res = t1.getDate().compareTo(t2.getDate());
+		} else if (res == 0) {
+		    res = t1.getTime().compareTo(t2.getTime());
+		}
+		// num순 정렬
+		return res;
+	    }
+
+	});
+
+	return timeSlots;
+
+    }
+
+    @Transactional(readOnly = true)
+    public List<TimeSlot> getMostTime(String meetId) {
+
+	List<TimeSlot> timeSlots = timeSlotRepository.findAllTimeSlot(meetId);
+
+	Collections.sort(timeSlots, new Comparator<TimeSlot>() {
+
+	    @Override
+	    public int compare(TimeSlot t1, TimeSlot t2) {
+
+		int res = t2.getNum().compareTo(t1.getNum());
+		if (res == 0) {
+		    res = t1.getDate().compareTo(t2.getDate());
+		} else if (res == 0) {
+		    res = t1.getTime().compareTo(t2.getTime());
+		}
+		// num순 정렬
+		return res;
+	    }
+
+	});
+
 	return timeSlots;
 
     }
