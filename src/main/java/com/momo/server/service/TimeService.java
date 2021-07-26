@@ -2,7 +2,9 @@ package com.momo.server.service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.momo.server.domain.Meet;
+import com.momo.server.domain.TimeSlot;
 import com.momo.server.domain.User;
 import com.momo.server.dto.request.UserTimeUpdateRequestDto;
 import com.momo.server.dto.response.MostLeastTimeRespDto;
@@ -30,7 +33,9 @@ public class TimeService {
     private final MeetRepository meetRepository;
     private final TimeSlotRepository timeSlotRepository;
 
-    // 유저의 시간정보 저장
+    /*
+     * 유저시간 업데이트 및 약속시간 업데이트 메소드
+     */
     @Transactional
     public ResponseEntity<?> updateUsertime(User userEntity, UserTimeUpdateRequestDto requestDto) {
 
@@ -69,7 +74,7 @@ public class TimeService {
 			// dbmeet로 row 위치 계산
 			int row = 0;
 			int input_hour = Integer.parseInt(timeslot.substring(0, 2));
-			int input_min = Integer.parseInt(timeslot.substring(3, 5));
+			int input_min = Integer.parseInt(timeslot.substring(3, 4));
 			int input_total_hour = input_hour * 60 + input_min;
 			row = (input_total_hour - total_hour) / gap;
 
@@ -90,15 +95,40 @@ public class TimeService {
 	userRepository.updateUserTime(userEntity, temp_userTimes);
 
 	// TimeSlot 갱신
-	updateTimeSlot(requestDto);
+	this.updateTimeSlot(userEntity, requestDto);
 
 	// Meet 시간 업데이트
-	meetRepository.updateMeetTime(userEntity.getMeetId(), temp_userTimes);
+	meetRepository.updateMeetTime(userEntity.getMeetId(), temp_Times);
 	return ResponseEntity.ok().build();
 
     };
 
-    private void updateTimeSlot(UserTimeUpdateRequestDto requestDto) {
+    /*
+     * 유저시간 업데이트할 때 함께 TimeSlot 업데이트하는 메소드
+     */
+    @Transactional
+    public void updateTimeSlot(User userEntity, UserTimeUpdateRequestDto requestDto) {
+
+	List<TimeSlot> timeSlots = timeSlotRepository.findAllTimeSlot(requestDto.getMeetId());
+
+	for (int i = 0; i < requestDto.getUsertimes().size(); i++) {
+	    for (int j = 0; j < timeSlots.size(); j++) {
+		if (requestDto.getUsertimes().get(i).getDate().equals(timeSlots.get(j).getDate())) {
+		    for (int t = 0; t < requestDto.getUsertimes().get(i).getTimeslots().size(); t++) {
+			if (requestDto.getUsertimes().get(i).getTimeslots().get(t).getTime()
+				.equals(timeSlots.get(j).getTime())) {
+
+			    HashSet<String> users = timeSlots.get(i).getUsers();
+			    users.add(userEntity.getUsername());
+
+			    timeSlotRepository.updateTimeSlot(requestDto.getMeetId(), users,
+				    requestDto.getUsertimes().get(i).getDate(),
+				    requestDto.getUsertimes().get(i).getTimeslots().get(t).getTime());
+			}
+		    }
+		}
+	    }
+	}
 
     }
 

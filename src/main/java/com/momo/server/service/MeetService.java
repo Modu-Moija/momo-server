@@ -3,6 +3,7 @@ package com.momo.server.service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
@@ -118,12 +119,12 @@ public class MeetService {
 	    int temp_Min = totalMin;
 	    for (int j = 0; j < row; j++) {
 		TimeSlot timeSlot = new TimeSlot();
-		ArrayList<String> users = new ArrayList<String>();
+		HashSet<String> users = new HashSet<String>();
 		timeSlot.setMeetId(hashedUrl);
 		timeSlot.setNum(0);
 		timeSlot.setUsers(users);
 		timeSlot.setDate(dates.get(i));
-		timeSlot.setTime(String.valueOf(temp_Min / 60) + ":" + String.valueOf(temp_Min % 60));
+		timeSlot.setTime(String.valueOf(temp_Min / 60) + ":" + temp_Min % 60);
 		temp_Min = temp_Min + gap;
 
 		timeSlotList.add(timeSlot);

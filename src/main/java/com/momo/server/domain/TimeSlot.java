@@ -1,7 +1,7 @@
 package com.momo.server.domain;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -20,7 +20,7 @@ public class TimeSlot {
     @MongoId
     private ObjectId id;
     private String meetId;
-    private ArrayList<String> users;
+    private HashSet<String> users;
     private String time;
     private LocalDate date;
     private int num;
