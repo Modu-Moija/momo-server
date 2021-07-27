@@ -36,6 +36,12 @@ public class MeetControllerTest {
     @Autowired
     private TimeSlotRepository timeSlotRepository;
 
+    public MeetControllerTest(MockMvc mockMvc, ObjectMapper objectMapper) {
+
+	this.mockMvc = mockMvc;
+	this.objectMapper = objectMapper;
+    }
+
     @AfterAll
     public void afterAll() {// 생성된 약속 찾아서 지워주기 @Transactional이 동작안해서직접 구현함
 	meetRepository.findAllAndRemoveMeet("e8e1bf2ec5ab131");
