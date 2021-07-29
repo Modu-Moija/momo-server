@@ -1,9 +1,13 @@
 package com.momo.server.service;
 
 import java.math.BigInteger;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Optional;
 
+import com.momo.server.utils.CurrentTime;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,67 +31,70 @@ public class UserService {
     @Transactional
     public User login(LoginRequestDto loginRequestDto) {
 
-	User userEntity = userRepository.isUserExist(loginRequestDto);
+        User userEntity = userRepository.isUserExist(loginRequestDto);
 
-	if (userEntity == null) {// 유저 존재하지않음(신규유저)
-	    userEntity = this.createUser(loginRequestDto);
-	    return userEntity;
-	} else {// 유저 존재(기존 유저)
-	    return userEntity;
-	}
+        if (userEntity == null) {// 유저 존재하지않음(신규유저)
+            userEntity = this.createUser(loginRequestDto);
+            return userEntity;
+        } else {// 유저 존재(기존 유저)
+            return userEntity;
+        }
     }
 
     // 유저 생성
     @Transactional
     public User createUser(LoginRequestDto loginRequestDto) {
 
-	User userEntity = new User();
+        User userEntity = new User();
 
-	BigInteger userid = BigInteger.valueOf(Integer.valueOf(Math.abs(loginRequestDto.hashCode())));
+        BigInteger userid = BigInteger.valueOf(Integer.valueOf(Math.abs(loginRequestDto.hashCode())));
 
-	userEntity.setUserId(userid);
-	userEntity.setUsername(loginRequestDto.getUsername());
-	userEntity.setCookieRemember(loginRequestDto.getRemember());
-	userEntity.setMeetId(loginRequestDto.getMeetId());
+        CurrentTime currentTime = new CurrentTime();
+        userEntity.setCreated(currentTime.getCurrentTime());
+        userEntity.setUserId(userid);
+        userEntity.setUsername(loginRequestDto.getUsername());
+        userEntity.setCookieRemember(loginRequestDto.getRemember());
+        userEntity.setMeetId(loginRequestDto.getMeetId());
 
-	Meet meetEntity = meetRepository.findMeet(loginRequestDto.getMeetId());
-	Optional.ofNullable(meetEntity).orElseThrow(() -> new MeetNotFoundException(loginRequestDto.getMeetId()));
+        Meet meetEntity = meetRepository.findMeet(loginRequestDto.getMeetId());
+        Optional.ofNullable(meetEntity).orElseThrow(() -> new MeetNotFoundException(loginRequestDto.getMeetId()));
 
-	int dates = meetEntity.getDates().size();
-	int timeslots = Integer.parseInt(meetEntity.getEnd().split(":")[0])
-		- Integer.parseInt(meetEntity.getStart().split(":")[0]);
-	int[][] userTimes = new int[timeslots * ((int) 60 / meetEntity.getGap())][dates];
-	userEntity.setUserTimes(userTimes);
+        int dates = meetEntity.getDates().size();
+        int timeslots = Integer.parseInt(meetEntity.getEnd().split(":")[0])
+                - Integer.parseInt(meetEntity.getStart().split(":")[0]);
+        int[][] userTimes = new int[timeslots * ((int) 60 / meetEntity.getGap())][dates];
+        userEntity.setUserTimes(userTimes);
 
-	userRepository.createUser(userEntity);
-	this.addUser(meetEntity, userEntity);
+        userRepository.createUser(userEntity);
+        this.addUser(meetEntity, userEntity);
 
-	return userEntity;
+        return userEntity;
     }
 
+    @Transactional
     public void addUser(Meet meetEntity, User userEntity) {
 
-	// userId 업데이트 연산
-	ArrayList<BigInteger> userList = new ArrayList<BigInteger>();
+        // userId 업데이트 연산
+        ArrayList<BigInteger> userList = new ArrayList<BigInteger>();
 
-	if (meetEntity.getUsers() == null) {
-	    userList.add(userEntity.getUserId());
-	} else {
-	    userList = meetEntity.getUsers();
-	    userList.add(userEntity.getUserId());
-	}
+        if (meetEntity.getUsers() == null) {
+            userList.add(userEntity.getUserId());
+        } else {
+            userList = meetEntity.getUsers();
+            userList.add(userEntity.getUserId());
+        }
 
-	// username 업데이트 연산
-	ArrayList<String> userNameList = new ArrayList<String>();
+        // username 업데이트 연산
+        ArrayList<String> userNameList = new ArrayList<String>();
 
-	if (meetEntity.getUsers() == null) {
-	    userNameList.add(userEntity.getUsername());
-	} else {
-	    userNameList = meetEntity.getUserNames();
-	    userNameList.add(userEntity.getUsername());
-	}
+        if (meetEntity.getUsers() == null) {
+            userNameList.add(userEntity.getUsername());
+        } else {
+            userNameList = meetEntity.getUserNames();
+            userNameList.add(userEntity.getUsername());
+        }
 
-	meetRepository.addUser(meetEntity, userList, userNameList);
+        meetRepository.addUser(meetEntity, userList, userNameList);
 
     }
 

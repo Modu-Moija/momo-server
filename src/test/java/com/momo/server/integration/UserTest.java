@@ -1,25 +1,20 @@
-package com.momo.server.setup;
+package com.momo.server.integration;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-
+import com.momo.server.BackEndApplicationTests;
 import com.momo.server.dto.request.LoginRequestDto;
 import com.momo.server.repository.UserRepository;
-import com.momo.server.setup.apicontroller.MeetTestController;
-import com.momo.server.setup.apicontroller.UserTestController;
+import com.momo.server.integration.apicontroller.MeetTestController;
+import com.momo.server.integration.apicontroller.UserTestController;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.momo.server.dto.request.MeetSaveRequestDto;
 import com.momo.server.repository.MeetRepository;
 import com.momo.server.repository.TimeSlotRepository;
-import org.springframework.test.web.servlet.MvcResult;
 
 @AutoConfigureMockMvc
 @SpringBootTest

@@ -1,10 +1,11 @@
-package com.momo.server.setup;
+package com.momo.server.integration;
 
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import com.momo.server.setup.apicontroller.MeetTestController;
+import com.momo.server.BackEndApplicationTests;
+import com.momo.server.integration.apicontroller.MeetTestController;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,7 +14,6 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;

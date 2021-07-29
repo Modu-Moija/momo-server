@@ -1,6 +1,7 @@
 package com.momo.server.domain;
 
 import java.math.BigInteger;
+import java.time.LocalDateTime;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -12,11 +13,6 @@ import lombok.Data;
 @Document(collection = "user")
 public class User {
 
-//	@Temporal(TemporalType.TIMESTAMP) 
-//	@DateTimeFormat(style = "M-") 
-//	@CreatedDate
-//	private Date createdDate; 
-
     @MongoId
     private ObjectId id;
     private BigInteger userId;
@@ -24,5 +20,6 @@ public class User {
     private String meetId;
     private int[][] userTimes;
     private Boolean cookieRemember;
+    private LocalDateTime created;//생성시간 기록
 
 }
