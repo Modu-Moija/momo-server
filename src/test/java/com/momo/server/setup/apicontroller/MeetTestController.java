@@ -15,6 +15,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.momo.server.dto.request.MeetSaveRequestDto;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+
 public class MeetTestController {
 
     private final MockMvc mockMvc;
@@ -31,10 +34,20 @@ public class MeetTestController {
 		.content(objectMapper.writeValueAsString(meetSaveRequestDto))).andDo(print())
 		.andExpect(status().isCreated()).andReturn();
 
-
         return mvcResult;
 	// 참조 https://engkimbs.tistory.com/858
 	// http://honeymon.io/tech/2019/10/23/spring-deprecated-media-type.html
+    }
+
+    public void createTestMeet() throws Exception {
+        ArrayList<LocalDate> testDate = new ArrayList<LocalDate>();
+
+        testDate.add(LocalDate.parse("2021-07-20"));
+        testDate.add(LocalDate.parse("2021-07-30"));
+
+        MeetSaveRequestDto meetSaveRequestDto = MeetSaveRequestDto.builder().title("테스트용약속생성").start("11:00")
+                .end("19:00").dates(testDate).gap(30).video(true).center(true).build();
+        createMeet(meetSaveRequestDto);
     }
 
     public void getMeet(String meetId) throws Exception {

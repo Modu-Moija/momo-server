@@ -24,7 +24,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 @AutoConfigureMockMvc
 @SpringBootTest
-@TestInstance(Lifecycle.PER_CLASS) // @AfterAll 어노테이션에는 필요함
+@TestInstance(Lifecycle.PER_CLASS)
 public class MeetTest {
     @Autowired
     private MockMvc mockMvc;
