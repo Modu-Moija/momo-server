@@ -13,8 +13,8 @@ import com.momo.server.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 @Repository
+@RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepository {
 
     private final MongoTemplate mongoTemplate;
