@@ -38,7 +38,8 @@ public class TimeController {
 
     @PutMapping
     public ResponseEntity<?> updateUsertime(HttpServletRequest request,
-											@RequestBody @Valid UserTimeUpdateRequestDto requestDto, BindingResult bindingResult, @CheckSessionUser SessionUser user) {
+											@RequestBody @Valid UserTimeUpdateRequestDto requestDto,
+											BindingResult bindingResult, @CheckSessionUser SessionUser user) {
 
 	// 세션에서 유저이름찾기
 //	HttpSession session = request.getSession();

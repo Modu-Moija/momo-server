@@ -42,20 +42,13 @@ public class TimeService {
     public ResponseEntity<?> updateUsertime(SessionUser userEntity, UserTimeUpdateRequestDto requestDto) {
 
 	Optional.ofNullable(userEntity).orElseThrow(() -> new UserNotFoundException(userEntity.getUserId()));
-
 	Meet meetEntity = meetRepository.findMeet(userEntity.getMeetId());
 	Optional.ofNullable(meetEntity).orElseThrow(() -> new MeetNotFoundException(userEntity.getMeetId()));
 
-	// 유저 시간 업데이트
 	// dbmeet로 column 위치 계산
 	ArrayList<LocalDate> dates = meetEntity.getDates();
-
-	// usertimetable 불러오기
 	int[][] temp_userTimes = userEntity.getUserTimes();
-
-	// meettimetable 불러오기
 	int[][] temp_Times = meetEntity.getTimes();
-
 	int gap = meetEntity.getGap();
 	String start = meetEntity.getStart();
 	int hour = Integer.parseInt(start.substring(0, 2));
@@ -82,7 +75,6 @@ public class TimeService {
 
 			// true일 때 좌표값 1로 세팅,false일때 좌표값 0으로 세팅
 			if (requestDto.getUsertimes().get(j).getTimeslots().get(t).getPossible() == true) {
-
 			    temp_userTimes[row][col] = 1;
 			    temp_Times[row][col] = temp_Times[row][col] + 1;
 			} else if (requestDto.getUsertimes().get(j).getTimeslots().get(t).getPossible() == false) {
@@ -141,7 +133,6 @@ public class TimeService {
     public UserMeetRespDto mapUserMeetRespDto(SessionUser user) {
 
 	UserMeetRespDto userMeetRespDto = new UserMeetRespDto();
-
 	LinkedHashMap<String, LinkedHashMap<String, Boolean>> planList = new LinkedHashMap<String, LinkedHashMap<String, Boolean>>();
 
 	// 데이터 db에서 불러오기
@@ -173,12 +164,11 @@ public class TimeService {
 	    int temp_totalStartTime = totalStartTime;
 
 	    for (int j = 0; j < userTimes.length; j++) {
-		if (userTimes[j][i] == 0) {
-		    time.put(String.valueOf(temp_totalStartTime / 60) + ":" + String.valueOf(temp_totalStartTime % 60),
-			    false);
+			String key = String.valueOf(temp_totalStartTime / 60) + ":" + String.valueOf(temp_totalStartTime % 60);
+			if (userTimes[j][i] == 0) {
+		    time.put(key, false);
 		} else if (userTimes[j][i] == 1) {
-		    time.put(String.valueOf(temp_totalStartTime / 60) + ":" + String.valueOf(temp_totalStartTime % 60),
-			    true);
+		    time.put(key, true);
 		}
 		temp_totalStartTime = temp_totalStartTime + gap;
 	    }

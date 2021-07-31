@@ -3,15 +3,12 @@ package com.momo.server.dto.request;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
 public class LoginRequestDto {
 
     @Size(max = 30, message = "아이디는 30자 이하여야 합니다.")
