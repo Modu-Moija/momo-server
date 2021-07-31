@@ -13,8 +13,8 @@ import com.momo.server.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 @Repository
+@RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepository {
 
     private final MongoTemplate mongoTemplate;
@@ -48,25 +48,19 @@ public class UserRepositoryImpl implements UserRepository {
 
     // 유저시간 업데이트연산
     @Override
-    public void updateUserTime(User user, int[][] temp_userTimes, int[][] temp_Times) {
+    public void updateUserTime(User user, int[][] temp_userTimes) {
 
 	Query query = new Query(Criteria.where("userId").is(user.getUserId()));
 	Update update = new Update();
 	update.set("userTimes", temp_userTimes);
 	mongoTemplate.updateFirst(query, update, User.class);
-
-	Query meetQuery = new Query(Criteria.where("meetId").is(user.getMeetId()));
-	Update meetUpdate = new Update();
-	meetUpdate.set("times", temp_Times);
-	mongoTemplate.updateFirst(meetQuery, meetUpdate, Meet.class);
     }
 
     @Override
     public void findAndRemoveUser(String userId) {
 
 	Query findUserQuery = new Query(Criteria.where("userId").is(userId));
-	mongoTemplate.findAndRemove(findUserQuery, Meet.class);
-
+	mongoTemplate.findAndRemove(findUserQuery, User.class);
     }
 
 }

@@ -49,24 +49,12 @@ public class UserController {
 	authCookie.setHttpOnly(false);
 	response.addCookie(authCookie);
 
-	// 유저 존재하지않음(신규유저)
-	if (userEntity == null) {
-	    userEntity = userService.createUser(loginRequestDto);
+	HttpSession session = request.getSession();
+	session.setAttribute("user", userEntity);
 
-	    HttpSession session = request.getSession();
-	    session.setAttribute("user", userEntity);
+	responseCode = ResponseEntity.status(HttpStatus.OK).build();
+	return new ResponseEntity<>(new CmRespDto<>(responseCode, "유저 로그인 성공", userEntity), HttpStatus.OK);
 
-	    responseCode = ResponseEntity.status(HttpStatus.CREATED).build();
-	    return new ResponseEntity<>(new CmRespDto<>(responseCode, "신규 유저 로그인 성공", null), HttpStatus.CREATED);
-
-	} else {// 유저 존재(기존 유저)
-
-	    HttpSession session = request.getSession();
-	    session.setAttribute("user", userEntity);
-
-	    responseCode = ResponseEntity.status(HttpStatus.OK).build();
-	    return new ResponseEntity<>(new CmRespDto<>(responseCode, "기존 유저 로그인 성공", null), HttpStatus.OK);
-	}
     }
 
 }

@@ -1,5 +1,6 @@
 package com.momo.server.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,15 +11,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.momo.server.domain.TimeSlot;
 import com.momo.server.domain.User;
 import com.momo.server.dto.CmRespDto;
 import com.momo.server.dto.request.UserTimeUpdateRequestDto;
-import com.momo.server.dto.response.MostLeastTimeRespDto;
 import com.momo.server.dto.response.UserMeetRespDto;
 import com.momo.server.exception.auth.UnauthorizedException;
 import com.momo.server.service.TimeService;
@@ -62,14 +64,17 @@ public class TimeController {
 	return userMeetRespDto;
     }
 
-    @GetMapping("/MostLeast")
-    public MostLeastTimeRespDto getMostLeastTime(HttpServletRequest request) {
+    @GetMapping("/{meetId}/least")
+    public List<TimeSlot> getLeastTime(@PathVariable("meetId") String meetId) {
 
-	// 세션에서 유저찾기
-	HttpSession session = request.getSession();
-	User user = (User) session.getAttribute("user");
+	List<TimeSlot> timeSlots = timeService.getLeastTime(meetId);
+	return timeSlots;
+    }
 
-	MostLeastTimeRespDto MostLeastTimeRespDto = timeService.getMostLeastTime(user.getMeetId());
-	return MostLeastTimeRespDto;
+    @GetMapping("/{meetId}/most")
+    public List<TimeSlot> getMostTime(@PathVariable("meetId") String meetId) {
+
+	List<TimeSlot> timeSlots = timeService.getMostTime(meetId);
+	return timeSlots;
     }
 }

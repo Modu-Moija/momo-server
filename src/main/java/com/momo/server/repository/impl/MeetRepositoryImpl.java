@@ -47,7 +47,7 @@ public class MeetRepositoryImpl implements MeetRepository {
 	addUserUpdate.set("users", userList);
 	addUserUpdate.set("userNames", userNameList);
 	addUserUpdate.inc("num", 1);
-	mongoTemplate.updateMulti(addUserQuery, addUserUpdate, Meet.class);
+	mongoTemplate.updateFirst(addUserQuery, addUserUpdate, Meet.class);
     }
 
     @Override
@@ -71,5 +71,15 @@ public class MeetRepositoryImpl implements MeetRepository {
 	meet = mongoTemplate.findOne(query, Meet.class, "meet");
 
 	return meet;
+    }
+
+    @Override
+    public void updateMeetTime(String meetId, int[][] temp_Times) {
+
+	Query meetQuery = new Query(Criteria.where("meetId").is(meetId));
+	Update meetUpdate = new Update();
+	meetUpdate.set("times", temp_Times);
+	mongoTemplate.updateFirst(meetQuery, meetUpdate, Meet.class);
+
     }
 }

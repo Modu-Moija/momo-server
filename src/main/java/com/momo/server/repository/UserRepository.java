@@ -14,7 +14,7 @@ public interface UserRepository {
 
     User findUser(User user);
 
-    void updateUserTime(User user, int[][] temp_userTimes, int[][] temp_Times);
+    void updateUserTime(User user, int[][] temp_userTimes);
 
     void findAndRemoveUser(String userId);
 

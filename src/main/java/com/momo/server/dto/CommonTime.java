@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-
 public class CommonTime {
     private String meetId;
     private LocalDate date;

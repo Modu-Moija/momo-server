@@ -3,6 +3,7 @@ package com.momo.server.service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
@@ -68,13 +69,6 @@ public class MeetService {
 	// 추후에 성능개선을 위해 캐시프랜들리 코드 적용 생각해보면 좋을 것 같음(행과 열 위치 연산개선)
 	// 참조링크 https://hot2364928.tistory.com/58
 
-	// 테스트코드
-//        for (int i = 0; i < row; i++) { // 행 반복
-//			for (int j = 0; j < col; j++) { // 열 반복
-//				System.out.println(i+"행 "+j+"열의 값:"+temptimes[i][j]);
-//			}
-//		}
-
 	// meet로 저장
 	meet.setMeetId(hashedUrl);
 	meet.setTitle(requestDto.getTitle());
@@ -83,7 +77,6 @@ public class MeetService {
 	meet.setCreated(LocalDateTime.now().plusHours(9));
 	meet.setGap(requestDto.getGap());
 	meet.setDates(dates);
-	// meet.setMeetSubInfo
 	meet.setTimes(temptimes);
 	meet.setCenter(requestDto.isCenter());
 	meet.setCenter(requestDto.isVideo());
@@ -126,22 +119,25 @@ public class MeetService {
 	    int temp_Min = totalMin;
 	    for (int j = 0; j < row; j++) {
 		TimeSlot timeSlot = new TimeSlot();
-		ArrayList<String> users = new ArrayList<String>();
+		HashSet<String> users = new HashSet<String>();
 		timeSlot.setMeetId(hashedUrl);
 		timeSlot.setNum(0);
 		timeSlot.setUsers(users);
 		timeSlot.setDate(dates.get(i));
-		timeSlot.setTime(String.valueOf(temp_Min / 60) + ":" + String.valueOf(temp_Min % 60));
+
+		int min = temp_Min % 60;
+		String strMin = null;
+		if (min == 0) {
+		    strMin = String.valueOf(min + "0");
+		} else {
+		    strMin = String.valueOf(min);
+		}
+		timeSlot.setTime(String.valueOf(temp_Min / 60) + ":" + strMin);
 		temp_Min = temp_Min + gap;
 
 		timeSlotList.add(timeSlot);
 	    }
 	}
-//
-//	for (int i = 0; i < timeSlotList.size(); i++) {
-//
-//	    System.out.println(timeSlotList.get(i));
-//	}
 	timeSlotRepository.createTimeSlot(timeSlotList);
     }
 
