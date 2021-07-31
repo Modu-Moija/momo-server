@@ -8,13 +8,12 @@ import javax.validation.constraints.Size;
 
 import com.momo.server.dto.DateTimeEntry;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
-@NoArgsConstructor
+@Builder
 @AllArgsConstructor
+@NoArgsConstructor
+@Getter
 public class UserTimeUpdateRequestDto {
 
     @Size(max = 100, message = "meetId는 100자 이하여야 합니다.")

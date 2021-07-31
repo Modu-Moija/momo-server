@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import com.momo.server.dto.auth.SessionUser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,7 @@ public class UserController {
 
     private final UserService userService;
     private final TimeService timeService;
+    private final HttpSession httpSession;
 
     @Value("${aesKey}")
     private String key;
@@ -49,8 +51,7 @@ public class UserController {
 	authCookie.setHttpOnly(false);
 	response.addCookie(authCookie);
 
-	HttpSession session = request.getSession();
-	session.setAttribute("user", userEntity);
+	httpSession.setAttribute("user", new SessionUser(userEntity));
 
 	responseCode = ResponseEntity.status(HttpStatus.OK).build();
 	return new ResponseEntity<>(new CmRespDto<>(responseCode, "유저 로그인 성공", userEntity), HttpStatus.OK);

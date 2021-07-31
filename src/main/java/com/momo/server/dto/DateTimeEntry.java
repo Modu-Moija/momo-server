@@ -10,5 +10,4 @@ public class DateTimeEntry {
 
     private LocalDate date;
     private List<TimeSlotEntry> timeslots;
-
 }

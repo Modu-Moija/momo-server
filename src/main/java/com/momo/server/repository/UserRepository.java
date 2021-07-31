@@ -1,6 +1,7 @@
 package com.momo.server.repository;
 
 import com.momo.server.domain.User;
+import com.momo.server.dto.auth.SessionUser;
 import com.momo.server.dto.request.LoginRequestDto;
 
 public interface UserRepository {
@@ -12,9 +13,9 @@ public interface UserRepository {
 
     User isUserExist(LoginRequestDto loginRequestDto);
 
-    User findUser(User user);
+    User findUser(SessionUser user);
 
-    void updateUserTime(User user, int[][] temp_userTimes);
+    void updateUserTime(SessionUser user, int[][] temp_userTimes);
 
     void findAndRemoveUser(String userId);
 

@@ -1,10 +1,7 @@
 package com.momo.server.service;
 
 import java.math.BigInteger;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.Optional;
 
 import com.momo.server.utils.CurrentTime;
@@ -66,36 +63,10 @@ public class UserService {
         userEntity.setUserTimes(userTimes);
 
         userRepository.createUser(userEntity);
-        this.addUser(meetEntity, userEntity);
 
         return userEntity;
     }
 
-    @Transactional
-    public void addUser(Meet meetEntity, User userEntity) {
 
-        // userId 업데이트 연산
-        ArrayList<BigInteger> userList = new ArrayList<BigInteger>();
-
-        if (meetEntity.getUsers() == null) {
-            userList.add(userEntity.getUserId());
-        } else {
-            userList = meetEntity.getUsers();
-            userList.add(userEntity.getUserId());
-        }
-
-        // username 업데이트 연산
-        ArrayList<String> userNameList = new ArrayList<String>();
-
-        if (meetEntity.getUsers() == null) {
-            userNameList.add(userEntity.getUsername());
-        } else {
-            userNameList = meetEntity.getUserNames();
-            userNameList.add(userEntity.getUsername());
-        }
-
-        meetRepository.addUser(meetEntity, userList, userNameList);
-
-    }
 
 }

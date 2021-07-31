@@ -1,14 +1,10 @@
 package com.momo.server.service;
 
+import java.math.BigInteger;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
+import com.momo.server.dto.auth.SessionUser;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,28 +34,27 @@ public class TimeService {
      * 유저시간 업데이트 및 약속시간 업데이트 메소드
      */
     @Transactional
-    public ResponseEntity<?> updateUsertime(User userEntity, UserTimeUpdateRequestDto requestDto) {
+    public ResponseEntity<?> updateUsertime(SessionUser userEntity, UserTimeUpdateRequestDto requestDto) {
 
 	Optional.ofNullable(userEntity).orElseThrow(() -> new UserNotFoundException(userEntity.getUserId()));
-
 	Meet meetEntity = meetRepository.findMeet(userEntity.getMeetId());
 	Optional.ofNullable(meetEntity).orElseThrow(() -> new MeetNotFoundException(userEntity.getMeetId()));
 
-	// 유저 시간 업데이트
 	// dbmeet로 column 위치 계산
 	ArrayList<LocalDate> dates = meetEntity.getDates();
-
-	// usertimetable 불러오기
 	int[][] temp_userTimes = userEntity.getUserTimes();
-
-	// meettimetable 불러오기
 	int[][] temp_Times = meetEntity.getTimes();
-
 	int gap = meetEntity.getGap();
 	String start = meetEntity.getStart();
+	ArrayList<String> userNames = meetEntity.getUserNames();
+	int userIndex=-1;
+	if(userNames!=null){
+		userIndex= this.checkUserIndexByName(userNames, userEntity.getUsername());
+	}
 	int hour = Integer.parseInt(start.substring(0, 2));
 	int min = Integer.parseInt(start.substring(3, 5));
 	int total_hour = hour * 60 + min;
+
 
 	int col = 0;
 	// db meet의 date로 날짜 찾기
@@ -81,12 +76,29 @@ public class TimeService {
 
 			// true일 때 좌표값 1로 세팅,false일때 좌표값 0으로 세팅
 			if (requestDto.getUsertimes().get(j).getTimeslots().get(t).getPossible() == true) {
-
 			    temp_userTimes[row][col] = 1;
-			    temp_Times[row][col] = temp_Times[row][col] + 1;
+			    // 1. 기존의 10진수를 2진수로 변환
+				String temp_bin=Integer.toBinaryString(temp_Times[row][col]);
+				// 2.
+				// - 새로운 유저면 맨 뒤에 추가
+				if(userIndex==-1){
+					temp_bin=temp_bin+"1";
+				} else{// - 기존 유저면 해당 인덱스의 이진수만 1
+					temp_bin=temp_bin.substring(0,userIndex)+"1"+temp_bin.substring(userIndex+1);
+				}
+
+				// 3. 다시 2진수를 10진수로 변환해서 저장
+			    temp_Times[row][col] = Integer.parseInt(temp_bin, 2);
+
 			} else if (requestDto.getUsertimes().get(j).getTimeslots().get(t).getPossible() == false) {
 			    temp_userTimes[row][col] = 0;
-			    temp_Times[row][col] = temp_Times[row][col] - 1;
+				String temp_bin=Integer.toBinaryString(temp_Times[row][col]);
+				if(userIndex==-1){
+					temp_bin=temp_bin+"0";
+				} else{
+					temp_bin=temp_bin.substring(0,userIndex)+"0"+temp_bin.substring(userIndex+1);
+				}
+				temp_Times[row][col] = Integer.parseInt(temp_bin, 2);
 			}
 		    }
 		}
@@ -97,18 +109,65 @@ public class TimeService {
 
 	// TimeSlot 갱신
 	this.updateTimeSlot(userEntity, requestDto);
+	this.addUserToMeet(meetEntity, userEntity);
 
 	// Meet 시간 업데이트
 	meetRepository.updateMeetTime(userEntity.getMeetId(), temp_Times);
 	return ResponseEntity.ok().build();
 
-    };
+    }
+
+	@Transactional
+	public void addUserToMeet(Meet meetEntity, SessionUser userEntity) {
+
+		// userId 업데이트 연산
+		ArrayList<BigInteger> userList = new ArrayList<BigInteger>();
+
+		if (meetEntity.getUsers() == null) {
+			userList.add(userEntity.getUserId());
+		} else {
+			userList = meetEntity.getUsers();
+			if(checkUserIndexById(userList, userEntity.getUserId())==-1){//존재하지 않으면
+				userList.add(userEntity.getUserId());
+			}
+		}
+
+		// username 업데이트 연산
+		ArrayList<String> userNameList = new ArrayList<String>();
+
+		if (meetEntity.getUsers() == null) {
+			userNameList.add(userEntity.getUsername());
+		} else {
+			userNameList = meetEntity.getUserNames();
+			if(checkUserIndexByName(userNameList, userEntity.getUsername())==-1){//존재하지 않으면
+				userNameList.add(userEntity.getUsername());
+			}
+		}
+		meetRepository.addUser(meetEntity, userList, userNameList);
+	}
+
+	/*
+	 * Meet의 usernames배열에서 username으로 인덱스 찾는 메소드
+	 */
+	private int checkUserIndexByName(ArrayList<?> userNames, String username) {
+		System.out.println(userNames);
+		System.out.println(username);
+    	return userNames.indexOf(username);
+	}
+
+	/*
+	 * Meet의 users배열에서 userId으로 인덱스 찾는 메소드
+	 */
+	private int checkUserIndexById(ArrayList<?> users, BigInteger userId) {
+		return users.indexOf(userId);
+	}
+
 
     /*
      * 유저시간 업데이트할 때 함께 TimeSlot 업데이트하는 메소드
      */
     @Transactional
-    public void updateTimeSlot(User userEntity, UserTimeUpdateRequestDto requestDto) {
+    public void updateTimeSlot(SessionUser userEntity, UserTimeUpdateRequestDto requestDto) {
 
 	List<TimeSlot> timeSlots = timeSlotRepository.findAllTimeSlot(requestDto.getMeetId());
 
@@ -137,10 +196,9 @@ public class TimeService {
      * 약속관련정보 매핑하는 메소드
      */
     @Transactional(readOnly = true)
-    public UserMeetRespDto mapUserMeetRespDto(User user) {
+    public UserMeetRespDto mapUserMeetRespDto(SessionUser user) {
 
 	UserMeetRespDto userMeetRespDto = new UserMeetRespDto();
-
 	LinkedHashMap<String, LinkedHashMap<String, Boolean>> planList = new LinkedHashMap<String, LinkedHashMap<String, Boolean>>();
 
 	// 데이터 db에서 불러오기
@@ -172,12 +230,11 @@ public class TimeService {
 	    int temp_totalStartTime = totalStartTime;
 
 	    for (int j = 0; j < userTimes.length; j++) {
-		if (userTimes[j][i] == 0) {
-		    time.put(String.valueOf(temp_totalStartTime / 60) + ":" + String.valueOf(temp_totalStartTime % 60),
-			    false);
+			String key = String.valueOf(temp_totalStartTime / 60) + ":" + String.valueOf(temp_totalStartTime % 60);
+			if (userTimes[j][i] == 0) {
+		    time.put(key, false);
 		} else if (userTimes[j][i] == 1) {
-		    time.put(String.valueOf(temp_totalStartTime / 60) + ":" + String.valueOf(temp_totalStartTime % 60),
-			    true);
+		    time.put(key, true);
 		}
 		temp_totalStartTime = temp_totalStartTime + gap;
 	    }
