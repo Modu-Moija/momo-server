@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import com.momo.server.config.auth.CheckSessionUser;
+import com.momo.server.dto.auth.SessionUser;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -36,15 +38,13 @@ public class TimeController {
 
     @PutMapping
     public ResponseEntity<?> updateUsertime(HttpServletRequest request,
-	    @RequestBody @Valid UserTimeUpdateRequestDto requestDto, BindingResult bindingResult) {// @CookieValue(value="gender",
-												   // required=false)
+											@RequestBody @Valid UserTimeUpdateRequestDto requestDto, BindingResult bindingResult, @CheckSessionUser SessionUser user) {
 
 	// 세션에서 유저이름찾기
-	HttpSession session = request.getSession();
-	User user = (User) session.getAttribute("user");
+//	HttpSession session = request.getSession();
+//	User user = (User) session.getAttribute("user");
 	Optional.ofNullable(user).orElseThrow(() -> new UnauthorizedException());
 
-	// System.out.println(user);
 	timeService.updateUsertime(user, requestDto);
 
 	ResponseEntity<?> responseCode = new ResponseEntity<>(HttpStatus.OK);
@@ -52,13 +52,9 @@ public class TimeController {
     };
 
     @GetMapping("/usertime")
-    public UserMeetRespDto getUserTime(HttpServletRequest request) {
+    public UserMeetRespDto getUserTime(HttpServletRequest request, @CheckSessionUser SessionUser user) {
 
-	// 세션에서 유저찾기
-	HttpSession session = request.getSession();
-	User user = (User) session.getAttribute("user");
 	Optional.ofNullable(user).orElseThrow(() -> new UnauthorizedException());
-
 	UserMeetRespDto userMeetRespDto = timeService.mapUserMeetRespDto(user);
 
 	return userMeetRespDto;

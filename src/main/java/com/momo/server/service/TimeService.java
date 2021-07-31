@@ -9,6 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 
+import com.momo.server.dto.auth.SessionUser;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,7 +39,7 @@ public class TimeService {
      * 유저시간 업데이트 및 약속시간 업데이트 메소드
      */
     @Transactional
-    public ResponseEntity<?> updateUsertime(User userEntity, UserTimeUpdateRequestDto requestDto) {
+    public ResponseEntity<?> updateUsertime(SessionUser userEntity, UserTimeUpdateRequestDto requestDto) {
 
 	Optional.ofNullable(userEntity).orElseThrow(() -> new UserNotFoundException(userEntity.getUserId()));
 
@@ -108,7 +109,7 @@ public class TimeService {
      * 유저시간 업데이트할 때 함께 TimeSlot 업데이트하는 메소드
      */
     @Transactional
-    public void updateTimeSlot(User userEntity, UserTimeUpdateRequestDto requestDto) {
+    public void updateTimeSlot(SessionUser userEntity, UserTimeUpdateRequestDto requestDto) {
 
 	List<TimeSlot> timeSlots = timeSlotRepository.findAllTimeSlot(requestDto.getMeetId());
 
@@ -137,7 +138,7 @@ public class TimeService {
      * 약속관련정보 매핑하는 메소드
      */
     @Transactional(readOnly = true)
-    public UserMeetRespDto mapUserMeetRespDto(User user) {
+    public UserMeetRespDto mapUserMeetRespDto(SessionUser user) {
 
 	UserMeetRespDto userMeetRespDto = new UserMeetRespDto();
 
