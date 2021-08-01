@@ -1,5 +1,6 @@
 package com.momo.server.exception;
 
+import com.momo.server.exception.valid.UsersOutOfBoundsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -63,5 +64,14 @@ public class ApiControllerAdvice {
 
 	return new ResponseEntity<>(new CmRespDto<>(responseCode, e.getMessage(), null), HttpStatus.UNAUTHORIZED);
     }
+
+	@ExceptionHandler(UsersOutOfBoundsException.class)
+	public ResponseEntity<?> handleUsersOutOfBoundsException(UsersOutOfBoundsException e) {
+		log.info("인원수 초과", e);
+
+		ResponseEntity<?> responseCode = new ResponseEntity<>(HttpStatus.FORBIDDEN);
+
+		return new ResponseEntity<>(new CmRespDto<>(responseCode, e.getMessage(), null), HttpStatus.FORBIDDEN);
+	}
 
 }

@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import com.momo.server.exception.valid.UsersOutOfBoundsException;
 import com.momo.server.utils.CurrentTime;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,7 +53,16 @@ public class UserService {
         userEntity.setMeetId(loginRequestDto.getMeetId());
 
         Meet meetEntity = meetRepository.findMeet(loginRequestDto.getMeetId());
+        //없는 meetId에 대한 예외처리
         Optional.ofNullable(meetEntity).orElseThrow(() -> new MeetNotFoundException(loginRequestDto.getMeetId()));
+        
+        //인원수 초과에 대한 예외처리
+        if(meetEntity.getUsers()!=null){
+            if(meetEntity.getUsers().size()==30){
+                throw new UsersOutOfBoundsException(loginRequestDto.getMeetId());
+            }
+        }
+
 
         int dates = meetEntity.getDates().size();
         int timeslots = Integer.parseInt(meetEntity.getEnd().split(":")[0])
