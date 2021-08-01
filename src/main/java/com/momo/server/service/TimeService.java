@@ -289,14 +289,17 @@ public class TimeService {
                 timeSlotRespEntry.setDate(dates.get(i));
                 timeSlotRespEntry.setMeetId(meetEntity.getMeetId());
                 int possibleMinStart = tempStartMin;
-                String possibleStart = String.valueOf(possibleMinStart / 60) + ":" + String.valueOf(possibleMinStart % 60);
+                int restMin = possibleMinStart % 60;
+                String strRestMin = null;
+                strRestMin = getStringMinFromZero(restMin, strRestMin);
+                String possibleStart = String.valueOf(possibleMinStart / 60) + ":" + strRestMin;
                 //숫자가 같을때까지 돌리기
                 while (j < times.length - 1 && times[j][i] == times[j + 1][i]) {
                     j = j + 1;
                     tempStartMin = tempStartMin + gap;
                 }
                 int possibleMinEnd = tempStartMin + gap;
-                String possibleEnd = String.valueOf(possibleMinEnd / 60) + ":" + String.valueOf(possibleMinEnd % 60);
+                String possibleEnd = String.valueOf(possibleMinEnd / 60) + ":" + strRestMin;
                 int[] bin = numConvert.decToBin(num, times[j][i]);
                 for (int t = 0; t < bin.length; t++) {
                     if (bin[t] == 1) {
@@ -311,6 +314,16 @@ public class TimeService {
 
         }
         return list;
+    }
+
+    /*
+    분이 0일 때 00으로 반환해주기 위한 메소드
+     */
+    private String getStringMinFromZero(int restMin, String strRestMin) {
+        if(restMin ==0){
+            strRestMin =String.valueOf(restMin)+"0";
+        }
+        return strRestMin;
     }
 
 }
