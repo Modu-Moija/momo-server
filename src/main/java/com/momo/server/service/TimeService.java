@@ -1,12 +1,12 @@
 package com.momo.server.service;
 
-import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.*;
 
 import com.momo.server.dto.TimeSlotRespEntry;
 import com.momo.server.dto.auth.SessionUser;
 import com.momo.server.dto.response.MostLeastRespDto;
+import com.momo.server.utils.NumConvert;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,10 +54,8 @@ public class TimeService {
 	if(userNames!=null){
 		userIndex= userNames.indexOf(userEntity.getUsername());
 	}
-	int hour = Integer.parseInt(start.substring(0, 2));
-	int min = Integer.parseInt(start.substring(3, 5));
-	int total_hour = hour * 60 + min;
-
+	int totalStartMin = getTotalMin(start);
+	NumConvert numConvert = new NumConvert();
 
 	int col = 0;
 	// db meet의 date로 날짜 찾기
@@ -75,24 +73,24 @@ public class TimeService {
 			int input_hour = Integer.parseInt(timeslot.substring(0, 2));
 			int input_min = Integer.parseInt(timeslot.substring(3, 5));
 			int input_total_hour = input_hour * 60 + input_min;
-			row = (input_total_hour - total_hour) / gap;
+			row = (input_total_hour - totalStartMin) / gap;
 
 			// true일 때 좌표값 1로 세팅,false일때 좌표값 0으로 세팅
 			if (requestDto.getUsertimes().get(j).getTimeslots().get(t).getPossible() == true) {
 			    temp_userTimes[row][col] = 1;
 			    // 1. 기존의 10진수를 2진수로 변환
-				int[] bin = decToBin(num, temp_Times[row][col]);
+				int[] bin = numConvert.decToBin(num, temp_Times[row][col]);
 				// 2.userindex의 위치 1로 변경
 				bin[userIndex]=1;
 				// 3. 다시 2진수를 10진수로 변환해서 저장
-				int dec = binToDec(num,bin);
+				int dec = numConvert.binToDec(num,bin);
 				temp_Times[row][col]=dec;
 
 			} else if (requestDto.getUsertimes().get(j).getTimeslots().get(t).getPossible() == false) {
 			    temp_userTimes[row][col] = 0;
-				int[] bin = decToBin(num, temp_Times[row][col]);
+				int[] bin = numConvert.decToBin(num, temp_Times[row][col]);
 				bin[userIndex]=0;
-				int dec = binToDec(num,bin);
+				int dec = numConvert.binToDec(num,bin);
 				temp_Times[row][col]=dec;
 			}
 		    }
@@ -109,38 +107,16 @@ public class TimeService {
 	return ResponseEntity.ok().build();
     }
 
-	/*
-    10진수 2진수로 변환하는 메소드(배열에 2진수 담도록 구현)
-     */
-	public int[] decToBin(int num, int dec){
-		int[] bin = new int[num];
-		for (int i = 0; i < num; i++) {
-			if (dec % 2 == 1) {
-				bin[i] = 1;
-			} else if (dec % 2 == 0) {
-				bin[i] = 0;
-			}
-			dec = dec / 2;
-		}
-		return bin;
-	}
-
-	/*
-    2진수 배열을 10진수로 변환하는 메소드
-     */
-	public int binToDec(int num, int[] bin){
-		int dec = 0;
-		int power = 0;
-		for (int i = 0; i < num; i++) {
-			double pow = Math.pow(2, power);
-			bin[i] = bin[i] * 1 * (int) pow;
-			dec = dec + bin[i];
-			power = power + 1;
-		}
-		return dec;
-	}
-
     /*
+    시간을 분으로 만드는 메소드(11:30을 690으로 바꾸는 메소드)
+     */
+	private int getTotalMin(String start) {
+		int hour = Integer.parseInt(start.substring(0, 2));
+		int min = Integer.parseInt(start.substring(3, 5));
+		return hour * 60 + min;
+	}
+
+	/*
      * 유저시간 업데이트할 때 함께 TimeSlot 업데이트하는 메소드
      */
     @Transactional
@@ -245,37 +221,14 @@ public class TimeService {
     }
 
     @Transactional(readOnly = true)
-    public List<TimeSlot> getLeastTime(String meetId) {
-
-	List<TimeSlot> timeSlots = timeSlotRepository.findAllTimeSlot(meetId);
-	Collections.sort(timeSlots, new Comparator<TimeSlot>() {
-
-	    @Override
-	    public int compare(TimeSlot t1, TimeSlot t2) {
-
-		int res = t1.getNum().compareTo(t2.getNum());
-		if (res == 0) {
-		    res = t1.getDate().compareTo(t2.getDate());
-		} else if (res == 0) {
-		    res = t1.getTime().compareTo(t2.getTime());
-		}
-		// num순 정렬
-		return res;
-	    }
-
-	});
-
-	return timeSlots;
-
-    }
-
-    @Transactional(readOnly = true)
     public MostLeastRespDto getMostLeastTime(String meetId) {
     	MostLeastRespDto mostLeastRespDto = new MostLeastRespDto();
 		Meet meetEntity = meetRepository.findMeet(meetId);
-		List<TimeSlotRespEntry> timeSlots = this.mapToTimeSlot(meetEntity);
+		List<TimeSlotRespEntry> mostTimeSlots = this.mapToTimeSlot(meetEntity);
+		//least를 위해 mosttimeSlots 배열 복사
+		List<TimeSlotRespEntry> leasttimeSlots = this.mapToTimeSlot(meetEntity);
 
-		Collections.sort(timeSlots, new Comparator<TimeSlotRespEntry>() {
+		Collections.sort(mostTimeSlots, new Comparator<TimeSlotRespEntry>() {
 
 	    @Override
 	    public int compare(TimeSlotRespEntry t1, TimeSlotRespEntry t2) {
@@ -291,9 +244,9 @@ public class TimeService {
 	    }
 
 	});
-		mostLeastRespDto.setMostTime(timeSlots);
+		mostLeastRespDto.setMostTime(mostTimeSlots);
 
-		Collections.sort(timeSlots, new Comparator<TimeSlotRespEntry>() {
+		Collections.sort(leasttimeSlots, new Comparator<TimeSlotRespEntry>() {
 
 			@Override
 			public int compare(TimeSlotRespEntry t1, TimeSlotRespEntry t2) {
@@ -310,20 +263,58 @@ public class TimeService {
 
 		});
 
-		mostLeastRespDto.setLeastTime(timeSlots);
+		mostLeastRespDto.setLeastTime(leasttimeSlots);
 	return mostLeastRespDto;
     }
 
     /*
-    meet의 이차원 배열을 timeslot으로 매핑시키는 메소드(BFS 알고리즘 활용)
+    meet의 이차원 배열을 timeslot으로 매핑시키는 메소드(BFS 알고리즘 활용으로 개선 가능)
      */
 	public List<TimeSlotRespEntry> mapToTimeSlot(Meet meetEntity){
 
 		List<TimeSlotRespEntry> list = new ArrayList<TimeSlotRespEntry>();
-
+		NumConvert numConvert = new NumConvert();
 		ArrayList<LocalDate> dates = meetEntity.getDates();
+		ArrayList<String> users = meetEntity.getUserNames();
 		int[][] times = meetEntity.getTimes();
+		int num = meetEntity.getNum();
+		int gap = meetEntity.getGap();
+		String start = meetEntity.getStart();
+		int totalStartMin = getTotalMin(start);
+		for(int i=0;i<times[0].length;i++){
+			int tempStartMin = totalStartMin;
+			for(int j=0;j<times.length;j++){
+				int iter = 0;
+				TimeSlotRespEntry timeSlotRespEntry = new TimeSlotRespEntry();
+				ArrayList<String> timeSlotUsers = new ArrayList<>();
+				timeSlotRespEntry.setDate(dates.get(i));
+				timeSlotRespEntry.setMeetId(meetEntity.getMeetId());
+				int possibleMinStart = tempStartMin;
+				String possibleStart = String.valueOf(possibleMinStart / 60) + ":" + String.valueOf(possibleMinStart % 60);
+				//숫자가 같을때까지 돌리기
+				while(j<times.length-1){
+					if(times[j][i]!=times[j+1][i]){
+						break;
+					}
+					iter = iter+1;
+					j=j+1;
+					tempStartMin=tempStartMin+gap;
+				}
+				int possibleMinEnd = tempStartMin+gap;
+				String possibleEnd = String.valueOf(possibleMinEnd / 60) + ":" + String.valueOf(possibleMinEnd % 60);
+				int[] bin = numConvert.decToBin(num, times[j][i]);
+				for(int t=0;t<bin.length;t++){
+					if(bin[t]==1){
+						timeSlotUsers.add(users.get(t));
+					}
+				}
+				timeSlotRespEntry.setUsers(timeSlotUsers);
+				timeSlotRespEntry.setTime(possibleStart+" ~ "+possibleEnd);
+				timeSlotRespEntry.setNum(timeSlotUsers.size());
+				list.add(timeSlotRespEntry);
+			}
 
+		}
 		return list;
 	}
 
