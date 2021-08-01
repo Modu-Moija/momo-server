@@ -322,6 +322,8 @@ public class TimeService {
     private String getStringMinFromZero(int restMin, String strRestMin) {
         if(restMin ==0){
             strRestMin =String.valueOf(restMin)+"0";
+        } else{
+            strRestMin =String.valueOf(restMin);
         }
         return strRestMin;
     }
