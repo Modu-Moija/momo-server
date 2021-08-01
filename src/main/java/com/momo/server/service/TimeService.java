@@ -4,7 +4,9 @@ import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.*;
 
+import com.momo.server.dto.TimeSlotRespEntry;
 import com.momo.server.dto.auth.SessionUser;
+import com.momo.server.dto.response.MostLeastRespDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -137,9 +139,6 @@ public class TimeService {
 		}
 		return dec;
 	}
-	
-
-
 
     /*
      * 유저시간 업데이트할 때 함께 TimeSlot 업데이트하는 메소드
@@ -179,9 +178,9 @@ public class TimeService {
 	UserMeetRespDto userMeetRespDto = new UserMeetRespDto();
 	LinkedHashMap<String, LinkedHashMap<String, Boolean>> planList = new LinkedHashMap<String, LinkedHashMap<String, Boolean>>();
 
-	// 데이터 db에서 불러오기
+	// 데이터 db에서 불러오기, 세션에서 가져오면 안될듯
 	User userEntity = userRepository.findUser(user);
-	Optional.ofNullable(userEntity).orElseThrow(() -> new UserNotFoundException(user.getUserId()));
+	Optional.ofNullable(user).orElseThrow(() -> new UserNotFoundException(user.getUserId()));
 
 	Meet meetEntity = meetRepository.findMeet(user.getMeetId());
 	Optional.ofNullable(meetEntity).orElseThrow(() -> new MeetNotFoundException(user.getMeetId()));
@@ -249,7 +248,6 @@ public class TimeService {
     public List<TimeSlot> getLeastTime(String meetId) {
 
 	List<TimeSlot> timeSlots = timeSlotRepository.findAllTimeSlot(meetId);
-
 	Collections.sort(timeSlots, new Comparator<TimeSlot>() {
 
 	    @Override
@@ -272,14 +270,15 @@ public class TimeService {
     }
 
     @Transactional(readOnly = true)
-    public List<TimeSlot> getMostTime(String meetId) {
+    public MostLeastRespDto getMostLeastTime(String meetId) {
+    	MostLeastRespDto mostLeastRespDto = new MostLeastRespDto();
+		Meet meetEntity = meetRepository.findMeet(meetId);
+		List<TimeSlotRespEntry> timeSlots = this.mapToTimeSlot(meetEntity);
 
-	List<TimeSlot> timeSlots = timeSlotRepository.findAllTimeSlot(meetId);
-
-	Collections.sort(timeSlots, new Comparator<TimeSlot>() {
+		Collections.sort(timeSlots, new Comparator<TimeSlotRespEntry>() {
 
 	    @Override
-	    public int compare(TimeSlot t1, TimeSlot t2) {
+	    public int compare(TimeSlotRespEntry t1, TimeSlotRespEntry t2) {
 
 		int res = t2.getNum().compareTo(t1.getNum());
 		if (res == 0) {
@@ -292,9 +291,40 @@ public class TimeService {
 	    }
 
 	});
+		mostLeastRespDto.setMostTime(timeSlots);
 
-	return timeSlots;
+		Collections.sort(timeSlots, new Comparator<TimeSlotRespEntry>() {
 
+			@Override
+			public int compare(TimeSlotRespEntry t1, TimeSlotRespEntry t2) {
+
+				int res = t1.getNum().compareTo(t2.getNum());
+				if (res == 0) {
+					res = t1.getDate().compareTo(t2.getDate());
+				} else if (res == 0) {
+					res = t1.getTime().compareTo(t2.getTime());
+				}
+				// num순 정렬
+				return res;
+			}
+
+		});
+
+		mostLeastRespDto.setLeastTime(timeSlots);
+	return mostLeastRespDto;
     }
+
+    /*
+    meet의 이차원 배열을 timeslot으로 매핑시키는 메소드(BFS 알고리즘 활용)
+     */
+	public List<TimeSlotRespEntry> mapToTimeSlot(Meet meetEntity){
+
+		List<TimeSlotRespEntry> list = new ArrayList<TimeSlotRespEntry>();
+
+		ArrayList<LocalDate> dates = meetEntity.getDates();
+		int[][] times = meetEntity.getTimes();
+
+		return list;
+	}
 
 }
