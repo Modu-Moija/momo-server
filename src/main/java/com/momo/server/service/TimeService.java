@@ -293,17 +293,13 @@ public class TimeService {
                 strRestMin = getStringMinFromZero(restStartMin);
                 String possibleStart = String.valueOf(possibleMinStart / 60) + ":" + strRestMin;
                 //숫자가 같을때까지 돌리기
-                System.out.println("j = " + j);
-                System.out.println("tempStartMin = " + tempStartMin);
                 while(j < times.length - 1){
-                    System.out.println("실행됨??");
                     if(times[j][i] != times[j + 1][i]){
                         break;
                     }
                     j=j+1;
                     tempStartMin = tempStartMin + gap;
                 }
-                System.out.println("반복문 돌고나서는??? = " + tempStartMin);
                 int possibleMinEnd = tempStartMin + gap;
                 int restEndMin = possibleMinEnd % 60;
                 strRestMin = getStringMinFromZero(restEndMin);
