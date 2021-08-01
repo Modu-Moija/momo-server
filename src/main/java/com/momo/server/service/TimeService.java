@@ -55,7 +55,6 @@ public class TimeService {
             userIndex = userNames.indexOf(userEntity.getUsername());
         }
         int totalStartMin = getTotalMin(start);
-        NumConvert numConvert = new NumConvert();
 
         int col = 0;
         // db meet의 date로 날짜 찾기
@@ -79,18 +78,18 @@ public class TimeService {
                         if (requestDto.getUsertimes().get(j).getTimeslots().get(t).getPossible() == true) {
                             temp_userTimes[row][col] = 1;
                             // 1. 기존의 10진수를 2진수로 변환
-                            int[] bin = numConvert.decToBin(num, temp_Times[row][col]);
+                            int[] bin = NumConvert.decToBin(num, temp_Times[row][col]);
                             // 2.userindex의 위치 1로 변경
                             bin[userIndex] = 1;
                             // 3. 다시 2진수를 10진수로 변환해서 저장
-                            int dec = numConvert.binToDec(num, bin);
+                            int dec = NumConvert.binToDec(num, bin);
                             temp_Times[row][col] = dec;
 
                         } else if (requestDto.getUsertimes().get(j).getTimeslots().get(t).getPossible() == false) {
                             temp_userTimes[row][col] = 0;
-                            int[] bin = numConvert.decToBin(num, temp_Times[row][col]);
+                            int[] bin = NumConvert.decToBin(num, temp_Times[row][col]);
                             bin[userIndex] = 0;
-                            int dec = numConvert.binToDec(num, bin);
+                            int dec = NumConvert.binToDec(num, bin);
                             temp_Times[row][col] = dec;
                         }
                     }

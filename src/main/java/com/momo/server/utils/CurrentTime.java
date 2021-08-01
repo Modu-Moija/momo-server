@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 public class CurrentTime {
 
 
-    public LocalDateTime getCurrentTime() {
+    public static LocalDateTime getCurrentTime() {
 
         LocalDateTime localDateTime = LocalDateTime.now();
         return localDateTime;

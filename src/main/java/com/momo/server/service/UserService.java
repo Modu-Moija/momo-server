@@ -43,11 +43,9 @@ public class UserService {
     public User createUser(LoginRequestDto loginRequestDto) {
 
         User userEntity = new User();
-
         BigInteger userid = BigInteger.valueOf(Integer.valueOf(Math.abs(loginRequestDto.hashCode())));
 
-        CurrentTime currentTime = new CurrentTime();
-        userEntity.setCreated(currentTime.getCurrentTime());
+        userEntity.setCreated(CurrentTime.getCurrentTime());
         userEntity.setUserId(userid);
         userEntity.setUsername(loginRequestDto.getUsername());
         userEntity.setCookieRemember(loginRequestDto.getRemember());
