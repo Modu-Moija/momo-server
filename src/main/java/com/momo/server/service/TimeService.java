@@ -282,22 +282,31 @@ public class TimeService {
         int totalStartMin = getTotalMin(start);
         for (int i = 0; i < times[0].length; i++) {
             int tempStartMin = totalStartMin;
-            for (int j = 0; j < times.length; j++,tempStartMin = tempStartMin + gap) {
+            for (int j = 0; j < times.length;j++,tempStartMin = tempStartMin + gap) {
                 TimeSlotRespEntry timeSlotRespEntry = new TimeSlotRespEntry();
                 ArrayList<String> timeSlotUsers = new ArrayList<>();
                 timeSlotRespEntry.setDate(dates.get(i));
                 timeSlotRespEntry.setMeetId(meetEntity.getMeetId());
                 int possibleMinStart = tempStartMin;
-                int restMin = possibleMinStart % 60;
+                int restStartMin = possibleMinStart % 60;
                 String strRestMin = null;
-                strRestMin = getStringMinFromZero(restMin, strRestMin);
+                strRestMin = getStringMinFromZero(restStartMin);
                 String possibleStart = String.valueOf(possibleMinStart / 60) + ":" + strRestMin;
                 //숫자가 같을때까지 돌리기
-                while (j < times.length - 1 && times[j][i] == times[j + 1][i]) {
-                    j = j + 1;
+                System.out.println("j = " + j);
+                System.out.println("tempStartMin = " + tempStartMin);
+                while(j < times.length - 1){
+                    System.out.println("실행됨??");
+                    if(times[j][i] != times[j + 1][i]){
+                        break;
+                    }
+                    j=j+1;
                     tempStartMin = tempStartMin + gap;
                 }
+                System.out.println("반복문 돌고나서는??? = " + tempStartMin);
                 int possibleMinEnd = tempStartMin + gap;
+                int restEndMin = possibleMinEnd % 60;
+                strRestMin = getStringMinFromZero(restEndMin);
                 String possibleEnd = String.valueOf(possibleMinEnd / 60) + ":" + strRestMin;
                 int[] bin = numConvert.decToBin(num, times[j][i]);
                 for (int t = 0; t < bin.length; t++) {
@@ -318,7 +327,8 @@ public class TimeService {
     /*
     분이 0일 때 00으로 반환해주기 위한 메소드
      */
-    private String getStringMinFromZero(int restMin, String strRestMin) {
+    private String getStringMinFromZero(int restMin) {
+        String strRestMin = null;
         if(restMin ==0){
             strRestMin =String.valueOf(restMin)+"0";
         } else{
