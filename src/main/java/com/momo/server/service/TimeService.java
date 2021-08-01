@@ -47,9 +47,10 @@ public class TimeService {
 	int gap = meetEntity.getGap();
 	String start = meetEntity.getStart();
 	ArrayList<String> userNames = meetEntity.getUserNames();
+	int num = meetEntity.getNum();
 	int userIndex=-1;
 	if(userNames!=null){
-		userIndex= this.checkUserIndexByName(userNames, userEntity.getUsername());
+		userIndex= userNames.indexOf(userEntity.getUsername());
 	}
 	int hour = Integer.parseInt(start.substring(0, 2));
 	int min = Integer.parseInt(start.substring(3, 5));
@@ -78,89 +79,66 @@ public class TimeService {
 			if (requestDto.getUsertimes().get(j).getTimeslots().get(t).getPossible() == true) {
 			    temp_userTimes[row][col] = 1;
 			    // 1. 기존의 10진수를 2진수로 변환
-				String temp_bin=Integer.toBinaryString(temp_Times[row][col]);
-				// 2.
-				// - 새로운 유저면 맨 뒤에 추가
-				if(userIndex==-1){
-					temp_bin=temp_bin+"1";
-				} else{// - 기존 유저면 해당 인덱스의 이진수만 1
-					temp_bin=temp_bin.substring(0,userIndex)+"1"+temp_bin.substring(userIndex+1);
-				}
-
+				int[] bin = decToBin(num, temp_Times[row][col]);
+				// 2.userindex의 위치 1로 변경
+				bin[userIndex]=1;
 				// 3. 다시 2진수를 10진수로 변환해서 저장
-			    temp_Times[row][col] = Integer.parseInt(temp_bin, 2);
+				int dec = binToDec(num,bin);
+				temp_Times[row][col]=dec;
 
 			} else if (requestDto.getUsertimes().get(j).getTimeslots().get(t).getPossible() == false) {
 			    temp_userTimes[row][col] = 0;
-				String temp_bin=Integer.toBinaryString(temp_Times[row][col]);
-				if(userIndex==-1){
-					temp_bin=temp_bin+"0";
-				} else{
-					temp_bin=temp_bin.substring(0,userIndex)+"0"+temp_bin.substring(userIndex+1);
-				}
-				temp_Times[row][col] = Integer.parseInt(temp_bin, 2);
+				int[] bin = decToBin(num, temp_Times[row][col]);
+				bin[userIndex]=0;
+				int dec = binToDec(num,bin);
+				temp_Times[row][col]=dec;
 			}
 		    }
 		}
 	    }
 	}
-
 	userRepository.updateUserTime(userEntity, temp_userTimes);
 
 	// TimeSlot 갱신
 	this.updateTimeSlot(userEntity, requestDto);
-	this.addUserToMeet(meetEntity, userEntity);
 
 	// Meet 시간 업데이트
 	meetRepository.updateMeetTime(userEntity.getMeetId(), temp_Times);
 	return ResponseEntity.ok().build();
-
     }
 
-	@Transactional
-	public void addUserToMeet(Meet meetEntity, SessionUser userEntity) {
-
-		// userId 업데이트 연산
-		ArrayList<BigInteger> userList = new ArrayList<BigInteger>();
-
-		if (meetEntity.getUsers() == null) {
-			userList.add(userEntity.getUserId());
-		} else {
-			userList = meetEntity.getUsers();
-			if(checkUserIndexById(userList, userEntity.getUserId())==-1){//존재하지 않으면
-				userList.add(userEntity.getUserId());
+	/*
+    10진수 2진수로 변환하는 메소드(배열에 2진수 담도록 구현)
+     */
+	public int[] decToBin(int num, int dec){
+		int[] bin = new int[num];
+		for (int i = 0; i < num; i++) {
+			if (dec % 2 == 1) {
+				bin[i] = 1;
+			} else if (dec % 2 == 0) {
+				bin[i] = 0;
 			}
+			dec = dec / 2;
 		}
-
-		// username 업데이트 연산
-		ArrayList<String> userNameList = new ArrayList<String>();
-
-		if (meetEntity.getUsers() == null) {
-			userNameList.add(userEntity.getUsername());
-		} else {
-			userNameList = meetEntity.getUserNames();
-			if(checkUserIndexByName(userNameList, userEntity.getUsername())==-1){//존재하지 않으면
-				userNameList.add(userEntity.getUsername());
-			}
-		}
-		meetRepository.addUser(meetEntity, userList, userNameList);
+		return bin;
 	}
 
 	/*
-	 * Meet의 usernames배열에서 username으로 인덱스 찾는 메소드
-	 */
-	private int checkUserIndexByName(ArrayList<?> userNames, String username) {
-		System.out.println(userNames);
-		System.out.println(username);
-    	return userNames.indexOf(username);
+    2진수 배열을 10진수로 변환하는 메소드
+     */
+	public int binToDec(int num, int[] bin){
+		int dec = 0;
+		int power = 0;
+		for (int i = 0; i < num; i++) {
+			double pow = Math.pow(2, power);
+			bin[i] = bin[i] * 1 * (int) pow;
+			dec = dec + bin[i];
+			power = power + 1;
+		}
+		return dec;
 	}
+	
 
-	/*
-	 * Meet의 users배열에서 userId으로 인덱스 찾는 메소드
-	 */
-	private int checkUserIndexById(ArrayList<?> users, BigInteger userId) {
-		return users.indexOf(userId);
-	}
 
 
     /*

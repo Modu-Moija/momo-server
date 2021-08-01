@@ -63,9 +63,43 @@ public class UserService {
         userEntity.setUserTimes(userTimes);
 
         userRepository.createUser(userEntity);
-
+        //user meet에 추가
+        this.addUserToMeet(meetEntity, userEntity);
         return userEntity;
     }
+
+    @Transactional
+    public void addUserToMeet(Meet meetEntity, User userEntity) {
+
+        // userId 업데이트 연산
+        ArrayList<BigInteger> userList = new ArrayList<BigInteger>();
+        if (meetEntity.getUsers() == null) {
+            userList.add(userEntity.getUserId());
+        } else {
+            userList = meetEntity.getUsers();
+            if(userList.indexOf(userEntity.getUserId())==-1){//존재하지 않으면
+                userList.add(userEntity.getUserId());
+            }
+        }
+
+        // username 업데이트 연산
+        ArrayList<String> userNameList = new ArrayList<String>();
+        if (meetEntity.getUsers() == null) {
+            userNameList.add(userEntity.getUsername());
+        } else {
+            userNameList = meetEntity.getUserNames();
+
+
+            if(userNameList.indexOf(userEntity.getUsername())==-1){//존재하지 않으면
+                userNameList.add(userEntity.getUsername());
+            }
+        }
+        meetRepository.addUser(meetEntity, userList, userNameList);
+    }
+
+
+
+
 
 
 
