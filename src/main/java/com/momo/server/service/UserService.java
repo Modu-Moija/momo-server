@@ -4,7 +4,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import com.momo.server.exception.valid.UsersOutOfBoundsException;
+import com.momo.server.exception.OutOfBound.UsersOutOfBoundsException;
 import com.momo.server.utils.CurrentTime;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

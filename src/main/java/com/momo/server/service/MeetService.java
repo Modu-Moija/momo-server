@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Optional;
 
+import com.momo.server.exception.OutOfBound.DatesOutOfBoundsException;
+import com.momo.server.exception.OutOfBound.UsersOutOfBoundsException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,6 +45,13 @@ public class MeetService {
 	while (!curDate.equals(endDate.plusDays(1))) {
 	    dates.add(curDate);
 	    curDate = curDate.plusDays(1);
+	}
+
+	//날짜수 초과에 대한 예외처리
+	if(dates!=null){
+		if(dates.size()>31){
+			throw new DatesOutOfBoundsException();
+		}
 	}
 
 	// meet의 times 이차원 배열 row 계산
