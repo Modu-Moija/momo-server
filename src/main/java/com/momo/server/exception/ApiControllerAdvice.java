@@ -2,6 +2,7 @@ package com.momo.server.exception;
 
 import com.momo.server.exception.OutOfBound.DatesOutOfBoundsException;
 import com.momo.server.exception.OutOfBound.UsersOutOfBoundsException;
+import com.momo.server.exception.valid.InvalidDateException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -77,6 +78,14 @@ public class ApiControllerAdvice {
     @ExceptionHandler(DatesOutOfBoundsException.class)
     public ResponseEntity<?> handleDatesOutOfBoundsException(DatesOutOfBoundsException e) {
         log.info("예약날짜수 초과", e);
+
+        ResponseEntity<?> responseCode = new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(new CmRespDto<>(responseCode, e.getMessage(), null), HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(InvalidDateException.class)
+    public ResponseEntity<?> handleInvalidDateException(InvalidDateException e) {
+        log.info("과거 날짜 약속 생성 시도", e);
 
         ResponseEntity<?> responseCode = new ResponseEntity<>(HttpStatus.FORBIDDEN);
         return new ResponseEntity<>(new CmRespDto<>(responseCode, e.getMessage(), null), HttpStatus.FORBIDDEN);

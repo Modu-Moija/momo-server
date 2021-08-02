@@ -41,8 +41,8 @@ public class MeetTestController {
     public void createTestMeet() throws Exception {
         ArrayList<LocalDate> testDate = new ArrayList<LocalDate>();
 
-        testDate.add(LocalDate.parse("2021-07-20"));
-        testDate.add(LocalDate.parse("2021-07-30"));
+        testDate.add(LocalDate.parse("2021-08-20"));
+        testDate.add(LocalDate.parse("2021-08-30"));
 
         MeetSaveRequestDto meetSaveRequestDto = MeetSaveRequestDto.builder().title("테스트용약속생성").start("11:00")
                 .end("19:00").dates(testDate).gap(30).video(true).center(true).build();
