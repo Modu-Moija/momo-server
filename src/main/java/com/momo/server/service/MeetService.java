@@ -7,20 +7,17 @@ import java.util.HashSet;
 import java.util.Optional;
 
 import com.momo.server.exception.OutOfBound.DatesOutOfBoundsException;
-import com.momo.server.exception.OutOfBound.UsersOutOfBoundsException;
 import com.momo.server.exception.valid.InvalidDateException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.momo.server.domain.Meet;
-import com.momo.server.domain.TimeSlot;
 import com.momo.server.dto.MeetSubInfo;
 import com.momo.server.dto.request.MeetSaveRequestDto;
 import com.momo.server.dto.response.MeetInfoRespDto;
 import com.momo.server.exception.notfound.MeetNotFoundException;
 import com.momo.server.repository.MeetRepository;
-import com.momo.server.repository.TimeSlotRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,7 +26,6 @@ import lombok.RequiredArgsConstructor;
 public class MeetService {
 
     private final MeetRepository meetRepository;
-    private final TimeSlotRepository timeSlotRepository;
 
     // 약속 생성메소드
     @Transactional
@@ -95,7 +91,6 @@ public class MeetService {
         meet.setCenter(requestDto.isVideo());
         meetRepository.createMeet(meet);
 
-        createTimeSlot(hashedUrl, row, col, startNum, endNum, gap, dates);
         return ResponseEntity.ok().build();
     }
 
@@ -117,41 +112,6 @@ public class MeetService {
         meetInfoRespDto.setMeetSubInfo(applyMeetSubInfo(meetEntity));
 
         return meetInfoRespDto;
-    }
-
-    // Timeslot 생성 메소드
-    @Transactional
-    public void createTimeSlot(String hashedUrl, int row, int col, int start, int end, int gap,
-                               ArrayList<LocalDate> dates) {
-
-        int totalMin = start * 60;
-
-        ArrayList<TimeSlot> timeSlotList = new ArrayList<TimeSlot>();
-
-        for (int i = 0; i < col; i++) {
-            int temp_Min = totalMin;
-            for (int j = 0; j < row; j++) {
-                TimeSlot timeSlot = new TimeSlot();
-                HashSet<String> users = new HashSet<String>();
-                timeSlot.setMeetId(hashedUrl);
-                timeSlot.setNum(0);
-                timeSlot.setUsers(users);
-                timeSlot.setDate(dates.get(i));
-
-                int min = temp_Min % 60;
-                String strMin = null;
-                if (min == 0) {
-                    strMin = String.valueOf(min + "0");
-                } else {
-                    strMin = String.valueOf(min);
-                }
-                timeSlot.setTime(String.valueOf(temp_Min / 60) + ":" + strMin);
-                temp_Min = temp_Min + gap;
-
-                timeSlotList.add(timeSlot);
-            }
-        }
-        timeSlotRepository.createTimeSlot(timeSlotList);
     }
 
     // meet정보 반환해줄 때 MeetSub 적용해주는 메소드
