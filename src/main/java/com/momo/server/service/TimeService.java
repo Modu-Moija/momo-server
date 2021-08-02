@@ -12,14 +12,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.momo.server.domain.Meet;
-import com.momo.server.domain.TimeSlot;
 import com.momo.server.domain.User;
 import com.momo.server.dto.request.UserTimeUpdateRequestDto;
 import com.momo.server.dto.response.UserMeetRespDto;
 import com.momo.server.exception.notfound.MeetNotFoundException;
 import com.momo.server.exception.notfound.UserNotFoundException;
 import com.momo.server.repository.MeetRepository;
-import com.momo.server.repository.TimeSlotRepository;
 import com.momo.server.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -30,7 +28,6 @@ public class TimeService {
 
     private final UserRepository userRepository;
     private final MeetRepository meetRepository;
-    private final TimeSlotRepository timeSlotRepository;
 
     /*
      * 유저시간 업데이트 및 약속시간 업데이트 메소드
@@ -98,9 +95,6 @@ public class TimeService {
         }
         userRepository.updateUserTime(userEntity, temp_userTimes);
 
-        // TimeSlot 갱신
-        this.updateTimeSlot(userEntity, requestDto);
-
         // Meet 시간 업데이트
         meetRepository.updateMeetTime(userEntity.getMeetId(), temp_Times);
         return ResponseEntity.ok().build();
@@ -113,35 +107,6 @@ public class TimeService {
         int hour = Integer.parseInt(start.substring(0, 2));
         int min = Integer.parseInt(start.substring(3, 5));
         return hour * 60 + min;
-    }
-
-    /*
-     * 유저시간 업데이트할 때 함께 TimeSlot 업데이트하는 메소드
-     */
-    @Transactional
-    public void updateTimeSlot(SessionUser userEntity, UserTimeUpdateRequestDto requestDto) {
-
-        List<TimeSlot> timeSlots = timeSlotRepository.findAllTimeSlot(requestDto.getMeetId());
-
-        for (int i = 0; i < requestDto.getUsertimes().size(); i++) {
-            for (int j = 0; j < timeSlots.size(); j++) {
-                if (requestDto.getUsertimes().get(i).getDate().equals(timeSlots.get(j).getDate())) {
-                    for (int t = 0; t < requestDto.getUsertimes().get(i).getTimeslots().size(); t++) {
-                        if (requestDto.getUsertimes().get(i).getTimeslots().get(t).getTime()
-                                .equals(timeSlots.get(j).getTime())) {
-
-                            HashSet<String> users = timeSlots.get(j).getUsers();
-                            users.add(userEntity.getUsername());
-
-                            timeSlotRepository.updateTimeSlot(requestDto.getMeetId(), users,
-                                    requestDto.getUsertimes().get(i).getDate(),
-                                    requestDto.getUsertimes().get(i).getTimeslots().get(t).getTime());
-                        }
-                    }
-                }
-            }
-        }
-
     }
 
     /*
@@ -223,9 +188,9 @@ public class TimeService {
     public MostLeastRespDto getMostLeastTime(String meetId) {
         MostLeastRespDto mostLeastRespDto = new MostLeastRespDto();
         Meet meetEntity = meetRepository.findMeet(meetId);
-        List<TimeSlotRespEntry> mostTimeSlots = this.mapToTimeSlot(meetEntity);
+        List<TimeSlotRespEntry> mostTimeSlots = this.mapToTimeSlotEntry(meetEntity);
         //least를 위해 mosttimeSlots 배열 복사
-        List<TimeSlotRespEntry> leasttimeSlots = this.mapToTimeSlot(meetEntity);
+        List<TimeSlotRespEntry> leasttimeSlots = this.mapToTimeSlotEntry(meetEntity);
 
         Collections.sort(mostTimeSlots, new Comparator<TimeSlotRespEntry>() {
 
@@ -269,7 +234,7 @@ public class TimeService {
     /*
     meet의 이차원 배열을 timeslot으로 매핑시키는 메소드(BFS 알고리즘 활용으로 개선 가능)
      */
-    public List<TimeSlotRespEntry> mapToTimeSlot(Meet meetEntity) {
+    public List<TimeSlotRespEntry> mapToTimeSlotEntry(Meet meetEntity) {
 
         List<TimeSlotRespEntry> list = new ArrayList<TimeSlotRespEntry>();
         NumConvert numConvert = new NumConvert();

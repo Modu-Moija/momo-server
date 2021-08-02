@@ -1,6 +1,5 @@
 package com.momo.server.integration;
 
-import com.momo.server.BackEndApplicationTests;
 import com.momo.server.dto.request.LoginRequestDto;
 import com.momo.server.repository.UserRepository;
 import com.momo.server.integration.apicontroller.MeetTestController;
@@ -14,7 +13,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.momo.server.repository.MeetRepository;
-import com.momo.server.repository.TimeSlotRepository;
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -28,9 +26,6 @@ public class UserTest {
 
     @Autowired
     private MeetRepository meetRepository;
-
-    @Autowired
-    private TimeSlotRepository timeSlotRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -49,7 +44,6 @@ public class UserTest {
     @AfterAll
     public void afterAll() {
         meetRepository.findAllAndRemoveMeet("48e00ec53bf70f4");
-        timeSlotRepository.findAllAndRemoveTimeSlot("48e00ec53bf70f4");
         userRepository.findAndRemoveUser("1817849666");
     }
 

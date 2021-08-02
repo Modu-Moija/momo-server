@@ -4,7 +4,6 @@ package com.momo.server.integration;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import com.momo.server.BackEndApplicationTests;
 import com.momo.server.integration.apicontroller.MeetTestController;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +18,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.momo.server.dto.request.MeetSaveRequestDto;
 import com.momo.server.repository.MeetRepository;
-import com.momo.server.repository.TimeSlotRepository;
 import org.springframework.test.web.servlet.MvcResult;
 
 @AutoConfigureMockMvc
@@ -35,9 +33,6 @@ public class MeetTest {
     @Autowired
     private MeetRepository meetRepository;
 
-    @Autowired
-    private TimeSlotRepository timeSlotRepository;
-
     private MeetTestController meetTestController;
 
     @BeforeEach
@@ -48,12 +43,10 @@ public class MeetTest {
     @AfterAll
     public void afterAll() {// 생성된 약속 찾아서 지워주기 @Transactional이 동작안해서직접 구현함
         meetRepository.findAllAndRemoveMeet("e8e1bf2ec5ab131");
-        timeSlotRepository.findAllAndRemoveTimeSlot("e8e1bf2ec5ab131");
     }
 
     @Test
     public void 약속을_생성() throws Exception {
-
         // given
         ArrayList<LocalDate> testDate = new ArrayList<LocalDate>();
 
