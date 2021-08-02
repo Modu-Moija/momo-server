@@ -79,7 +79,6 @@ public class MeetRepositoryImpl implements MeetRepository {
 	Query meetQuery = new Query(Criteria.where("meetId").is(meetId));
 	Update meetUpdate = new Update();
 	meetUpdate.set("times", temp_Times);
-	meetUpdate.set("times", temp_Times);
 	mongoTemplate.updateFirst(meetQuery, meetUpdate, Meet.class);
 
     }

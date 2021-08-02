@@ -9,6 +9,7 @@ import javax.validation.Valid;
 
 import com.momo.server.config.auth.CheckSessionUser;
 import com.momo.server.dto.auth.SessionUser;
+import com.momo.server.dto.response.MostLeastRespDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -61,17 +62,11 @@ public class TimeController {
 	return userMeetRespDto;
     }
 
-    @GetMapping("/{meetId}/least")
-    public List<TimeSlot> getLeastTime(@PathVariable("meetId") String meetId) {
 
-	List<TimeSlot> timeSlots = timeService.getLeastTime(meetId);
-	return timeSlots;
-    }
+    @GetMapping("/{meetId}/mostleast")
+    public MostLeastRespDto getMostLeastTime(@PathVariable("meetId") String meetId) {
 
-    @GetMapping("/{meetId}/most")
-    public List<TimeSlot> getMostTime(@PathVariable("meetId") String meetId) {
-
-	List<TimeSlot> timeSlots = timeService.getMostTime(meetId);
-	return timeSlots;
+	MostLeastRespDto mostLeastRespDto = timeService.getMostLeastTime(meetId);
+	return mostLeastRespDto;
     }
 }
