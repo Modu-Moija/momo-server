@@ -31,14 +31,13 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 
     private final UserService userService;
-    private final TimeService timeService;
     private final HttpSession httpSession;
 
     @Value("${aesKey}")
     private String key;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDto loginRequestDto, BindingResult bindingResult,
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDto loginRequestDto,
 	    HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 	User userEntity = userService.login(loginRequestDto);
