@@ -31,14 +31,13 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 
     private final UserService userService;
-    private final TimeService timeService;
     private final HttpSession httpSession;
 
     @Value("${aesKey}")
     private String key;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDto loginRequestDto, BindingResult bindingResult,
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDto loginRequestDto,
 	    HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 	User userEntity = userService.login(loginRequestDto);
@@ -46,7 +45,7 @@ public class UserController {
 
 	request.setAttribute("authuser", loginRequestDto);
 	Aes128 aes128 = new Aes128(key);
-	String enc = aes128.encrypt(loginRequestDto.getUsername().toString());// 유저이름으로 암호화시켜도 안전한지 모르겠습니다
+	String enc = aes128.encrypt(userEntity.getUserId().toString());// 유저이름으로 암호화시켜도 안전한지 모르겠습니다
 	Cookie authCookie = new Cookie("authuser", enc);
 	authCookie.setHttpOnly(false);
 	response.addCookie(authCookie);
