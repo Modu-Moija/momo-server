@@ -1,6 +1,7 @@
 package com.momo.server.config.auth;
 
 import com.momo.server.dto.auth.SessionUser;
+import com.momo.server.exception.auth.UnauthorizedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -10,6 +11,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import javax.servlet.http.HttpSession;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Component
@@ -33,6 +35,6 @@ public class SessionUserArgumentResolver implements HandlerMethodArgumentResolve
                                   NativeWebRequest nativeWebRequest,
                                   WebDataBinderFactory webDataBinderFactory) throws Exception {
 //세션에서 값 가져오는 기능임.
-        return httpSession.getAttribute("user");
+        return Optional.ofNullable(httpSession.getAttribute("user")).orElseThrow(() -> new UnauthorizedException());
     }
 }
