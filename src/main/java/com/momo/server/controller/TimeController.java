@@ -38,13 +38,7 @@ public class TimeController {
 											@RequestBody @Valid UserTimeUpdateRequestDto requestDto,
 											BindingResult bindingResult, @CheckSessionUser SessionUser user) {
 
-	// 세션에서 유저이름찾기
-//	HttpSession session = request.getSession();
-//	User user = (User) session.getAttribute("user");
-	Optional.ofNullable(user).orElseThrow(() -> new UnauthorizedException());
-
 	timeService.updateUsertime(user, requestDto);
-
 	ResponseEntity<?> responseCode = new ResponseEntity<>(HttpStatus.OK);
 	return new ResponseEntity<>(new CmRespDto<>(responseCode, "시간 수정 성공", null), HttpStatus.OK);
     };
@@ -52,7 +46,6 @@ public class TimeController {
     @GetMapping("/usertime")
     public UserMeetRespDto getUserTime(HttpServletRequest request, @CheckSessionUser SessionUser user) {
 
-	Optional.ofNullable(user).orElseThrow(() -> new UnauthorizedException());
 	UserMeetRespDto userMeetRespDto = timeService.mapUserMeetRespDto(user);
 
 	return userMeetRespDto;
