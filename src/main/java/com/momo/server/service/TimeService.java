@@ -1,6 +1,7 @@
 package com.momo.server.service;
 
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.*;
 
 import com.momo.server.dto.TimeSlotRespEntry;
@@ -166,12 +167,18 @@ public class TimeService {
         return userMeetRespDto;
     }
 
-    // 날짜 색깔 구하는 연산
+    /*
+    각 날짜별 되는 사람 구하는 연산
+     */
     @Transactional(readOnly = true)
-    public ArrayList<Integer> getColorDate(Meet meetEntity) {
-        ArrayList<Integer> colorDate = new ArrayList<Integer>();
+    public LinkedHashMap<Integer, LinkedHashMap<Integer, Integer>> getColorDate(Meet meetEntity) {
+        LinkedHashMap<Integer, LinkedHashMap<Integer, Integer>> monthDayMap = new LinkedHashMap<>();
 
+
+
+        ArrayList<Integer> colorDate = new ArrayList<Integer>();
         int[][] times = meetEntity.getTimes();
+        ArrayList<LocalDate> dates = meetEntity.getDates();
 
         int temp = 0;
         for (int j = 0; j < times[0].length; j++) {
@@ -181,7 +188,35 @@ public class TimeService {
             colorDate.add(j, temp);
             temp = 0;
         }
-        return colorDate;
+
+        Month firstMonth = dates.get(0).getMonth();
+        
+        //전체 날짜만큼 반복
+        for(int i=0;i<dates.size();){
+            
+            //달의 날짜 개수 세기 ex) 7월 26,27,28,29,30,31일이면 6
+            int MonthDayCount=0;
+            for(int t=0;t<dates.size();t++){
+                if(dates.get(t).getMonth()==firstMonth){
+                    MonthDayCount++;
+                }
+            }
+            
+            //해시맵 선언
+            LinkedHashMap<Integer, Integer> dayCountMap = new LinkedHashMap<>();
+            //해당 달의 날짜수만큼 반복하면서 날짜와 colorDate 맵에 입력
+            for(int j=0;j<MonthDayCount;j++,i++){
+                dayCountMap.put(dates.get(i).getDayOfMonth(), colorDate.get(i));
+            }
+            //해당 달의 값 입력
+            monthDayMap.put(firstMonth.getValue(), dayCountMap);
+            
+            //달 하나 더하기
+            firstMonth=firstMonth.plus(1);
+        }
+
+
+        return monthDayMap;
     }
 
     @Transactional(readOnly = true)

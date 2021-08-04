@@ -50,8 +50,8 @@ public class MeetTest {
         // given
         ArrayList<LocalDate> testDate = new ArrayList<LocalDate>();
 
-        testDate.add(LocalDate.parse("2021-08-20"));
-        testDate.add(LocalDate.parse("2021-08-30"));
+        testDate.add(LocalDate.now().plusDays(5));
+        testDate.add(LocalDate.now().plusDays(10));
 
         MeetSaveRequestDto meetSaveRequestDto = MeetSaveRequestDto.builder().title("약속생성테스트").start("11:00")
                 .end("19:00").dates(testDate).gap(30).video(true).center(true).build();

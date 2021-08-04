@@ -14,6 +14,6 @@ public class UserMeetRespDto {
 
     private String meetId;
     private LinkedHashMap<String, LinkedHashMap<String, Boolean>> PlanList;
-    private ArrayList colorDate;
+    private LinkedHashMap<Integer, LinkedHashMap<Integer, Integer>> colorDate;
 
 }
