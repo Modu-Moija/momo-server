@@ -73,10 +73,10 @@ public class TimeTest {
         timeTestController.getUserTime();
     }
 
-//    @Test
-//    public void 최대최소조회() throws Exception {
-//
-//        String meetId = "ea3d15b1adf87f5";
-//        meetTestController.getMeet(meetId);
-//    }
+    @Test
+    public void 최대최소조회() throws Exception {
+
+        String meetId = "b0f0cb7e67286b8";
+        timeTestController.getMostLeast(meetId);
+    }
 }
