@@ -35,6 +35,6 @@ public class SessionUserArgumentResolver implements HandlerMethodArgumentResolve
                                   NativeWebRequest nativeWebRequest,
                                   WebDataBinderFactory webDataBinderFactory) throws Exception {
 //세션에서 값 가져오는 기능임.
-        return Optional.ofNullable(httpSession.getAttribute("user")).orElseThrow(() -> new UnauthorizedException());
+        return Optional.ofNullable(httpSession.getAttribute("sessionuser")).orElseThrow(() -> new UnauthorizedException());
     }
 }

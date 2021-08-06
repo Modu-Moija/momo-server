@@ -1,6 +1,7 @@
-package com.momo.server.integration.utils;
+package com.momo.server.unit.utils;
 
 import com.momo.server.utils.Aes128;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -13,6 +14,7 @@ public class AesTest {
         aes = new Aes128("this-is-test-key");
     }
 
+    @DisplayName("Aes128 동작 테스트")
     @Test
     public void 테스트() throws Exception {
         String origin = "originString";
