@@ -1,10 +1,8 @@
 package com.momo.server.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.momo.server.dto.auth.SessionUser;
-import com.momo.server.dto.request.MeetSaveRequestDto;
-import com.momo.server.integration.apicontroller.MeetTestController;
 import com.momo.server.integration.apicontroller.TimeTestController;
+import com.momo.server.integration.setup.SessionSetup;
 import com.momo.server.repository.MeetRepository;
 import com.momo.server.repository.UserRepository;
 import org.junit.jupiter.api.AfterAll;
@@ -14,16 +12,10 @@ import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.math.BigInteger;
-import java.time.LocalDate;
-import java.util.ArrayList;
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -49,17 +41,7 @@ public class TimeTest {
     @BeforeEach
     void setUp() throws Exception {
         BigInteger userId = new BigInteger("760433781");
-
-        //세션 셋업
-        SessionUser sessionUser = new SessionUser();
-        sessionUser.setMeetId("b0f0cb7e67286b8");
-        sessionUser.setUserId(userId);
-        MockHttpSession session = new MockHttpSession();
-        session.setAttribute("sessionuser", sessionUser);
-
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        request.setSession(session);
-        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
+        session= SessionSetup.sessionSetUp();
 
         timeTestController = new TimeTestController(mockMvc, objectMapper, session);
 
