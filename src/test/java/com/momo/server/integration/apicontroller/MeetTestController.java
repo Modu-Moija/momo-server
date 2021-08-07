@@ -51,10 +51,10 @@ public class MeetTestController {
 
     public void getMeet(String meetId) throws Exception {
 
-        MvcResult mvcResult = mockMvc.perform(get("/api/meet/" + meetId)) // 1, 2
-		.andExpect(status().isOk()) // 4
+        MvcResult mvcResult = mockMvc.perform(get("/api/meet/" + meetId))
+		.andExpect(status().isOk())
 		.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-		.andExpect(jsonPath("$.data.title").value("새로운테스트")).andDo(print()).andReturn();
+		.andExpect(jsonPath("$.data.title").value("테스트템플릿")).andDo(print()).andReturn();
 
     }
 

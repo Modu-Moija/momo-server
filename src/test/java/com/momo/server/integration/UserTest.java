@@ -43,14 +43,15 @@ public class UserTest {
 
     @AfterAll
     public void afterAll() {
-        meetRepository.findAllAndRemoveMeet("48e00ec53bf70f4");
-        userRepository.findAndRemoveUser("1817849666");
+        meetRepository.removeMeetByTitle("약속생성테스트");
+        meetRepository.removeMeetByTitle("테스트용약속생성");
+        userRepository.removeUserByUsername("junit테스트유저");
     }
 
     @Test
-    public void 유저_로그인() throws Exception {
+    public void 유저로그인() throws Exception {
 
-        LoginRequestDto loginRequestDto = LoginRequestDto.builder().remember(true).meetId("48e00ec53bf70f4").username("테스트유저").build();
+        LoginRequestDto loginRequestDto = LoginRequestDto.builder().remember(true).meetId("b0f0cb7e67286b8").username("테스트템플릿").build();
         userTestController.loginUser(loginRequestDto);
     }
 }

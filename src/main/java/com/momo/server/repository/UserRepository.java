@@ -17,6 +17,6 @@ public interface UserRepository {
 
     void updateUserTime(SessionUser user, int[][] temp_userTimes);
 
-    void findAndRemoveUser(String userId);
+    void removeUserByUsername(String username);
 
 }
