@@ -57,9 +57,9 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void findAndRemoveUser(String userId) {
+    public void removeUserByUsername(String username) {
 
-	Query findUserQuery = new Query(Criteria.where("userId").is(userId));
+	Query findUserQuery = new Query(Criteria.where("username").is(username));
 	mongoTemplate.findAndRemove(findUserQuery, User.class);
     }
 

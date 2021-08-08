@@ -2,11 +2,13 @@ package com.momo.server.dto.auth;
 
 import com.momo.server.domain.User;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 
+@NoArgsConstructor
 @Data
 public class SessionUser implements Serializable {
 
@@ -26,4 +28,5 @@ public class SessionUser implements Serializable {
         this.created=user.getCreated();
         this.cookieRemember=user.getCookieRemember();
     }
+
 }

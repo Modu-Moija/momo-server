@@ -47,7 +47,6 @@ public class TimeController {
     public UserMeetRespDto getUserTime(HttpServletRequest request, @CheckSessionUser SessionUser user) {
 
 	UserMeetRespDto userMeetRespDto = timeService.mapUserMeetRespDto(user);
-
 	return userMeetRespDto;
     }
 

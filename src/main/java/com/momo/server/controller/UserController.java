@@ -50,7 +50,7 @@ public class UserController {
 	authCookie.setHttpOnly(false);
 	response.addCookie(authCookie);
 
-	httpSession.setAttribute("user", new SessionUser(userEntity));
+	httpSession.setAttribute("sessionuser", new SessionUser(userEntity));
 
 	responseCode = ResponseEntity.status(HttpStatus.OK).build();
 	return new ResponseEntity<>(new CmRespDto<>(responseCode, "유저 로그인 성공", userEntity), HttpStatus.OK);
