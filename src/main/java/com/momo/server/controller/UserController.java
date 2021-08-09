@@ -10,7 +10,6 @@ import com.momo.server.dto.auth.SessionUser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.momo.server.domain.User;
 import com.momo.server.dto.CmRespDto;
 import com.momo.server.dto.request.LoginRequestDto;
-import com.momo.server.service.TimeService;
 import com.momo.server.service.UserService;
 import com.momo.server.utils.Aes128;
 
