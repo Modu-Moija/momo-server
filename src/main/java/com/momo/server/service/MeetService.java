@@ -41,15 +41,7 @@ public class MeetService {
         validateDates(dates);
         validateStartDate(startDate);
 
-        // meet의 times 이차원 배열 row 계산
-        String start = requestDto.getStart().split(":")[0];
-        String end = requestDto.getEnd().split(":")[0];
-        int row = Integer.parseInt(end) - Integer.parseInt(start);
-        row = (int) (60 / requestDto.getGap()) * row;
-
-        // meet의 times 이차원 배열 col 계산
-        int col = dates.size();
-        int[][] temptimes = fillTempTimesToZero(row, col);
+        int[][] temptimes = getRowCol(requestDto, dates);
 
         // meet로 저장
         meet.setMeetId(hashedUrl);
@@ -65,6 +57,19 @@ public class MeetService {
         meetRepository.createMeet(meet);
 
         return ResponseEntity.ok().build();
+    }
+
+    private int[][] getRowCol(MeetSaveRequestDto requestDto, ArrayList<LocalDate> dates) {
+
+        // meet의 times 이차원 배열 row 계산
+        String start = requestDto.getStart().split(":")[0];
+        String end = requestDto.getEnd().split(":")[0];
+        int row = Integer.parseInt(end) - Integer.parseInt(start);
+        row = (int) (60 / requestDto.getGap()) * row;
+
+        // meet의 times 이차원 배열 col 계산
+        int col = dates.size();
+        return fillTempTimesToZero(row, col);
     }
 
     private int[][] fillTempTimesToZero(int row, int col) {
