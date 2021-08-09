@@ -40,7 +40,6 @@ public class TimeService {
         Meet meetEntity = meetRepository.findMeet(userEntity.getMeetId());
         Optional.ofNullable(meetEntity).orElseThrow(() -> new MeetNotFoundException(userEntity.getMeetId()));
 
-        // dbmeet로 column 위치 계산
         ArrayList<LocalDate> dates = meetEntity.getDates();
         int[][] temp_userTimes = userEntity.getUserTimes();
         int[][] temp_Times = meetEntity.getTimes();
@@ -49,13 +48,10 @@ public class TimeService {
         ArrayList<String> userNames = meetEntity.getUserNames();
         int num = meetEntity.getNum();
         int userIndex = -1;
-        if (userNames != null) {
-            userIndex = userNames.indexOf(userEntity.getUsername());
-        }
+        userIndex = getUserIndex(userEntity, userNames, userIndex);
         int totalStartMin = getTotalMin(start);
 
-        int col = 0;
-        // db meet의 date로 날짜 찾기
+        int col;
         for (int i = 0; i < dates.size(); i++) {
             // requestDto의 date 찾기
             for (int j = 0; j < requestDto.getUsertimes().size(); j++) {
@@ -64,41 +60,56 @@ public class TimeService {
                     // requestDto의 시간배열 크기만큼 반복
                     for (int t = 0; t < requestDto.getUsertimes().get(j).getTimeslots().size(); t++) {
                         String timeslot = requestDto.getUsertimes().get(j).getTimeslots().get(t).getTime();
-
-                        // dbmeet로 row 위치 계산
-                        int row = 0;
-                        int input_hour = Integer.parseInt(timeslot.substring(0, 2));
-                        int input_min = Integer.parseInt(timeslot.substring(3, 5));
-                        int input_total_hour = input_hour * 60 + input_min;
-                        row = (input_total_hour - totalStartMin) / gap;
-
+                        int row = getRowByUserTimeUpdate(gap, totalStartMin, timeslot);
                         // true일 때 좌표값 1로 세팅,false일때 좌표값 0으로 세팅
-                        if (requestDto.getUsertimes().get(j).getTimeslots().get(t).getPossible() == true) {
-                            temp_userTimes[row][col] = 1;
-                            // 1. 기존의 10진수를 2진수로 변환
-                            int[] bin = NumConvert.decToBin(num, temp_Times[row][col]);
-                            // 2.userindex의 위치 1로 변경
-                            bin[userIndex] = 1;
-                            // 3. 다시 2진수를 10진수로 변환해서 저장
-                            int dec = NumConvert.binToDec(num, bin);
-                            temp_Times[row][col] = dec;
-
-                        } else if (requestDto.getUsertimes().get(j).getTimeslots().get(t).getPossible() == false) {
-                            temp_userTimes[row][col] = 0;
-                            int[] bin = NumConvert.decToBin(num, temp_Times[row][col]);
-                            bin[userIndex] = 0;
-                            int dec = NumConvert.binToDec(num, bin);
-                            temp_Times[row][col] = dec;
+                        if (requestDto.getUsertimes().get(j).getTimeslots().get(t).getPossible()) {
+                            setOneToUserMeetTime(temp_userTimes, temp_Times[row], num, userIndex, col, row);
+                        } else if (!requestDto.getUsertimes().get(j).getTimeslots().get(t).getPossible()) {
+                            setZeroToUserMeetTime(temp_userTimes, temp_Times[row], num, userIndex, col, row);
                         }
                     }
                 }
             }
         }
         userRepository.updateUserTime(userEntity, temp_userTimes);
-
-        // Meet 시간 업데이트
         meetRepository.updateMeetTime(userEntity.getMeetId(), temp_Times);
         return ResponseEntity.ok().build();
+    }
+
+    private int getUserIndex(SessionUser userEntity, ArrayList<String> userNames, int userIndex) {
+        if (userNames != null) {
+            userIndex = userNames.indexOf(userEntity.getUsername());
+        }
+        return userIndex;
+    }
+
+    private void setZeroToUserMeetTime(int[][] temp_userTimes, int[] temp_time, int num, int userIndex, int col, int row) {
+        temp_userTimes[row][col] = 0;
+        int[] bin = NumConvert.decToBin(num, temp_time[col]);
+        bin[userIndex] = 0;
+        int dec = NumConvert.binToDec(num, bin);
+        temp_time[col] = dec;
+    }
+
+    private void setOneToUserMeetTime(int[][] temp_userTimes, int[] temp_time, int num, int userIndex, int col, int row) {
+        temp_userTimes[row][col] = 1;
+        // 1. 기존의 10진수를 2진수로 변환
+        int[] bin = NumConvert.decToBin(num, temp_time[col]);
+        // 2.userindex의 위치 1로 변경
+        bin[userIndex] = 1;
+        // 3. 다시 2진수를 10진수로 변환해서 저장
+        int dec = NumConvert.binToDec(num, bin);
+        temp_time[col] = dec;
+    }
+
+    /*
+    row 위치 계산
+     */
+    private int getRowByUserTimeUpdate(int gap, int totalStartMin, String timeslot) {
+        int row;
+        int input_total_hour = getTotalMin(timeslot);
+        row = (input_total_hour - totalStartMin) / gap;
+        return row;
     }
 
     /*
@@ -117,54 +128,49 @@ public class TimeService {
     public UserMeetRespDto mapUserMeetRespDto(SessionUser user) {
 
         UserMeetRespDto userMeetRespDto = new UserMeetRespDto();
-        LinkedHashMap<String, LinkedHashMap<String, Boolean>> planList = new LinkedHashMap<String, LinkedHashMap<String, Boolean>>();
+        LinkedHashMap<String, LinkedHashMap<String, Boolean>> planList = new LinkedHashMap<>();
 
-        // 데이터 db에서 불러오기, 세션에서 가져오면 안될듯
         User userEntity = userRepository.findUser(user);
         Optional.ofNullable(user).orElseThrow(() -> new UserNotFoundException(user.getUserId()));
-
         Meet meetEntity = meetRepository.findMeet(user.getMeetId());
         Optional.ofNullable(meetEntity).orElseThrow(() -> new MeetNotFoundException(user.getMeetId()));
 
         int[][] userTimes = userEntity.getUserTimes();
-        String start = meetEntity.getStart();
-        String end = meetEntity.getEnd();
         int gap = meetEntity.getGap();
         LocalDate startDate = meetEntity.getDates().get(0);
+        String start = meetEntity.getStart();
         int dayOfMonth = startDate.getDayOfMonth();
+        int totalStartMin = getTotalMin(start);
 
-        int hour = Integer.parseInt(start.split(":")[0]);
-        int gapTime = Integer.parseInt(start.split(":")[1]);
-        int totalStartTime = hour * 60 + gapTime;
-
-        // 2차원 배열 돌면서 데이터 저장
+        // 2차원 배열 돌면서 데이터 매핑
         for (int i = 0; i < userTimes[0].length; i++) {
-
-            // 순서 저장을 위해 링크드해쉬맵 사용
-            LinkedHashMap<String, Boolean> time = new LinkedHashMap<String, Boolean>();
-
-            String temp_date = String.valueOf(startDate.getYear()) + "/" + String.valueOf(startDate.getMonthValue())
-                    + "/" + String.valueOf(dayOfMonth);
-            int temp_totalStartTime = totalStartTime;
-
+            LinkedHashMap<String, Boolean> timeMap = new LinkedHashMap<>();
+            String temp_date = startDate.getYear() + "/" + startDate.getMonthValue() + "/" + dayOfMonth;
+            int temp_totalStartMin = totalStartMin;
             for (int j = 0; j < userTimes.length; j++) {
-                String key = String.valueOf(temp_totalStartTime / 60) + ":" + String.valueOf(temp_totalStartTime % 60);
-                if (userTimes[j][i] == 0) {
-                    time.put(key, false);
-                } else if (userTimes[j][i] == 1) {
-                    time.put(key, true);
-                }
-                temp_totalStartTime = temp_totalStartTime + gap;
+                mapToTimeMap(userTimes, i, timeMap, temp_totalStartMin, j);
+                temp_totalStartMin = temp_totalStartMin + gap;
             }
             dayOfMonth++;
-            planList.put(temp_date, time);
+            planList.put(temp_date, timeMap);
         }
+        setUserMeetRespDto(user, userMeetRespDto, planList, meetEntity);
+        return userMeetRespDto;
+    }
 
+    private void mapToTimeMap(int[][] userTimes, int i, LinkedHashMap<String, Boolean> timeMap, int temp_totalStartTime, int j) {
+        String key = String.valueOf(temp_totalStartTime / 60) + ":" + String.valueOf(temp_totalStartTime % 60);
+        if (userTimes[j][i] == 0) {
+            timeMap.put(key, false);
+        } else if (userTimes[j][i] == 1) {
+            timeMap.put(key, true);
+        }
+    }
+
+    private void setUserMeetRespDto(SessionUser user, UserMeetRespDto userMeetRespDto, LinkedHashMap<String, LinkedHashMap<String, Boolean>> planList, Meet meetEntity) {
         userMeetRespDto.setMeetId(user.getMeetId());
         userMeetRespDto.setPlanList(planList);
         userMeetRespDto.setColorDate(getColorDate(meetEntity));
-
-        return userMeetRespDto;
     }
 
     /*
@@ -174,35 +180,21 @@ public class TimeService {
     public LinkedHashMap<Integer, LinkedHashMap<Integer, Integer>> getColorDate(Meet meetEntity) {
         LinkedHashMap<Integer, LinkedHashMap<Integer, Integer>> monthDayMap = new LinkedHashMap<>();
 
-
-
-        ArrayList<Integer> colorDate = new ArrayList<Integer>();
+        ArrayList<Integer> colorDate = new ArrayList<>();
         int[][] times = meetEntity.getTimes();
         ArrayList<LocalDate> dates = meetEntity.getDates();
 
-        int temp = 0;
-        for (int j = 0; j < times[0].length; j++) {
-            for (int i = 0; i < times.length; i++) {
-                temp = temp + times[i][j];
-            }
-            colorDate.add(j, temp);
-            temp = 0;
-        }
-
+        sumTwoDimArrayVertical(colorDate, times);
         Month firstMonth = dates.get(0).getMonth();
-        
         //전체 날짜만큼 반복
         for(int i=0;i<dates.size();){
-            
             //달의 날짜 개수 세기 ex) 7월 26,27,28,29,30,31일이면 6
             int MonthDayCount=0;
-            for(int t=0;t<dates.size();t++){
-                if(dates.get(t).getMonth()==firstMonth){
+            for (LocalDate date : dates) {
+                if (date.getMonth() == firstMonth) {
                     MonthDayCount++;
                 }
             }
-            
-            //해시맵 선언
             LinkedHashMap<Integer, Integer> dayCountMap = new LinkedHashMap<>();
             //해당 달의 날짜수만큼 반복하면서 날짜와 colorDate 맵에 입력
             for(int j=0;j<MonthDayCount;j++,i++){
@@ -210,13 +202,20 @@ public class TimeService {
             }
             //해당 달의 값 입력
             monthDayMap.put(firstMonth.getValue(), dayCountMap);
-            
-            //달 하나 더하기
             firstMonth=firstMonth.plus(1);
         }
-
-
         return monthDayMap;
+    }
+
+    private void sumTwoDimArrayVertical(ArrayList<Integer> colorDate, int[][] times) {
+        int temp = 0;
+        for (int j = 0; j < times[0].length; j++) {
+            for (int[] time : times) {
+                temp = temp + time[j];
+            }
+            colorDate.add(j, temp);
+            temp = 0;
+        }
     }
 
     @Transactional(readOnly = true)
@@ -224,46 +223,40 @@ public class TimeService {
         MostLeastRespDto mostLeastRespDto = new MostLeastRespDto();
         Meet meetEntity = meetRepository.findMeet(meetId);
         List<TimeSlotRespEntry> mostTimeSlots = this.mapToTimeSlotEntry(meetEntity);
-        //least를 위해 mosttimeSlots 배열 복사
         List<TimeSlotRespEntry> leasttimeSlots = this.mapToTimeSlotEntry(meetEntity);
 
-        Collections.sort(mostTimeSlots, new Comparator<TimeSlotRespEntry>() {
-
-            @Override
-            public int compare(TimeSlotRespEntry t1, TimeSlotRespEntry t2) {
-                //숫자 같으면, 날짜, 시간 빠른순으로 반환
-                int res = t2.getNum().compareTo(t1.getNum());
-                if (res == 0) {
-                    res = t1.getDate().compareTo(t2.getDate());
-                } else if (res == 0) {
-                    res = t1.getTime().compareTo(t2.getTime());
-                }
-                // num순 정렬
-                return res;
-            }
-
-        });
+        sortByMostTime(mostTimeSlots);
         mostLeastRespDto.setMostTime(mostTimeSlots);
 
-        Collections.sort(leasttimeSlots, new Comparator<TimeSlotRespEntry>() {
-
-            @Override
-            public int compare(TimeSlotRespEntry t1, TimeSlotRespEntry t2) {
-                //숫자 같으면, 날짜, 시간 빠른순으로 반환
-                int res = t1.getNum().compareTo(t2.getNum());
-                if (res == 0) {
-                    res = t1.getDate().compareTo(t2.getDate());
-                } else if (res == 0) {
-                    res = t1.getTime().compareTo(t2.getTime());
-                }
-                // num순 정렬
-                return res;
-            }
-
-        });
-
+        sortByLeastTime(leasttimeSlots);
         mostLeastRespDto.setLeastTime(leasttimeSlots);
         return mostLeastRespDto;
+    }
+
+    private void sortByLeastTime(List<TimeSlotRespEntry> leasttimeSlots) {
+        leasttimeSlots.sort((t1, t2) -> {
+            //숫자 같으면, 날짜, 시간 빠른순으로 반환
+            int res = t1.getNum().compareTo(t2.getNum());
+            if (res == 0) {
+                res = t1.getDate().compareTo(t2.getDate());
+            } else if (res == 0) {
+                res = t1.getTime().compareTo(t2.getTime());
+            }
+            return res;
+        });
+    }
+
+    private void sortByMostTime(List<TimeSlotRespEntry> mostTimeSlots) {
+        mostTimeSlots.sort((t1, t2) -> {
+            //숫자 같으면, 날짜, 시간 빠른순으로 반환
+            int res = t2.getNum().compareTo(t1.getNum());
+            if (res == 0) {
+                res = t1.getDate().compareTo(t2.getDate());
+            } else if (res == 0) {
+                res = t1.getTime().compareTo(t2.getTime());
+            }
+            return res;
+        });
     }
 
     /*
@@ -271,8 +264,7 @@ public class TimeService {
      */
     public List<TimeSlotRespEntry> mapToTimeSlotEntry(Meet meetEntity) {
 
-        List<TimeSlotRespEntry> list = new ArrayList<TimeSlotRespEntry>();
-        NumConvert numConvert = new NumConvert();
+        List<TimeSlotRespEntry> list = new ArrayList<>();
         ArrayList<LocalDate> dates = meetEntity.getDates();
         ArrayList<String> users = meetEntity.getUserNames();
         int[][] times = meetEntity.getTimes();
@@ -280,18 +272,14 @@ public class TimeService {
         int gap = meetEntity.getGap();
         String start = meetEntity.getStart();
         int totalStartMin = getTotalMin(start);
+
         for (int i = 0; i < times[0].length; i++) {
             int tempStartMin = totalStartMin;
             for (int j = 0; j < times.length;j++,tempStartMin = tempStartMin + gap) {
                 TimeSlotRespEntry timeSlotRespEntry = new TimeSlotRespEntry();
                 ArrayList<String> timeSlotUsers = new ArrayList<>();
-                timeSlotRespEntry.setDate(dates.get(i));
-                timeSlotRespEntry.setMeetId(meetEntity.getMeetId());
                 int possibleMinStart = tempStartMin;
-                int restStartMin = possibleMinStart % 60;
-                String strRestMin = null;
-                strRestMin = getStringMinFromZero(restStartMin);
-                String possibleStart = String.valueOf(possibleMinStart / 60) + ":" + strRestMin;
+                String possibleStart = splitToHourMin(possibleMinStart);
                 //숫자가 같을때까지 돌리기
                 while(j < times.length - 1){
                     if(times[j][i] != times[j + 1][i]){
@@ -301,23 +289,41 @@ public class TimeService {
                     tempStartMin = tempStartMin + gap;
                 }
                 int possibleMinEnd = tempStartMin + gap;
-                int restEndMin = possibleMinEnd % 60;
-                strRestMin = getStringMinFromZero(restEndMin);
-                String possibleEnd = String.valueOf(possibleMinEnd / 60) + ":" + strRestMin;
-                int[] bin = numConvert.decToBin(num, times[j][i]);
-                for (int t = 0; t < bin.length; t++) {
-                    if (bin[t] == 1) {
-                        timeSlotUsers.add(users.get(t));
-                    }
-                }
-                timeSlotRespEntry.setUsers(timeSlotUsers);
-                timeSlotRespEntry.setTime(possibleStart + " ~ " + possibleEnd);
-                timeSlotRespEntry.setNum(timeSlotUsers.size());
+                String possibleEnd = splitToHourMin(possibleMinEnd);
+
+                int[] bin = NumConvert.decToBin(num, times[j][i]);
+                addTimeSlotUsers(users, timeSlotUsers, bin);
+                setTimeSlotRespEntry(meetEntity, dates, i, timeSlotRespEntry, timeSlotUsers, possibleStart, possibleEnd);
                 list.add(timeSlotRespEntry);
             }
-
         }
         return list;
+    }
+
+    /*
+    분을 시간과 분으로 나눠주는 메소드 ex)330 -> 5:30
+     */
+    private String splitToHourMin(int totalMin) {
+        String tempRestMin;
+        int restStartMin = totalMin % 60;
+        tempRestMin = getStringMinFromZero(restStartMin);
+        return String.valueOf(totalMin / 60) + ":" + tempRestMin;
+    }
+
+    private void addTimeSlotUsers(ArrayList<String> users, ArrayList<String> timeSlotUsers, int[] bin) {
+        for (int t = 0; t < bin.length; t++) {
+            if (bin[t] == 1) {
+                timeSlotUsers.add(users.get(t));
+            }
+        }
+    }
+
+    private void setTimeSlotRespEntry(Meet meetEntity, ArrayList<LocalDate> dates, int i, TimeSlotRespEntry timeSlotRespEntry, ArrayList<String> timeSlotUsers, String possibleStart, String possibleEnd) {
+        timeSlotRespEntry.setDate(dates.get(i));
+        timeSlotRespEntry.setMeetId(meetEntity.getMeetId());
+        timeSlotRespEntry.setUsers(timeSlotUsers);
+        timeSlotRespEntry.setTime(possibleStart + " ~ " + possibleEnd);
+        timeSlotRespEntry.setNum(timeSlotUsers.size());
     }
 
     /*

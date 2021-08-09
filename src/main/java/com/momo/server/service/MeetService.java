@@ -41,7 +41,9 @@ public class MeetService {
         validateDates(dates);
         validateStartDate(startDate);
 
-        int[][] temptimes = getRowCol(requestDto, dates);
+        int row = getRow(requestDto);
+        int col = getCol(dates);
+        int[][] temptimes = fillTempTimesToZero(row, col);
 
         // meet로 저장
         setMeet(requestDto, hashedUrl, meet, dates, temptimes);
@@ -63,17 +65,17 @@ public class MeetService {
         meet.setCenter(requestDto.isVideo());
     }
 
-    private int[][] getRowCol(MeetSaveRequestDto requestDto, ArrayList<LocalDate> dates) {
+    private int getCol(ArrayList<LocalDate> dates) {
+        int col = dates.size();
+        return col;
+    }
 
-        // meet의 times 이차원 배열 row 계산
+    private int getRow(MeetSaveRequestDto requestDto) {
         String start = requestDto.getStart().split(":")[0];
         String end = requestDto.getEnd().split(":")[0];
         int row = Integer.parseInt(end) - Integer.parseInt(start);
         row = (int) (60 / requestDto.getGap()) * row;
-
-        // meet의 times 이차원 배열 col 계산
-        int col = dates.size();
-        return fillTempTimesToZero(row, col);
+        return row;
     }
 
     private int[][] fillTempTimesToZero(int row, int col) {
