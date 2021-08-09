@@ -44,6 +44,13 @@ public class MeetService {
         int[][] temptimes = getRowCol(requestDto, dates);
 
         // meet로 저장
+        setMeet(requestDto, hashedUrl, meet, dates, temptimes);
+        meetRepository.createMeet(meet);
+
+        return ResponseEntity.ok().build();
+    }
+
+    private void setMeet(MeetSaveRequestDto requestDto, String hashedUrl, Meet meet, ArrayList<LocalDate> dates, int[][] temptimes) {
         meet.setMeetId(hashedUrl);
         meet.setTitle(requestDto.getTitle());
         meet.setStart(requestDto.getStart());
@@ -54,9 +61,6 @@ public class MeetService {
         meet.setTimes(temptimes);
         meet.setCenter(requestDto.isCenter());
         meet.setCenter(requestDto.isVideo());
-        meetRepository.createMeet(meet);
-
-        return ResponseEntity.ok().build();
     }
 
     private int[][] getRowCol(MeetSaveRequestDto requestDto, ArrayList<LocalDate> dates) {
@@ -113,6 +117,12 @@ public class MeetService {
         MeetInfoRespDto meetInfoRespDto = new MeetInfoRespDto();
         Meet meetEntity = meetRepository.findMeet(meetId);
         Optional.ofNullable(meetEntity).orElseThrow(() -> new MeetNotFoundException(meetId));
+        setMeetInfoRespDto(meetInfoRespDto, meetEntity);
+
+        return meetInfoRespDto;
+    }
+
+    private void setMeetInfoRespDto(MeetInfoRespDto meetInfoRespDto, Meet meetEntity) {
         meetInfoRespDto.setCenter(meetEntity.isCenter());
         meetInfoRespDto.setVideo(meetEntity.isVideo());
         meetInfoRespDto.setTitle(meetEntity.getTitle());
@@ -120,10 +130,7 @@ public class MeetService {
         meetInfoRespDto.setStart(meetEntity.getStart());
         meetInfoRespDto.setEnd(meetEntity.getEnd());
         meetInfoRespDto.setGap(meetEntity.getGap());
-
         meetInfoRespDto.setMeetSubInfo(applyMeetSubInfo(meetEntity));
-
-        return meetInfoRespDto;
     }
 
     // meet정보 반환해줄 때 MeetSub 적용해주는 메소드
