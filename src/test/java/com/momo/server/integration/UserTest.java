@@ -51,7 +51,7 @@ public class UserTest {
     @Test
     public void 유저로그인() throws Exception {
 
-        LoginRequestDto loginRequestDto = LoginRequestDto.builder().remember(true).meetId("b0f0cb7e67286b8").username("테스트템플릿").build();
+        LoginRequestDto loginRequestDto = LoginRequestDto.builder().remember(true).meetId("b0f0cb7e67286b8").username("junit테스트유저").build();
         userTestController.loginUser(loginRequestDto);
     }
 }
