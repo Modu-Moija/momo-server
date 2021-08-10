@@ -20,7 +20,7 @@ jobs:
       with:
         java-version: '8'
     - name: Build with Maven
-      run: mvn clean install -Ddbname=${{ secrets.DBNAME }} -Ddbusername=${{ secrets.DBUSERNAME }} -Ddbpassword=${{ secrets.DBPASSWORD }} -Ddbhost=${{ secrets.DBHOST }} -Ddbport=${{ secrets.DBPORT }} -DaesKey=${{ secrets.AESKEY}}
+      run: mvn clean install -Duser.timezone=KST -Ddbname=${{ secrets.DBNAME }} -Ddbusername=${{ secrets.DBUSERNAME }} -Ddbpassword=${{ secrets.DBPASSWORD }} -Ddbhost=${{ secrets.DBHOST }} -Ddbport=${{ secrets.DBPORT }} -DaesKey=${{ secrets.AESKEY}}
       working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
       
     - name: Azure WebApp
