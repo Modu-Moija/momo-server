@@ -32,53 +32,27 @@ public class MeetService {
     public ResponseEntity<?> createMeet(MeetSaveRequestDto requestDto, String hashedUrl) {
 
         Meet meet = new Meet();
-
         LocalDate startDate = requestDto.getDates().get(0);
         LocalDate endDate = requestDto.getDates().get(1);
-
-        ArrayList<LocalDate> dates = new ArrayList<LocalDate>();
+        ArrayList<LocalDate> dates = new ArrayList<>();
         LocalDate curDate = startDate;
 
-        while (!curDate.equals(endDate.plusDays(1))) {
-            dates.add(curDate);
-            curDate = curDate.plusDays(1);
-        }
+        fillDatesArray(endDate, dates, curDate);
+        validateDates(dates);
+        validateStartDate(startDate);
 
-        //날짜수 초과에 대한 예외처리
-        if (dates != null) {
-            if (dates.size() > 31) {
-                throw new DatesOutOfBoundsException();
-            }
-        }
-        //이전 날짜에 대한 예외처리
-        if (startDate.compareTo(LocalDate.now()) <0) {
-            throw new InvalidDateException();
-        }
-
-        // meet의 times 이차원 배열 row 계산
-        String start = requestDto.getStart().split(":")[0];
-        String end = requestDto.getEnd().split(":")[0];
-        int startNum = Integer.parseInt(start);
-        int endNum = Integer.parseInt(end);
-        int gap = requestDto.getGap();
-        int row = Integer.parseInt(end) - Integer.parseInt(start);
-        row = (int) (60 / requestDto.getGap()) * row;
-
-        // meet의 times 이차원 배열 col 계산
-        int col = dates.size();
-
-        // meet의 times 이차원배열 0으로 채우기
-        int[][] temptimes = new int[row][col];
-
-        for (int i = 0; i < row; i++) { // 행 반복
-            for (int j = 0; j < col; j++) { // 열 반복
-                temptimes[i][j] = 0;
-            }
-        }
-        // 추후에 성능개선을 위해 캐시프랜들리 코드 적용 생각해보면 좋을 것 같음(행과 열 위치 연산개선)
-        // 참조링크 https://hot2364928.tistory.com/58
+        int row = getRow(requestDto);
+        int col = getCol(dates);
+        int[][] temptimes = fillTempTimesToZero(row, col);
 
         // meet로 저장
+        setMeet(requestDto, hashedUrl, meet, dates, temptimes);
+        meetRepository.createMeet(meet);
+
+        return ResponseEntity.ok().build();
+    }
+
+    private void setMeet(MeetSaveRequestDto requestDto, String hashedUrl, Meet meet, ArrayList<LocalDate> dates, int[][] temptimes) {
         meet.setMeetId(hashedUrl);
         meet.setTitle(requestDto.getTitle());
         meet.setStart(requestDto.getStart());
@@ -89,18 +63,68 @@ public class MeetService {
         meet.setTimes(temptimes);
         meet.setCenter(requestDto.isCenter());
         meet.setCenter(requestDto.isVideo());
-        meetRepository.createMeet(meet);
+    }
 
-        return ResponseEntity.ok().build();
+    private int getCol(ArrayList<LocalDate> dates) {
+        int col = dates.size();
+        return col;
+    }
+
+    private int getRow(MeetSaveRequestDto requestDto) {
+        String start = requestDto.getStart().split(":")[0];
+        String end = requestDto.getEnd().split(":")[0];
+        int row = Integer.parseInt(end) - Integer.parseInt(start);
+        row = (int) (60 / requestDto.getGap()) * row;
+        return row;
+    }
+
+    private int[][] fillTempTimesToZero(int row, int col) {
+
+        // meet의 times 이차원배열 0으로 채우기
+        // 캐시프렌들리코드 https://hot2364928.tistory.com/58
+        int[][] temptimes = new int[row][col];
+        for (int i = 0; i < row; i++) { // 행 반복
+            for (int j = 0; j < col; j++) { // 열 반복
+                temptimes[i][j] = 0;
+            }
+        }
+        return temptimes;
+    }
+
+    private void fillDatesArray(LocalDate endDate, ArrayList<LocalDate> dates, LocalDate curDate) {
+        while (!curDate.equals(endDate.plusDays(1))) {
+            dates.add(curDate);
+            curDate = curDate.plusDays(1);
+        }
+    }
+
+    private void validateStartDate(LocalDate startDate) {
+        //시작날짜에 대한 예외처리
+        if (startDate.compareTo(LocalDate.now()) <0) {
+            throw new InvalidDateException();
+        }
+    }
+
+    private void validateDates(ArrayList<LocalDate> dates) {
+        //날짜수 초과에 대한 예외처리
+        if (dates != null) {
+            if (dates.size() > 31) {
+                throw new DatesOutOfBoundsException();
+            }
+        }
     }
 
     @Transactional(readOnly = true)
     public MeetInfoRespDto getMeetInfo(String meetId) {
         MeetInfoRespDto meetInfoRespDto = new MeetInfoRespDto();
-
         Meet meetEntity = meetRepository.findMeet(meetId);
-
         Optional.ofNullable(meetEntity).orElseThrow(() -> new MeetNotFoundException(meetId));
+        setMeetInfoRespDto(meetInfoRespDto, meetEntity);
+
+        return meetInfoRespDto;
+    }
+
+    private void setMeetInfoRespDto(MeetInfoRespDto meetInfoRespDto, Meet meetEntity) {
         meetInfoRespDto.setCenter(meetEntity.isCenter());
         meetInfoRespDto.setVideo(meetEntity.isVideo());
         meetInfoRespDto.setTitle(meetEntity.getTitle());
@@ -108,10 +132,7 @@ public class MeetService {
         meetInfoRespDto.setStart(meetEntity.getStart());
         meetInfoRespDto.setEnd(meetEntity.getEnd());
         meetInfoRespDto.setGap(meetEntity.getGap());
-
         meetInfoRespDto.setMeetSubInfo(applyMeetSubInfo(meetEntity));
-
-        return meetInfoRespDto;
     }
 
     // meet정보 반환해줄 때 MeetSub 적용해주는 메소드
