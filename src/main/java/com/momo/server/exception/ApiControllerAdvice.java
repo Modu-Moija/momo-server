@@ -1,8 +1,8 @@
 package com.momo.server.exception;
 
-import com.momo.server.exception.OutOfBound.DatesOutOfBoundsException;
-import com.momo.server.exception.OutOfBound.UsersOutOfBoundsException;
-import com.momo.server.exception.valid.InvalidDateException;
+import com.momo.server.exception.outofbound.DatesOutOfBoundsException;
+import com.momo.server.exception.outofbound.UsersOutOfBoundsException;
+import com.momo.server.exception.validation.InvalidDateException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.momo.server.dto.CmRespDto;
 import com.momo.server.exception.auth.UnauthorizedException;
-import com.momo.server.exception.valid.InvalidMeetException;
-import com.momo.server.exception.valid.InvalidUsernameExecption;
-import com.momo.server.exception.valid.InvalidUserTimeExcpetion;
+import com.momo.server.exception.validation.InvalidMeetException;
+import com.momo.server.exception.validation.InvalidUsernameExecption;
+import com.momo.server.exception.validation.InvalidUserTimeExcpetion;
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -1,4 +1,4 @@
-package com.momo.server.exception.OutOfBound;
+package com.momo.server.exception.outofbound;
 
 import com.momo.server.exception.CommonException;
 

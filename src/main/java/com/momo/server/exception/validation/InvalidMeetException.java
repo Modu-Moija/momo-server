@@ -1,18 +1,18 @@
-package com.momo.server.exception.valid;
+package com.momo.server.exception.validation;
 
 import java.util.Map;
 
 @SuppressWarnings("serial")
-public class InvalidUsernameExecption extends RuntimeException {
+public class InvalidMeetException extends RuntimeException {
 
     private Map<String, String> errorMap;
 
-    public InvalidUsernameExecption(String message, Map<String, String> errorMap) {
+    public InvalidMeetException(String message, Map<String, String> errorMap) {
 	super(message);
 	this.errorMap = errorMap;
     }
 
-    public InvalidUsernameExecption(String message) {
+    public InvalidMeetException(String message) {
 	super(message);
     }
 
