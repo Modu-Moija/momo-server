@@ -8,6 +8,7 @@ import com.momo.server.dto.TimeSlotRespEntry;
 import com.momo.server.dto.auth.SessionUser;
 import com.momo.server.dto.response.MostLeastRespDto;
 import com.momo.server.utils.NumConvert;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,14 +22,17 @@ import com.momo.server.exception.notfound.UserNotFoundException;
 import com.momo.server.repository.MeetRepository;
 import com.momo.server.repository.UserRepository;
 
-import lombok.RequiredArgsConstructor;
-
 @Service
-@RequiredArgsConstructor
 public class TimeService {
 
     private final UserRepository userRepository;
     private final MeetRepository meetRepository;
+
+    @Autowired
+    public TimeService(UserRepository userRepository, MeetRepository meetRepository) {
+        this.userRepository = userRepository;
+        this.meetRepository = meetRepository;
+    }
 
     /*
      * 유저시간 업데이트 및 약속시간 업데이트 메소드

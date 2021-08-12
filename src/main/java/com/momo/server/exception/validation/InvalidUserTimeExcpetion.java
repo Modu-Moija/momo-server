@@ -1,4 +1,4 @@
-package com.momo.server.exception.valid;
+package com.momo.server.exception.validation;
 
 import java.util.Map;
 

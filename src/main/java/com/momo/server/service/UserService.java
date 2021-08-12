@@ -4,8 +4,9 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import com.momo.server.exception.OutOfBound.UsersOutOfBoundsException;
+import com.momo.server.exception.outofbound.UsersOutOfBoundsException;
 import com.momo.server.utils.CurrentTime;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,14 +17,17 @@ import com.momo.server.exception.notfound.MeetNotFoundException;
 import com.momo.server.repository.MeetRepository;
 import com.momo.server.repository.UserRepository;
 
-import lombok.RequiredArgsConstructor;
-
 @Service
-@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
     private final MeetRepository meetRepository;
+
+    @Autowired
+    public UserService(UserRepository userRepository, MeetRepository meetRepository) {
+        this.userRepository = userRepository;
+        this.meetRepository = meetRepository;
+    }
 
     // 로그인 메소드
     @Transactional

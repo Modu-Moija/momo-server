@@ -1,13 +1,12 @@
 package com.momo.server.controller;
 
-import java.util.Optional;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import com.momo.server.config.auth.CheckSessionUser;
 import com.momo.server.dto.auth.SessionUser;
 import com.momo.server.dto.response.MostLeastRespDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -21,17 +20,18 @@ import org.springframework.web.bind.annotation.RestController;
 import com.momo.server.dto.CmRespDto;
 import com.momo.server.dto.request.UserTimeUpdateRequestDto;
 import com.momo.server.dto.response.UserMeetRespDto;
-import com.momo.server.exception.auth.UnauthorizedException;
 import com.momo.server.service.TimeService;
 
-import lombok.RequiredArgsConstructor;
-
 @RestController
-@RequiredArgsConstructor
 @RequestMapping(value = "/api/time")
 public class TimeController {
 
     private final TimeService timeService;
+
+    @Autowired
+    public TimeController(TimeService timeService) {
+        this.timeService = timeService;
+    }
 
     @PutMapping
     public ResponseEntity<?> updateUsertime(HttpServletRequest request,

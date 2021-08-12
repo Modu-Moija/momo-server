@@ -3,11 +3,10 @@ package com.momo.server.dto.response;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserMeetRespDto {

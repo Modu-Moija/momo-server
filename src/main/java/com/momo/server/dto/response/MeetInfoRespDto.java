@@ -5,13 +5,12 @@ import java.util.ArrayList;
 
 import com.momo.server.dto.MeetSubInfo;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 public class MeetInfoRespDto {
 
     private String title;

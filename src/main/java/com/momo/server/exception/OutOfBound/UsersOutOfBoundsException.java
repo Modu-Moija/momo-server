@@ -1,8 +1,6 @@
-package com.momo.server.exception.OutOfBound;
+package com.momo.server.exception.outofbound;
 
 import com.momo.server.exception.CommonException;
-
-import java.util.Map;
 
 public class UsersOutOfBoundsException extends CommonException {
 

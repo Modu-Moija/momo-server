@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
-import com.momo.server.exception.valid.InvalidMeetException;
+import com.momo.server.exception.validation.InvalidMeetException;
 
 @Component
 @Aspect

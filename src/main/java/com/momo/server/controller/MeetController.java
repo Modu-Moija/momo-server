@@ -4,6 +4,7 @@ import java.nio.charset.StandardCharsets;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -20,16 +21,18 @@ import com.momo.server.dto.request.MeetSaveRequestDto;
 import com.momo.server.dto.response.MeetInfoRespDto;
 import com.momo.server.service.MeetService;
 
-import lombok.RequiredArgsConstructor;
-
 @RestController
-@RequiredArgsConstructor
 @RequestMapping(value = "/api/meet")
 public class MeetController {
 
     private final MeetService meetService;
 
-    @PostMapping
+    @Autowired
+	public MeetController(MeetService meetService) {
+		this.meetService = meetService;
+	}
+
+	@PostMapping
     public ResponseEntity<?> createMeet(@RequestBody @Valid MeetSaveRequestDto requestDto,
 	    BindingResult bindingResult) {
 
