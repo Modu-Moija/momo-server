@@ -3,11 +3,11 @@ package com.momo.server.service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Optional;
 
-import com.momo.server.exception.OutOfBound.DatesOutOfBoundsException;
-import com.momo.server.exception.valid.InvalidDateException;
+import com.momo.server.exception.outofbound.DatesOutOfBoundsException;
+import com.momo.server.exception.validation.InvalidDateException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,13 +19,15 @@ import com.momo.server.dto.response.MeetInfoRespDto;
 import com.momo.server.exception.notfound.MeetNotFoundException;
 import com.momo.server.repository.MeetRepository;
 
-import lombok.RequiredArgsConstructor;
-
-@RequiredArgsConstructor
 @Service
 public class MeetService {
 
     private final MeetRepository meetRepository;
+
+    @Autowired
+    public MeetService(MeetRepository meetRepository) {
+        this.meetRepository = meetRepository;
+    }
 
     // 약속 생성메소드
     @Transactional

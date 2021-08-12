@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import com.momo.server.dto.auth.SessionUser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,10 +22,7 @@ import com.momo.server.dto.request.LoginRequestDto;
 import com.momo.server.service.UserService;
 import com.momo.server.utils.Aes128;
 
-import lombok.RequiredArgsConstructor;
-
 @RestController
-@RequiredArgsConstructor
 @RequestMapping(value = "/api/user")
 public class UserController {
 
@@ -34,7 +32,13 @@ public class UserController {
     @Value("${aesKey}")
     private String key;
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @Autowired
+	public UserController(UserService userService, HttpSession httpSession) {
+		this.userService = userService;
+		this.httpSession = httpSession;
+	}
+
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDto loginRequestDto,
 	    HttpServletRequest request, HttpServletResponse response) throws Exception {
 
