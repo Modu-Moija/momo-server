@@ -39,4 +39,16 @@ public class TimeTestController {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.mostTime[0].num").value(3)).andDo(print()).andReturn();
     }
+
+    public void compareTimtableData() throws Exception{
+        MvcResult mvcResult = mockMvc.perform(get("/api/time/2d"))
+                .andExpect(status().isOk())
+                .andDo(print()).andReturn();
+        System.out.println("response body content(B) : " + mvcResult.getResponse().getContentAsByteArray().length);
+        MvcResult mvcResult2 = mockMvc.perform(get("/api/time/array"))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn();
+        System.out.println("response body content(B) : " + mvcResult2.getResponse().getContentAsByteArray().length);
+    }
 }

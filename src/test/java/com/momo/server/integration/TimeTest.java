@@ -79,4 +79,9 @@ public class TimeTest {
         String meetId = "b0f0cb7e67286b8";
         timeTestController.getMostLeast(meetId);
     }
+
+    @Test
+    public void 시간_데이터_형태_비교() throws Exception{
+        timeTestController.compareTimtableData();
+    }
 }
