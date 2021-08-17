@@ -18,6 +18,7 @@ import com.momo.server.repository.MeetRepository;
 @SpringBootTest
 @TestInstance(Lifecycle.PER_CLASS)
 public class UserTest {
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -51,7 +52,8 @@ public class UserTest {
     @Test
     public void 유저로그인() throws Exception {
 
-        LoginRequestDto loginRequestDto = LoginRequestDto.builder().remember(true).meetId("b0f0cb7e67286b8").username("junit테스트유저").build();
+        LoginRequestDto loginRequestDto = LoginRequestDto.builder().remember(true)
+            .meetId("b0f0cb7e67286b8").username("junit테스트유저").build();
         userTestController.loginUser(loginRequestDto);
     }
 }

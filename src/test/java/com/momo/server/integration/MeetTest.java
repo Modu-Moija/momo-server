@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.MvcResult;
 @SpringBootTest
 @TestInstance(Lifecycle.PER_CLASS)
 public class MeetTest {
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -53,8 +54,9 @@ public class MeetTest {
         testDate.add(LocalDate.now().plusDays(5));
         testDate.add(LocalDate.now().plusDays(10));
 
-        MeetSaveRequestDto meetSaveRequestDto = MeetSaveRequestDto.builder().title("약속생성테스트").start("11:00")
-                .end("19:00").dates(testDate).gap(30).video(true).center(true).build();
+        MeetSaveRequestDto meetSaveRequestDto = MeetSaveRequestDto.builder().title("약속생성테스트")
+            .start("11:00")
+            .end("19:00").dates(testDate).gap(30).video(true).center(true).build();
 
         MvcResult mvcResult = meetTestController.createMeet(meetSaveRequestDto);
         // 참조 https://engkimbs.tistory.com/858

@@ -28,9 +28,9 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
 
         return new ApiInfoBuilder()
-                .title("MoMo")
-                .description("MoMo API")
-                .build();
+            .title("MoMo")
+            .description("MoMo API")
+            .build();
     }
 
     @Bean
@@ -38,17 +38,17 @@ public class SwaggerConfig {
 
         TypeResolver typeResolver = new TypeResolver();
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
-                .alternateTypeRules( AlternateTypeRules.newRule(
-                        typeResolver.resolve(ArrayList.class, LocalDate.class),
-                        typeResolver.resolve(ArrayList.class, Date.class), Ordered.HIGHEST_PRECEDENCE))
-                .groupName("momo")
-                .useDefaultResponseMessages(false)
-                .apiInfo(this.apiInfo())
-                .select()
-                .apis(RequestHandlerSelectors
-                        .basePackage("com.momo.server.controller"))
-                .paths(PathSelectors.ant("/api/**"))
-                .build();
+            .alternateTypeRules(AlternateTypeRules.newRule(
+                typeResolver.resolve(ArrayList.class, LocalDate.class),
+                typeResolver.resolve(ArrayList.class, Date.class), Ordered.HIGHEST_PRECEDENCE))
+            .groupName("momo")
+            .useDefaultResponseMessages(false)
+            .apiInfo(this.apiInfo())
+            .select()
+            .apis(RequestHandlerSelectors
+                .basePackage("com.momo.server.controller"))
+            .paths(PathSelectors.ant("/api/**"))
+            .build();
 
         return docket;
     }

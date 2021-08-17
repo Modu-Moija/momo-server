@@ -22,11 +22,11 @@ public class SessionUser implements Serializable {
 
     public SessionUser(User user) {
         this.username = user.getUsername();
-        this.userId=user.getUserId();
-        this.userTimes=user.getUserTimes();
-        this.meetId=user.getMeetId();
-        this.created=user.getCreated();
-        this.cookieRemember=user.getCookieRemember();
+        this.userId = user.getUserId();
+        this.userTimes = user.getUserTimes();
+        this.meetId = user.getMeetId();
+        this.created = user.getCreated();
+        this.cookieRemember = user.getCookieRemember();
     }
 
 }

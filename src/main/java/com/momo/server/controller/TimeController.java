@@ -26,35 +26,38 @@ import com.momo.server.service.TimeService;
 @RequestMapping(value = "/api/time")
 public class TimeController {
 
-    private final TimeService timeService;
+  private final TimeService timeService;
 
-    @Autowired
-    public TimeController(TimeService timeService) {
-        this.timeService = timeService;
-    }
+  @Autowired
+  public TimeController(TimeService timeService) {
+    this.timeService = timeService;
+  }
 
-    @PutMapping
-    public ResponseEntity<?> updateUsertime(HttpServletRequest request,
-											@RequestBody @Valid UserTimeUpdateRequestDto requestDto,
-											BindingResult bindingResult, @CheckSessionUser SessionUser user) {
+  @PutMapping
+  public ResponseEntity<?> updateUsertime(HttpServletRequest request,
+      @RequestBody @Valid UserTimeUpdateRequestDto requestDto,
+      BindingResult bindingResult, @CheckSessionUser SessionUser user) {
 
-	timeService.updateUsertime(user, requestDto);
-	ResponseEntity<?> responseCode = new ResponseEntity<>(HttpStatus.OK);
-	return new ResponseEntity<>(new CmRespDto<>(responseCode, "시간 수정 성공", null), HttpStatus.OK);
-    };
+    timeService.updateUsertime(user, requestDto);
+    ResponseEntity<?> responseCode = new ResponseEntity<>(HttpStatus.OK);
+    return new ResponseEntity<>(new CmRespDto<>(responseCode, "시간 수정 성공", null), HttpStatus.OK);
+  }
 
-    @GetMapping("/usertime")
-    public UserMeetRespDto getUserTime(HttpServletRequest request, @CheckSessionUser SessionUser user) {
+  ;
 
-	UserMeetRespDto userMeetRespDto = timeService.mapUserMeetRespDto(user);
-	return userMeetRespDto;
-    }
+  @GetMapping("/usertime")
+  public UserMeetRespDto getUserTime(HttpServletRequest request,
+      @CheckSessionUser SessionUser user) {
+
+    UserMeetRespDto userMeetRespDto = timeService.mapUserMeetRespDto(user);
+    return userMeetRespDto;
+  }
 
 
-    @GetMapping("/{meetId}/mostleast")
-    public MostLeastRespDto getMostLeastTime(@PathVariable("meetId") String meetId) {
+  @GetMapping("/{meetId}/mostleast")
+  public MostLeastRespDto getMostLeastTime(@PathVariable("meetId") String meetId) {
 
-	MostLeastRespDto mostLeastRespDto = timeService.getMostLeastTime(meetId);
-	return mostLeastRespDto;
-    }
+    MostLeastRespDto mostLeastRespDto = timeService.getMostLeastTime(meetId);
+    return mostLeastRespDto;
+  }
 }
