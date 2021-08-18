@@ -41,7 +41,7 @@ public class TimeTest {
     @BeforeEach
     void setUp() throws Exception {
         BigInteger userId = new BigInteger("760433781");
-        session= SessionSetup.sessionSetUp();
+        session = SessionSetup.sessionSetUp();
 
         timeTestController = new TimeTestController(mockMvc, objectMapper, session);
 

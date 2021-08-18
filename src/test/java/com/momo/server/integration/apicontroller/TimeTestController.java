@@ -21,23 +21,23 @@ public class TimeTestController {
     public TimeTestController(MockMvc mockMvc, ObjectMapper objectMapper, MockHttpSession session) {
         this.mockMvc = mockMvc;
         this.objectMapper = objectMapper;
-        this.session=session;
+        this.session = session;
     }
 
     public void getUserTime() throws Exception {
 
         MvcResult mvcResult = mockMvc.perform(get("/api/time/usertime").session(session))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.colorDate.8.2").value(60)).andDo(print()).andReturn();
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.colorDate.8.2").value(60)).andDo(print()).andReturn();
     }
 
     public void getMostLeast(String meetId) throws Exception {
 
-        MvcResult mvcResult = mockMvc.perform(get("/api/time/"+meetId+"/mostleast"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.mostTime[0].num").value(3)).andDo(print()).andReturn();
+        MvcResult mvcResult = mockMvc.perform(get("/api/time/" + meetId + "/mostleast"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.mostTime[0].num").value(3)).andDo(print()).andReturn();
     }
 
     public void compareTimtableData() throws Exception{

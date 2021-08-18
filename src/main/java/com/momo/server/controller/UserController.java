@@ -26,38 +26,39 @@ import com.momo.server.utils.Aes128;
 @RequestMapping(value = "/api/user")
 public class UserController {
 
-    private final UserService userService;
-    private final HttpSession httpSession;
+  private final UserService userService;
+  private final HttpSession httpSession;
 
-    @Value("${aesKey}")
-    private String key;
+  @Value("${aesKey}")
+  private String key;
 
-    @Autowired
-	public UserController(UserService userService, HttpSession httpSession) {
-		this.userService = userService;
-		this.httpSession = httpSession;
-	}
+  @Autowired
+  public UserController(UserService userService, HttpSession httpSession) {
+    this.userService = userService;
+    this.httpSession = httpSession;
+  }
 
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDto loginRequestDto,
-	    HttpServletRequest request, HttpServletResponse response) throws Exception {
+  @RequestMapping(value = "/login", method = RequestMethod.POST)
+  public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDto loginRequestDto,
+      HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-	User userEntity = userService.login(loginRequestDto);
-	ResponseEntity<?> responseCode;
+    User userEntity = userService.login(loginRequestDto);
+    ResponseEntity<?> responseCode;
 
-	request.setAttribute("authuser", loginRequestDto);
-	Aes128 aes128 = new Aes128(key);
-	String enc = aes128.encrypt(userEntity.getUserId().toString());// 유저이름으로 암호화시켜도 안전한지 모르겠습니다
-	Cookie authCookie = new Cookie("authuser", enc);
-	authCookie.setHttpOnly(false);
-	response.addCookie(authCookie);
+    request.setAttribute("authuser", loginRequestDto);
+    Aes128 aes128 = new Aes128(key);
+    String enc = aes128.encrypt(userEntity.getUserId().toString());// 유저이름으로 암호화시켜도 안전한지 모르겠습니다
+    Cookie authCookie = new Cookie("authuser", enc);
+    authCookie.setHttpOnly(false);
+    response.addCookie(authCookie);
 
-	httpSession.setAttribute("sessionuser", new SessionUser(userEntity));
+    httpSession.setAttribute("sessionuser", new SessionUser(userEntity));
 
-	responseCode = ResponseEntity.status(HttpStatus.OK).build();
-	return new ResponseEntity<>(new CmRespDto<>(responseCode, "유저 로그인 성공", userEntity), HttpStatus.OK);
+    responseCode = ResponseEntity.status(HttpStatus.OK).build();
+    return new ResponseEntity<>(new CmRespDto<>(responseCode, "유저 로그인 성공", userEntity),
+        HttpStatus.OK);
 
-    }
+  }
 
 
 

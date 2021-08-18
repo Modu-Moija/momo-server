@@ -6,7 +6,6 @@ import com.momo.server.exception.CommonException;
 public class UnauthorizedException extends CommonException {
 
     public UnauthorizedException() {
-	super("로그인이 되어 있지 않습니다. 로그인 후에 실행해주세요");
+        super("로그인이 되어 있지 않습니다. 로그인 후에 실행해주세요");
     }
-
 }

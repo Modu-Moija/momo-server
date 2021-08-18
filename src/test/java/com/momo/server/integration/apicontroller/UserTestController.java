@@ -23,9 +23,9 @@ public class UserTestController {
     public void loginUser(LoginRequestDto loginRequestDto) throws Exception {
 
         mockMvc.perform(post("/api/user/login").contentType(MediaType.APPLICATION_JSON)
-        .accept(MediaType.APPLICATION_JSON)
-		.content(objectMapper.writeValueAsString(loginRequestDto))).andDo(print())
-		.andExpect(status().isOk()).andReturn();
+                .accept(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(loginRequestDto))).andDo(print())
+                .andExpect(status().isOk()).andReturn();
     }
 
 }

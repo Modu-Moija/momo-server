@@ -29,13 +29,15 @@ public class MeetTestController {
 
     public MvcResult createMeet(MeetSaveRequestDto meetSaveRequestDto) throws Exception {
 
-        MvcResult mvcResult = mockMvc.perform(post("/api/meet").contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
-		.content(objectMapper.writeValueAsString(meetSaveRequestDto))).andDo(print())
-		.andExpect(status().isCreated()).andReturn();
+        MvcResult mvcResult = mockMvc.perform(
+                post("/api/meet").contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(meetSaveRequestDto))).andDo(print())
+            .andExpect(status().isCreated()).andReturn();
 
         return mvcResult;
-	// 참조 https://engkimbs.tistory.com/858
-	// http://honeymon.io/tech/2019/10/23/spring-deprecated-media-type.html
+        // 참조 https://engkimbs.tistory.com/858
+        // http://honeymon.io/tech/2019/10/23/spring-deprecated-media-type.html
     }
 
     public void createTestMeet() throws Exception {
@@ -44,17 +46,18 @@ public class MeetTestController {
         testDate.add(LocalDate.now().plusDays(5));
         testDate.add(LocalDate.now().plusDays(10));
 
-        MeetSaveRequestDto meetSaveRequestDto = MeetSaveRequestDto.builder().title("테스트용약속생성").start("11:00")
-                .end("19:00").dates(testDate).gap(30).video(true).center(true).build();
+        MeetSaveRequestDto meetSaveRequestDto = MeetSaveRequestDto.builder().title("테스트용약속생성")
+            .start("11:00")
+            .end("19:00").dates(testDate).gap(30).video(true).center(true).build();
         createMeet(meetSaveRequestDto);
     }
 
     public void getMeet(String meetId) throws Exception {
 
         MvcResult mvcResult = mockMvc.perform(get("/api/meet/" + meetId))
-		.andExpect(status().isOk())
-		.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-		.andExpect(jsonPath("$.data.title").value("테스트템플릿")).andDo(print()).andReturn();
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.data.title").value("테스트템플릿")).andDo(print()).andReturn();
 
     }
 

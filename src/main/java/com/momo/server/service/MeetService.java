@@ -54,7 +54,8 @@ public class MeetService {
         return ResponseEntity.ok().build();
     }
 
-    private void setMeet(MeetSaveRequestDto requestDto, String hashedUrl, Meet meet, ArrayList<LocalDate> dates, int[][] temptimes) {
+    private void setMeet(MeetSaveRequestDto requestDto, String hashedUrl, Meet meet,
+        ArrayList<LocalDate> dates, int[][] temptimes) {
         meet.setMeetId(hashedUrl);
         meet.setTitle(requestDto.getTitle());
         meet.setStart(requestDto.getStart());
@@ -102,7 +103,7 @@ public class MeetService {
 
     private void validateStartDate(LocalDate startDate) {
         //시작날짜에 대한 예외처리
-        if (startDate.compareTo(LocalDate.now()) <0) {
+        if (startDate.compareTo(LocalDate.now()) < 0) {
             throw new InvalidDateException();
         }
     }
@@ -143,7 +144,8 @@ public class MeetService {
         MeetSubInfo meetSubInfo = new MeetSubInfo();
 
         meetSubInfo.setWhen(
-                meetEntity.getDates().get(0) + " ~ " + meetEntity.getDates().get(meetEntity.getDates().size() - 1));
+            meetEntity.getDates().get(0) + " ~ " + meetEntity.getDates()
+                .get(meetEntity.getDates().size() - 1));
 
         String where = null;
         if (meetEntity.isVideo() == true) {

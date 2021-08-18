@@ -36,15 +36,16 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
     @Override
     protected void configureClientSettings(MongoClientSettings.Builder builder) {
 
-	builder.credential(MongoCredential.createCredential(dbUsername, dbName, dbPassword.toCharArray()))
-		.applyToClusterSettings(settings -> {
-		    settings.hosts(singletonList(new ServerAddress(dbHost, dbPort)));
-		});
+        builder.credential(
+                MongoCredential.createCredential(dbUsername, dbName, dbPassword.toCharArray()))
+            .applyToClusterSettings(settings -> {
+                settings.hosts(singletonList(new ServerAddress(dbHost, dbPort)));
+            });
 
     }
 
     @Override
     protected String getDatabaseName() {
-	return dbName;
+        return dbName;
     }
 }

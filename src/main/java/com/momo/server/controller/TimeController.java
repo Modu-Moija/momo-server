@@ -26,47 +26,48 @@ import com.momo.server.service.TimeService;
 @RequestMapping(value = "/api/time")
 public class TimeController {
 
-    private final TimeService timeService;
+  private final TimeService timeService;
 
-    @Autowired
-    public TimeController(TimeService timeService) {
-        this.timeService = timeService;
+  @Autowired
+  public TimeController(TimeService timeService) {
+    this.timeService = timeService;
+  }
+
+  @PutMapping
+  public ResponseEntity<?> updateUsertime(HttpServletRequest request,
+      @RequestBody @Valid UserTimeUpdateRequestDto requestDto,
+      BindingResult bindingResult, @CheckSessionUser SessionUser user) {
+
+    timeService.updateUsertime(user, requestDto);
+    ResponseEntity<?> responseCode = new ResponseEntity<>(HttpStatus.OK);
+    return new ResponseEntity<>(new CmRespDto<>(responseCode, "시간 수정 성공", null), HttpStatus.OK);
+  }
+
+  @GetMapping("/usertime")
+  public UserMeetRespDto getUserTime(HttpServletRequest request,
+      @CheckSessionUser SessionUser user) {
+
+    UserMeetRespDto userMeetRespDto = timeService.mapUserMeetRespDto(user);
+    return userMeetRespDto;
+  }
+
+
+  @GetMapping("/{meetId}/mostleast")
+  public MostLeastRespDto getMostLeastTime(@PathVariable("meetId") String meetId) {
+
+    MostLeastRespDto mostLeastRespDto = timeService.getMostLeastTime(meetId);
+    return mostLeastRespDto;
     }
 
-    @PutMapping
-    public ResponseEntity<?> updateUsertime(HttpServletRequest request,
-											@RequestBody @Valid UserTimeUpdateRequestDto requestDto,
-											BindingResult bindingResult, @CheckSessionUser SessionUser user) {
+  @GetMapping("/2d")
+  public ResponseEntity<?> get2DTimetable(){
+      int[][] data = {{2, 0, 0, 0}, {2,0,0,0}, {0,1,0,1}, {0,2,2,1}, {2,0,0,1}, {2,1,1,0},{2,1,1,3}};
+      return new ResponseEntity<>(data, HttpStatus.OK);
+  }
 
-	timeService.updateUsertime(user, requestDto);
-	ResponseEntity<?> responseCode = new ResponseEntity<>(HttpStatus.OK);
-	return new ResponseEntity<>(new CmRespDto<>(responseCode, "시간 수정 성공", null), HttpStatus.OK);
-    };
-
-    @GetMapping("/usertime")
-    public UserMeetRespDto getUserTime(HttpServletRequest request, @CheckSessionUser SessionUser user) {
-
-	UserMeetRespDto userMeetRespDto = timeService.mapUserMeetRespDto(user);
-	return userMeetRespDto;
-    }
-
-
-    @GetMapping("/{meetId}/mostleast")
-    public MostLeastRespDto getMostLeastTime(@PathVariable("meetId") String meetId) {
-
-	MostLeastRespDto mostLeastRespDto = timeService.getMostLeastTime(meetId);
-	return mostLeastRespDto;
-    }
-
-    @GetMapping("/2d")
-    public ResponseEntity<?> get2DTimetable(){
-        int[][] data = {{2, 0, 0, 0}, {2,0,0,0}, {0,1,0,1}, {0,2,2,1}, {2,0,0,1}, {2,1,1,0},{2,1,1,3}};
-        return new ResponseEntity<>(data, HttpStatus.OK);
-    }
-
-    @GetMapping("/array")
-    public ResponseEntity<?> getArrayTimetable(){
-        int[] data = {128, 128, 17, 41, 129, 148, 151};
-        return new ResponseEntity<>(data, HttpStatus.OK);
-    }
+  @GetMapping("/array")
+  public ResponseEntity<?> getArrayTimetable(){
+      int[] data = {128, 128, 17, 41, 129, 148, 151};
+      return new ResponseEntity<>(data, HttpStatus.OK);
+  }
 }
