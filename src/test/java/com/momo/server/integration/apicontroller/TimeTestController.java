@@ -29,7 +29,7 @@ public class TimeTestController {
         MvcResult mvcResult = mockMvc.perform(get("/api/time/usertime").session(session))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.colorDate.8.2").value(60)).andDo(print()).andReturn();
+            .andExpect(jsonPath("$.colorDate.8.2").value(62)).andDo(print()).andReturn();
     }
 
     public void getMostLeast(String meetId) throws Exception {
