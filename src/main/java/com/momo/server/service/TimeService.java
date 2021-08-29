@@ -154,14 +154,14 @@ public class TimeService {
         int gap = meetEntity.getGap();
         LocalDate startDate = meetEntity.getDates().get(0);
         String start = meetEntity.getStart();
-        int dayOfMonth = startDate.getDayOfMonth();
+        Integer dayOfMonth = startDate.getDayOfMonth();
         int totalStartMin = getTotalMin(start);
 
         // 2차원 배열 돌면서 데이터 매핑
         for (int i = 0; i < userTimes[0].length; i++) {
             LinkedHashMap<String, Boolean> timeMap = new LinkedHashMap<>();
             String temp_date =
-                startDate.getYear() + "/" + startDate.getMonthValue() + "/" + dayOfMonth;
+                startDate.getYear() + "-" + addZeroToValue(startDate.getMonthValue()) + "-" + addZeroToValue(dayOfMonth);
             int temp_totalStartMin = totalStartMin;
             for (int j = 0; j < userTimes.length; j++) {
                 mapToTimeMap(userTimes, i, timeMap, temp_totalStartMin, j);
@@ -174,10 +174,19 @@ public class TimeService {
         return userMeetRespDto;
     }
 
+    private String addZeroToValue(int num){
+        String strNum = String.valueOf(num);
+        if(strNum.length()==1){
+            return "0"+strNum;
+        }else{
+            return strNum;
+        }
+    }
+
     private void mapToTimeMap(int[][] userTimes, int i, LinkedHashMap<String, Boolean> timeMap,
         int temp_totalStartTime, int j) {
         String key = String.valueOf(temp_totalStartTime / 60) + ":" + String.valueOf(
-            temp_totalStartTime % 60);
+            addZeroToValue(temp_totalStartTime % 60));
         if (userTimes[j][i] == 0) {
             timeMap.put(key, false);
         } else if (userTimes[j][i] == 1) {
