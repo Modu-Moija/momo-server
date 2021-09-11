@@ -12,7 +12,7 @@ public class SpringSessionConfig {
     @Bean
     public CookieSerializer cookieSerializer() {
         DefaultCookieSerializer cookieSerializer = new DefaultCookieSerializer();
-        cookieSerializer.setSameSite("None");
+        cookieSerializer.setSameSite("Lax");
         return cookieSerializer;
     }
 }
