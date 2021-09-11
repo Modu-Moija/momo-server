@@ -13,6 +13,8 @@ public class SpringSessionConfig {
     public CookieSerializer cookieSerializer() {
         DefaultCookieSerializer cookieSerializer = new DefaultCookieSerializer();
         cookieSerializer.setSameSite("Lax");
+        cookieSerializer.setCookiePath("/");
+        cookieSerializer.setDomainName("momo.azurewebsites.net:3000");
         return cookieSerializer;
     }
 }
