@@ -40,7 +40,7 @@ public class TimeTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        BigInteger userId = new BigInteger("760433781");
+        BigInteger userId = new BigInteger("2051448780");
         session = SessionSetup.sessionSetUp();
 
         timeTestController = new TimeTestController(mockMvc, objectMapper, session);
@@ -75,8 +75,7 @@ public class TimeTest {
 
     @Test
     public void 최대최소조회() throws Exception {
-
-        String meetId = "b0f0cb7e67286b8";
+        String meetId = "88183217cfe7de3";
         timeTestController.getMostLeast(meetId);
     }
 

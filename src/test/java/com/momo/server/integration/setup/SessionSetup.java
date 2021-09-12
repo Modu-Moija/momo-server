@@ -11,11 +11,11 @@ import java.math.BigInteger;
 public class SessionSetup {
 
     public static MockHttpSession sessionSetUp() throws Exception {
-        BigInteger userId = new BigInteger("760433781");
+        BigInteger userId = new BigInteger("2051448780");
 
         //세션 셋업
         SessionUser sessionUser = new SessionUser();
-        sessionUser.setMeetId("b0f0cb7e67286b8");
+        sessionUser.setMeetId("88183217cfe7de3");
         sessionUser.setUserId(userId);
         MockHttpSession session = new MockHttpSession();
         session.setAttribute("sessionuser", sessionUser);

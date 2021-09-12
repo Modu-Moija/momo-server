@@ -117,7 +117,7 @@ public class UserService {
             userNameList.add(userEntity.getUsername());
         } else {
             userNameList = meetEntity.getUserNames();
-            if (userNameList.indexOf(userEntity.getUsername()) == -1) {//존재하지 않으면
+            if (userNameList.indexOf(userEntity.getUsername()) == -1) {
                 userNameList.add(userEntity.getUsername());
             }
         }
@@ -133,7 +133,7 @@ public class UserService {
             userList.add(userEntity.getUserId());
         } else {
             userList = meetEntity.getUsers();
-            if (userList.indexOf(userEntity.getUserId()) == -1) {//존재하지 않으면
+            if (userList.indexOf(userEntity.getUserId()) == -1) {
                 userList.add(userEntity.getUserId());
             }
         }
