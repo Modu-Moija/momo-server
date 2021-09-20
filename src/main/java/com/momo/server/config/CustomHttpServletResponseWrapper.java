@@ -27,11 +27,9 @@ public class CustomHttpServletResponseWrapper extends HttpServletResponseWrapper
         if (cookie.isHttpOnly()) {
             builder.append(";HttpOnly");
         }
-        if (cookie.getSecure()) {
-            builder.append(";Secure");
-        }
         // here you can append other attributes like domain / max-age etc.
         builder.append(";SameSite=None");
+        builder.append(";Secure");
         return builder.toString();
     }
 }
