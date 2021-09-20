@@ -57,7 +57,7 @@ public class MeetTestController {
         MvcResult mvcResult = mockMvc.perform(get("/api/meet/" + meetId))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.data.title").value("테스트템플릿")).andDo(print()).andReturn();
+            .andExpect(jsonPath("$.data.title").value("임시테스트")).andDo(print()).andReturn();
 
     }
 
