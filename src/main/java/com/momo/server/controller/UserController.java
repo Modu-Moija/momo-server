@@ -10,6 +10,7 @@ import com.momo.server.dto.auth.SessionUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,6 +51,7 @@ public class UserController {
     String enc = aes128.encrypt(userEntity.getUserId().toString());// 유저이름으로 암호화시켜도 안전한지 모르겠습니다
     Cookie authCookie = new Cookie("authuser", enc);
     authCookie.setHttpOnly(false);
+    authCookie.setSecure(true);
     response.addCookie(authCookie);
 
     httpSession.setAttribute("sessionuser", new SessionUser(userEntity));
