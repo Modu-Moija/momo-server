@@ -25,15 +25,6 @@ public class WebConfig implements WebMvcConfigurer {
             .allowedMethods("GET", "POST", "PUT", "DELETE");
     }
 
-    @Bean
-    public TomcatContextCustomizer sameSiteCookiesConfig() {
-        return context -> {
-            final Rfc6265CookieProcessor cookieProcessor = new Rfc6265CookieProcessor();
-            cookieProcessor.setSameSiteCookies(SameSiteCookies.NONE.getValue());
-            context.setCookieProcessor(cookieProcessor);
-        };
-    }
-
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
         // HandlerMethodArgumentResolver 구현체를 여기에 등록
