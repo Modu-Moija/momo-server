@@ -40,7 +40,7 @@ public class TimeTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        BigInteger userId = new BigInteger("2051448780");
+        BigInteger userId = new BigInteger("1917727052");
         session = SessionSetup.sessionSetUp();
 
         timeTestController = new TimeTestController(mockMvc, objectMapper, session);
@@ -67,20 +67,20 @@ public class TimeTest {
 //        // http://honeymon.io/tech/2019/10/23/spring-deprecated-media-type.html
 //    }
 
-    @Test
-    public void 유저타임조회() throws Exception {
+//    @Test
+//    public void 유저타임조회() throws Exception {
+//
+//        timeTestController.getUserTime();
+//    }
 
-        timeTestController.getUserTime();
-    }
+//    @Test
+//    public void 최대최소조회() throws Exception {
+//        String meetId = "c623ff63d157415";
+//        timeTestController.getMostLeast(meetId);
+//    }
 
-    @Test
-    public void 최대최소조회() throws Exception {
-        String meetId = "88183217cfe7de3";
-        timeTestController.getMostLeast(meetId);
-    }
-
-    @Test
-    public void 시간_데이터_형태_비교() throws Exception{
-        timeTestController.compareTimtableData();
-    }
+//    @Test
+//    public void 시간_데이터_형태_비교() throws Exception{
+//        timeTestController.compareTimtableData();
+//    }
 }

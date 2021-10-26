@@ -66,7 +66,7 @@ public class MeetTest {
     @Test
     public void 약속조회() throws Exception {
 
-        String meetId = "88183217cfe7de3";
+        String meetId = "7c0570c5542f5c7";
         meetTestController.getMeet(meetId);
     }
 

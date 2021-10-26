@@ -3,8 +3,8 @@ package com.momo.server.utils;
 public class NumConvert {
 
     /*
-10진수 2진수로 변환하는 메소드(배열에 2진수 담도록 구현)
- */
+    10진수 2진수로 변환하는 메소드(배열에 2진수 담도록 구현), num은 meet의 총 사람 수, dec는 10진수
+     */
     public static int[] decToBin(int num, int dec) {
         int[] bin = new int[num];
         for (int i = 0; i < num; i++) {
