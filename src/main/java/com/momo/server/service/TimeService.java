@@ -211,8 +211,9 @@ public class TimeService {
         ArrayList<Integer> colorDate = new ArrayList<>();
         int[][] times = meetEntity.getTimes();
         ArrayList<LocalDate> dates = meetEntity.getDates();
+        int num = meetEntity.getNum();
 
-        sumTwoDimArrayVertical(colorDate, times);
+        sumTwoDimArrayVertical(colorDate, times, num);
         Month firstMonth = dates.get(0).getMonth();
         //전체 날짜만큼 반복
         for (int i = 0; i < dates.size(); ) {
@@ -235,14 +236,20 @@ public class TimeService {
         return monthDayMap;
     }
 
-    private void sumTwoDimArrayVertical(ArrayList<Integer> colorDate, int[][] times) {
-        int temp = 0;
+    private void sumTwoDimArrayVertical(ArrayList<Integer> colorDate, int[][] times, int num) {
         for (int j = 0; j < times[0].length; j++) {
-            for (int[] time : times) {
-                temp = temp + time[j];
+            int temp = 0;
+            for (int i = 0; i < times.length; i++) {
+                int[] userBin = NumConvert.decToBin(num, times[i][j]);
+                int oneCnt=0;
+                for(int t=0;t<userBin.length;t++){
+                    if(userBin[t]==1){
+                        oneCnt++;
+                    }
+                }
+                temp = temp + oneCnt;
             }
             colorDate.add(j, temp);
-            temp = 0;
         }
     }
 
