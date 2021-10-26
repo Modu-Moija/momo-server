@@ -58,7 +58,6 @@ public class MeetTestController {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.data.title").value("임시테스트")).andDo(print()).andReturn();
-
     }
 
 }
