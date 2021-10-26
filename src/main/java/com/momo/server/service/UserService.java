@@ -88,7 +88,7 @@ public class UserService {
 
         //인원수 초과에 대한 예외처리
         if (meetEntity.getUsers() != null) {
-            if (meetEntity.getUsers().size() == 100) {
+            if (meetEntity.getUsers().size() == 30) {
                 throw new UsersOutOfBoundsException(loginRequestDto.getMeetId());
             }
         }
