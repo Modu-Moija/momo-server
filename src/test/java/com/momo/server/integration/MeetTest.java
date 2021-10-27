@@ -36,38 +36,38 @@ public class MeetTest {
 
     private MeetTestController meetTestController;
 
-    @BeforeEach
-    void setUp() throws Exception {
-        meetTestController = new MeetTestController(mockMvc, objectMapper);
-    }
-
-    @AfterAll
-    public void afterAll() {// 생성된 약속 찾아서 지워주기 @Transactional이 동작안해서직접 구현함
-        meetRepository.removeMeetByTitle("약속생성테스트");
-    }
-
-    @Test
-    public void 약속생성() throws Exception {
-        // given
-        ArrayList<LocalDate> testDate = new ArrayList<LocalDate>();
-
-        testDate.add(LocalDate.now().plusDays(5));
-        testDate.add(LocalDate.now().plusDays(10));
-
-        MeetSaveRequestDto meetSaveRequestDto = MeetSaveRequestDto.builder().title("약속생성테스트")
-            .start("11:00")
-            .end("19:00").dates(testDate).gap(30).video(true).center(true).build();
-
-        MvcResult mvcResult = meetTestController.createMeet(meetSaveRequestDto);
-        // 참조 https://engkimbs.tistory.com/858
-        // http://honeymon.io/tech/2019/10/23/spring-deprecated-media-type.html
-    }
-
-    @Test
-    public void 약속조회() throws Exception {
-
-        String meetId = "7c0570c5542f5c7";
-        meetTestController.getMeet(meetId);
-    }
+//    @BeforeEach
+//    void setUp() throws Exception {
+//        meetTestController = new MeetTestController(mockMvc, objectMapper);
+//    }
+//
+//    @AfterAll
+//    public void afterAll() {// 생성된 약속 찾아서 지워주기 @Transactional이 동작안해서직접 구현함
+//        meetRepository.removeMeetByTitle("약속생성테스트");
+//    }
+//
+//    @Test
+//    public void 약속생성() throws Exception {
+//        // given
+//        ArrayList<LocalDate> testDate = new ArrayList<LocalDate>();
+//
+//        testDate.add(LocalDate.now().plusDays(5));
+//        testDate.add(LocalDate.now().plusDays(10));
+//
+//        MeetSaveRequestDto meetSaveRequestDto = MeetSaveRequestDto.builder().title("약속생성테스트")
+//            .start("11:00")
+//            .end("19:00").dates(testDate).gap(30).video(true).center(true).build();
+//
+//        MvcResult mvcResult = meetTestController.createMeet(meetSaveRequestDto);
+//        // 참조 https://engkimbs.tistory.com/858
+//        // http://honeymon.io/tech/2019/10/23/spring-deprecated-media-type.html
+//    }
+//
+//    @Test
+//    public void 약속조회() throws Exception {
+//
+//        String meetId = "7c0570c5542f5c7";
+//        meetTestController.getMeet(meetId);
+//    }
 
 }
