@@ -34,26 +34,26 @@ public class UserTest {
     private MeetTestController meetTestController;
     private UserTestController userTestController;
 
-    @BeforeAll
-    void setUp() throws Exception {
-        meetTestController = new MeetTestController(mockMvc, objectMapper);
-        meetTestController.createTestMeet();
-
-        userTestController = new UserTestController(mockMvc, objectMapper);
-    }
-
-    @AfterAll
-    public void afterAll() {
-        meetRepository.removeMeetByTitle("약속생성테스트");
-        meetRepository.removeMeetByTitle("테스트용약속생성");
-        userRepository.removeUserByUsername("junit테스트유저");
-    }
-
-    @Test
-    public void 유저로그인() throws Exception {
-
-        LoginRequestDto loginRequestDto = LoginRequestDto.builder().remember(true)
-            .meetId("88183217cfe7de3").username("테스트유저").build();
-        userTestController.loginUser(loginRequestDto);
-    }
+//    @BeforeAll
+//    void setUp() throws Exception {
+//        meetTestController = new MeetTestController(mockMvc, objectMapper);
+//        meetTestController.createTestMeet();
+//
+//        userTestController = new UserTestController(mockMvc, objectMapper);
+//    }
+//
+//    @AfterAll
+//    public void afterAll() {
+//        meetRepository.removeMeetByTitle("약속생성테스트");
+//        meetRepository.removeMeetByTitle("테스트용약속생성");
+//        userRepository.removeUserByUsername("junit테스트유저");
+//    }
+//
+//    @Test
+//    public void 유저로그인() throws Exception {
+//
+//        LoginRequestDto loginRequestDto = LoginRequestDto.builder().remember(true)
+//            .meetId("88183217cfe7de3").username("테스트유저").build();
+//        userTestController.loginUser(loginRequestDto);
+//    }
 }

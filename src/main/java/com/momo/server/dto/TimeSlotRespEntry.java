@@ -9,7 +9,7 @@ import java.util.HashSet;
 @Data
 public class TimeSlotRespEntry {
 
-    private String meetId;
+    private String key;
     private ArrayList<String> users;
     private String time;
     private LocalDate date;

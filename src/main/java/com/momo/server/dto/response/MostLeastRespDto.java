@@ -10,6 +10,8 @@ import java.util.List;
 @Getter
 @Setter
 public class MostLeastRespDto {
+
+    private String meetId;
     private List<TimeSlotRespEntry> MostTime;
     private List<TimeSlotRespEntry> LeastTime;
 }
