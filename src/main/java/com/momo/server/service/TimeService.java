@@ -260,6 +260,7 @@ public class TimeService {
         List<TimeSlotRespEntry> mostTimeSlots = this.mapToTimeSlotEntry(meetEntity);
         List<TimeSlotRespEntry> leasttimeSlots = this.mapToTimeSlotEntry(meetEntity);
 
+        mostLeastRespDto.setMeetId(meetId);
         sortByMostTime(mostTimeSlots);
         mostLeastRespDto.setMostTime(mostTimeSlots);
 
@@ -358,8 +359,8 @@ public class TimeService {
     private void setTimeSlotRespEntry(Meet meetEntity, ArrayList<LocalDate> dates, int i,
         TimeSlotRespEntry timeSlotRespEntry, ArrayList<String> timeSlotUsers, String possibleStart,
         String possibleEnd) {
+        timeSlotRespEntry.setKey(dates.get(i)+","+possibleStart);
         timeSlotRespEntry.setDate(dates.get(i));
-        timeSlotRespEntry.setMeetId(meetEntity.getMeetId());
         timeSlotRespEntry.setUsers(timeSlotUsers);
         timeSlotRespEntry.setTime(possibleStart + " ~ " + possibleEnd);
         timeSlotRespEntry.setNum(timeSlotUsers.size());
