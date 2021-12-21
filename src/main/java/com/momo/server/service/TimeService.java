@@ -152,23 +152,19 @@ public class TimeService {
 
         int[][] userTimes = userEntity.getUserTimes();
         int gap = meetEntity.getGap();
-        LocalDate startDate = meetEntity.getDates().get(0);
+        ArrayList dates = meetEntity.getDates();
         String start = meetEntity.getStart();
-        Integer dayOfMonth = startDate.getDayOfMonth();
         int totalStartMin = getTotalMin(start);
 
         // 2차원 배열 돌면서 데이터 매핑
         for (int i = 0; i < userTimes[0].length; i++) {
             LinkedHashMap<String, Boolean> timeMap = new LinkedHashMap<>();
-            String temp_date =
-                startDate.getYear() + "-" + addZeroToValue(startDate.getMonthValue()) + "-" + addZeroToValue(dayOfMonth);
             int temp_totalStartMin = totalStartMin;
             for (int j = 0; j < userTimes.length; j++) {
                 mapToTimeMap(userTimes, i, timeMap, temp_totalStartMin, j);
                 temp_totalStartMin = temp_totalStartMin + gap;
             }
-            dayOfMonth++;
-            planList.put(temp_date, timeMap);
+            planList.put(dates.get(i).toString(), timeMap);
         }
         setUserMeetRespDto(user, userMeetRespDto, planList, meetEntity);
         return userMeetRespDto;
