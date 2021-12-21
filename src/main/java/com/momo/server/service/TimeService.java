@@ -313,7 +313,8 @@ public class TimeService {
             int tempStartMin = totalStartMin;
             for (int j = 0; j < times.length; j++, tempStartMin = tempStartMin + gap) {
                 TimeSlotRespEntry timeSlotRespEntry = new TimeSlotRespEntry();
-                ArrayList<String> timeSlotUsers = new ArrayList<>();
+                ArrayList<String> availUsers = new ArrayList<>();
+                ArrayList<String> unavailUsers = new ArrayList<>();
                 int possibleMinStart = tempStartMin;
                 String possibleStart = splitToHourMin(possibleMinStart);
                 //숫자가 같을때까지 돌리기
@@ -328,8 +329,9 @@ public class TimeService {
                 String possibleEnd = splitToHourMin(possibleMinEnd);
 
                 int[] bin = NumConvert.decToBin(num, times[j][i]);
-                addTimeSlotUsers(users, timeSlotUsers, bin);
-                setTimeSlotRespEntry(meetEntity, dates, i, timeSlotRespEntry, timeSlotUsers,
+                addAvailUsers(users, availUsers, bin);
+                addUnavailUsers(users,unavailUsers,bin);
+                setTimeSlotRespEntry(meetEntity, dates, i, timeSlotRespEntry, availUsers, unavailUsers,
                     possibleStart, possibleEnd);
                 list.add(timeSlotRespEntry);
             }
@@ -346,24 +348,39 @@ public class TimeService {
         tempRestMin = getStringMinFromZero(restStartMin);
         return String.valueOf(totalMin / 60) + ":" + tempRestMin;
     }
-
-    private void addTimeSlotUsers(ArrayList<String> users, ArrayList<String> timeSlotUsers,
+    /*
+    가능한 유저 추가 메소드
+     */
+    private void addAvailUsers(ArrayList<String> users, ArrayList<String> availUsers,
         int[] bin) {
         for (int t = 0; t < bin.length; t++) {
             if (bin[t] == 1) {
-                timeSlotUsers.add(users.get(t));
+                availUsers.add(users.get(t));
+            }
+        }
+    }
+    /*
+    불가능한 유저 추가 메소드
+     */
+    private void addUnavailUsers(ArrayList<String> users, ArrayList<String> unavailUsers,
+        int[] bin) {
+        for (int t = 0; t < bin.length; t++) {
+            if (bin[t] == 0) {
+                unavailUsers.add(users.get(t));
             }
         }
     }
 
-    private void setTimeSlotRespEntry(Meet meetEntity, ArrayList<LocalDate> dates, int i,
-        TimeSlotRespEntry timeSlotRespEntry, ArrayList<String> timeSlotUsers, String possibleStart,
+    private TimeSlotRespEntry setTimeSlotRespEntry(Meet meetEntity, ArrayList<LocalDate> dates, int i,
+        TimeSlotRespEntry timeSlotRespEntry, ArrayList<String> availUsers, ArrayList<String> unavailUsers,  String possibleStart,
         String possibleEnd) {
         timeSlotRespEntry.setKey(dates.get(i)+","+possibleStart);
         timeSlotRespEntry.setDate(dates.get(i));
-        timeSlotRespEntry.setUsers(timeSlotUsers);
+        timeSlotRespEntry.setAvailUsers(availUsers);
+        timeSlotRespEntry.setUnavailUsers(unavailUsers);
         timeSlotRespEntry.setTime(possibleStart + " ~ " + possibleEnd);
-        timeSlotRespEntry.setNum(timeSlotUsers.size());
+        timeSlotRespEntry.setNum(availUsers.size());
+        return timeSlotRespEntry;
     }
 
     /*
