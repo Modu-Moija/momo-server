@@ -10,7 +10,8 @@ import java.util.HashSet;
 public class TimeSlotRespEntry {
 
     private String key;
-    private ArrayList<String> users;
+    private ArrayList<String> availUsers;
+    private ArrayList<String> unavailUsers;
     private String time;
     private LocalDate date;
     private Integer num;
