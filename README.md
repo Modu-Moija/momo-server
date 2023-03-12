@@ -42,13 +42,6 @@
 ![약속 시간 화면](./image/2021-08-04-00-07-32.png)
 
 
-## WIKI
-- [RDBMS가 아닌 MongoDB를 사용한 이유](https://github.com/Modu-Moija/momo-server/wiki/RDBMS%EA%B0%80-%EC%95%84%EB%8B%8C-MongoDB%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%9C-%EC%9D%B4%EC%9C%A0)
-
-- [MongoDB replica set과 standalone](https://github.com/Modu-Moija/momo-server/wiki/mongodb-replica-set-vs-standalone)
-
-- [MongoDB 데이터 모델링](https://durumiss.tistory.com/10)
-
 ## 참조
 - [스프링부트 2.4.1 공식문서](https://docs.spring.io/spring-boot/docs/2.4.1-SNAPSHOT/reference/pdf/spring-boot-reference.pdf)
 - [spring-data-mongoDB 공식문서](https://docs.spring.io/spring-data/mongodb/docs/3.2.3/reference/html/#reference)
